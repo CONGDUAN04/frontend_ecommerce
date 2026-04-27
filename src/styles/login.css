@@ -102,17 +102,64 @@
     box-shadow: 0 6px 20px rgba(59, 130, 246, 0.4);
 }
 
-.login-footer {
+/* Quên mật khẩu */
+.forgot-password {
+    margin-top: 8px;
     text-align: center;
-    margin-top: 4px;
-    font-size: 14px;
+}
+
+.forgot-password a {
+    display: inline-block;
+    color: #60a5fa;
+    font-weight: 500;
+    text-decoration: none;
+    transition: all 0.3s ease;
+}
+
+.forgot-password a:hover {
+    color: #2563eb;
+    text-decoration: underline;
+}
+/* Đăng ký */
+.register-link {
+    margin-top: 18px;
+    padding-top: 18px;
+    border-top: 1px solid rgba(226, 232, 240, 0.8);
+    text-align: center;
+}
+
+.register-link span {
+    display: inline-block;
+    margin-right: 6px;
     color: #6b7280;
 }
 
-.login-footer a {
-    color: #3b82f6;
-    font-weight: 600;
+.register-link a {
+    display: inline-block;
+    color: #2563eb;
+    font-weight: 700;
     text-decoration: none;
+    position: relative;
+    transition: all 0.3s ease;
+}
+
+.register-link a::after {
+    content: '';
+    position: absolute;
+    left: 0;
+    bottom: -2px;
+    width: 0;
+    height: 2px;
+    background: linear-gradient(90deg, #3b82f6, #2563eb);
+    transition: width 0.3s ease;
+}
+
+.register-link a:hover {
+    color: #1d4ed8;
+}
+
+.register-link a:hover::after {
+    width: 100%;
 }
 
 @media (max-width: 576px) {

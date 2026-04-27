@@ -1,26 +1,35 @@
-import { useLoading } from "../../hooks/useLoading";
+import { useEffect, useState } from "react";
+import { useLocation } from "react-router-dom";
 import { Spin } from "antd";
 
 const GlobalSpin = ({ children }) => {
-  const { loading } = useLoading();
+  const location = useLocation();
+  const [loading, setLoading] = useState(false);
 
-  const overlayStyle = {
-    position: "fixed",
-    top: 0,
-    left: 0,
-    width: "100%",
-    height: "100%",
-    background: "rgba(255,255,255,0.6)",
-    display: "flex",
-    justifyContent: "center",
-    alignItems: "center",
-    zIndex: 9999,
-  };
+  useEffect(() => {
+    setLoading(true);
+
+    const timer = setTimeout(() => {
+      setLoading(false);
+    }, 300);
+
+    return () => clearTimeout(timer);
+  }, [location.pathname]);
 
   return (
     <>
       {loading && (
-        <div style={overlayStyle}>
+        <div
+          style={{
+            position: "fixed",
+            inset: 0,
+            background: "rgba(255,255,255,0.6)",
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "center",
+            zIndex: 9999,
+          }}
+        >
           <Spin size="large" />
         </div>
       )}

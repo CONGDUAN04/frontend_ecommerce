@@ -14,8 +14,6 @@ import {
   Menu,
 } from "lucide-react";
 import "../../styles/admin/header.css";
-import { useLoading } from "../../hooks/useLoading.js";
-import { useAuth } from "../../hooks/useAuth.js";
 import { handleApiError, handleApiSuccess } from "../../utils/apiHandler.js";
 const ROUTE_TITLES = [
   ["/admin/product-groups", "Nhóm sản phẩm"],
@@ -45,17 +43,14 @@ export default function Header({ toggleSidebar }) {
   const parts = title.split(" / ");
   const parent = parts.length > 1 ? parts[0] : "Trang chủ";
   const current = parts[parts.length - 1];
-
-  const { callAuth } = useAuth();
-  const { loading } = useLoading();
-
+  const [loading, setLoading] = useState(false);
   const handleLogout = async () => {
     if (loading) return;
 
+    setLoading(true);
+
     try {
-      await callAuth(() => logoutAPI(), {
-        showLoading: false,
-      });
+      await logoutAPI();
 
       localStorage.clear();
       setUser(null);
@@ -63,10 +58,11 @@ export default function Header({ toggleSidebar }) {
       handleApiSuccess(api, "Đăng xuất thành công!");
 
       setDropOpen(false);
-
       navigate("/");
     } catch (err) {
       handleApiError(api, err);
+    } finally {
+      setLoading(false);
     }
   };
 

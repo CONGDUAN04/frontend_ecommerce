@@ -17,10 +17,11 @@ import HomePageUser from "./pages/client/homepage.jsx";
 import { AuthWrapper } from "./contexts/auth.context.jsx";
 import NotifyProvider from "./contexts/notify.provider.jsx";
 import LoadingProvider from "./contexts/loading.context.jsx";
-import GlobalSpin from "./components/common/global.spin.jsx";
 import UserPage from "./pages/admin/user/index.jsx";
 import RolePage from "./pages/admin/role/index.jsx";
-
+import ForgotPassword from "./pages/auth/ForgotPassword.jsx";
+import ResetPassword from "./pages/auth/ResetPassword.jsx";
+import VerifyOtpPage from "./pages/auth/VerifyOTPPage.jsx";
 const router = createBrowserRouter([
   {
     path: "/admin",
@@ -50,6 +51,18 @@ const router = createBrowserRouter([
     path: "/register",
     element: <RegisterPage />,
   },
+  {
+    path: "/forgot-password",
+    element: <ForgotPassword />,
+  },
+  {
+    path: "/reset-password",
+    element: <ResetPassword />,
+  },
+  {
+    path: "/verify-otp",
+    element: <VerifyOtpPage />,
+  },
 ]);
 
 ReactDOM.createRoot(document.getElementById("root")).render(
@@ -57,9 +70,7 @@ ReactDOM.createRoot(document.getElementById("root")).render(
     <NotifyProvider>
       <LoadingProvider>
         <AuthWrapper>
-          <GlobalSpin>
-            <RouterProvider router={router} />
-          </GlobalSpin>
+          <RouterProvider router={router} />
         </AuthWrapper>
       </LoadingProvider>
     </NotifyProvider>

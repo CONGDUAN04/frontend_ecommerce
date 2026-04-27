@@ -7,7 +7,6 @@ import {
   updateUserStatusAPI,
 } from "../../../../services/api.user";
 
-import { useApi } from "../../../../hooks/useApi";
 import { useContext, useCallback } from "react";
 import { NotifyContext } from "../../../../contexts/notify.context";
 import { handleApiSuccess, handleApiError } from "../../../../utils/apiHandler";
@@ -23,24 +22,22 @@ export const useUser = () => {
     },
   })();
 
-  const { callApi } = useApi();
   const { api } = useContext(NotifyContext);
 
   const updateStatus = useCallback(
-    (id, data) => {
-      return callApi(() => updateUserStatusAPI(id, data))
-        .then((res) => {
-          handleApiSuccess(
-            api,
-            res?.message || "Cập nhật trạng thái người dùng thành công",
-          );
-          return res;
-        })
-        .catch((err) => {
-          handleApiError(api, err);
-        });
+    async (id, data) => {
+      try {
+        const res = await updateUserStatusAPI(id, data);
+        handleApiSuccess(
+          api,
+          res?.message || "Cập nhật trạng thái người dùng thành công",
+        );
+        return res;
+      } catch (err) {
+        handleApiError(api, err);
+      }
     },
-    [callApi, api],
+    [api],
   );
 
   return {

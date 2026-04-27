@@ -10,6 +10,7 @@ const BaseModal = ({
   cancelText = "Hủy",
   width = 600,
   footer = undefined,
+  confirmLoading = false,
 }) => {
   return (
     <Modal
@@ -29,6 +30,7 @@ const BaseModal = ({
       maskClosable={false}
       width={width}
       footer={footer}
+      confirmLoading={confirmLoading}
     >
       {children}
     </Modal>

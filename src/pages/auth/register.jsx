@@ -1,9 +1,8 @@
 import { Divider, Button, Form, Input, Row, Col } from "antd";
 import { Link, useNavigate } from "react-router-dom";
 import { registerUserAPI } from "../../services/api.auth.js";
-import { useContext } from "react";
+import { useContext, useState } from "react";
 import { NotifyContext } from "../../contexts/notify.context.jsx";
-import { useAuth } from "../../hooks/useAuth.js";
 import { useLoading } from "../../hooks/useLoading.js";
 import "../../styles/register.css";
 import { handleApiError, handleApiSuccess } from "../../utils/apiHandler.js";
@@ -11,27 +10,28 @@ import { handleApiError, handleApiSuccess } from "../../utils/apiHandler.js";
 const RegisterPage = () => {
   const [form] = Form.useForm();
   const navigate = useNavigate();
-
-  const { callAuth } = useAuth();
+  const [loading, setLoading] = useState(false);
   const { api } = useContext(NotifyContext);
-  const { loading } = useLoading();
-  console.log("API PAGE:", api);
+
   const onFinish = async (values) => {
     if (loading) return;
 
+    setLoading(true);
     try {
-      await callAuth(() => registerUserAPI(values), {
-        showLoading: false, // ❗ dùng button loading
+      const res = await registerUserAPI({
+        ...values,
+        type: "VERIFY_EMAIL",
       });
 
-      handleApiSuccess(api, "Đăng ký thành công 🎉");
+      handleApiSuccess(api, res?.message);
 
-      setTimeout(() => {
-        navigate("/login");
-      }, 500);
+      localStorage.setItem("verify_email", values.username);
+
+      navigate("/verify-otp");
     } catch (err) {
-      console.log("OUTER CATCH:", err);
       handleApiError(api, err, form);
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -75,8 +75,15 @@ const RegisterPage = () => {
                 label="Mật khẩu"
                 name="password"
                 rules={[
-                  { required: true, message: "Không được để trống" },
-                  { min: 6, message: "Ít nhất 6 ký tự" },
+                  {
+                    required: true,
+                    message: "Mật khẩu không được để trống",
+                  },
+                  {
+                    pattern: /^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{6,}$/,
+                    message:
+                      "Mật khẩu tối thiểu 6 ký tự, có ít nhất 1 chữ cái và 1 số",
+                  },
                 ]}
               >
                 <Input.Password size="large" placeholder="Nhập mật khẩu" />
@@ -114,8 +121,9 @@ const RegisterPage = () => {
 
             <Divider />
 
-            <div className="register-footer">
-              Đã có tài khoản? <Link to="/login">Đăng nhập</Link>
+            <div className="register-footer login-link">
+              <span>Đã có tài khoản?</span>
+              <Link to="/login">Đăng nhập ngay</Link>
             </div>
           </div>
         </Col>

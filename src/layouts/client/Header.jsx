@@ -2,7 +2,7 @@ import { Search, ShoppingCart, Menu, LogIn, User } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import { Dropdown, Avatar, Badge, Spin } from "antd";
 import { useContext, useState, useCallback, useEffect } from "react";
-
+import { handleApiError, handleApiSuccess } from "../../utils/apiHandler.js";
 import { AuthContext } from "../../contexts/auth.context.jsx";
 import { NotifyContext } from "../../contexts/notify.context.jsx";
 import { logoutAPI } from "../../services/api.auth.js";
@@ -36,17 +36,11 @@ const Header = ({ cartCount = 0 }) => {
       localStorage.removeItem("user");
       setUser(null);
 
-      api.success({
-        message: "Đăng xuất thành công",
-        description: res?.message,
-      });
+      handleApiSuccess(api, res?.message);
 
       navigate("/");
-    } catch (error) {
-      api.error({
-        message: "Lỗi",
-        description: error?.message,
-      });
+    } catch (err) {
+      handleApiError(api, err);
     } finally {
       setLoadingLogout(false);
     }

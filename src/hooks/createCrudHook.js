@@ -1,63 +1,57 @@
 import { useContext, useCallback, useMemo } from "react";
-import { useApi } from "./useApi";
 import { NotifyContext } from "../contexts/notify.context";
 import { handleApiSuccess, handleApiError } from "../utils/apiHandler";
 
 export const createCrudHook = ({ name, apis }) => {
   return () => {
-    const { callApi } = useApi();
     const { api } = useContext(NotifyContext);
 
-    const getAll = useCallback(
-      (...params) => {
-        return callApi(() => apis.getAll(...params));
-      },
-      [callApi, apis.getAll],
-    );
+    const getAll = async (...params) => {
+      try {
+        return await apis.getAll(...params);
+      } catch (err) {
+        handleApiError(api, err);
+        throw err;
+      }
+    };
 
     const create = useCallback(
-      (data, form) => {
-        return callApi(() => apis.create(data))
-          .then((res) => {
-            handleApiSuccess(api, res?.message || `Tạo ${name} thành công`);
-            return res;
-          })
-          .catch((err) => {
-            handleApiError(api, err, form);
-          });
+      async (data, form) => {
+        try {
+          const res = await apis.create(data);
+          handleApiSuccess(api, res?.message || `Tạo ${name} thành công`);
+          return res;
+        } catch (err) {
+          handleApiError(api, err, form);
+        }
       },
-      [callApi, apis.create, api, name],
+      [apis, api, name],
     );
 
     const update = useCallback(
-      (id, data, form) => {
-        return callApi(() => apis.update(id, data))
-          .then((res) => {
-            handleApiSuccess(
-              api,
-              res?.message || `Cập nhật ${name} thành công`,
-            );
-            return res;
-          })
-          .catch((err) => {
-            handleApiError(api, err, form);
-          });
+      async (id, data, form) => {
+        try {
+          const res = await apis.update(id, data);
+          handleApiSuccess(api, res?.message || `Cập nhật ${name} thành công`);
+          return res;
+        } catch (err) {
+          handleApiError(api, err, form);
+        }
       },
-      [callApi, apis.update, api, name],
+      [apis, api, name],
     );
 
     const remove = useCallback(
-      (id) => {
-        return callApi(() => apis.delete(id))
-          .then((res) => {
-            handleApiSuccess(api, res?.message || `Xóa ${name} thành công`);
-            return res;
-          })
-          .catch((err) => {
-            handleApiError(api, err);
-          });
+      async (id) => {
+        try {
+          const res = await apis.delete(id);
+          handleApiSuccess(api, res?.message || `Xóa ${name} thành công`);
+          return res;
+        } catch (err) {
+          handleApiError(api, err);
+        }
       },
-      [callApi, apis.delete, api, name],
+      [apis, api, name],
     );
 
     return useMemo(
