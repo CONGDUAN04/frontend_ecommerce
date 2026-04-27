@@ -1,9 +1,9 @@
-import { Divider, Button, Form, Input, Row, Col } from "antd";
+import { Divider, Button, Form, Input, Row, Col, Typography } from "antd";
+import { CheckCircleOutlined } from "@ant-design/icons";
 import { Link, useNavigate } from "react-router-dom";
 import { registerUserAPI } from "../../services/api.auth.js";
 import { useContext, useState } from "react";
 import { NotifyContext } from "../../contexts/notify.context.jsx";
-import { useLoading } from "../../hooks/useLoading.js";
 import "../../styles/register.css";
 import { handleApiError, handleApiSuccess } from "../../utils/apiHandler.js";
 
@@ -53,7 +53,7 @@ const RegisterPage = () => {
                 label="Họ và tên"
                 name="fullName"
                 rules={[
-                  { required: true, message: "Không được để trống" },
+                  { required: true, message: "Họ và tên không được để trống" },
                   { min: 3, message: "Ít nhất 3 ký tự" },
                 ]}
               >
@@ -64,12 +64,25 @@ const RegisterPage = () => {
                 label="Email"
                 name="username"
                 rules={[
-                  { required: true, message: "Không được để trống" },
+                  { required: true, message: "Email không được để trống" },
                   { type: "email", message: "Email không đúng định dạng!" },
                 ]}
               >
                 <Input size="large" placeholder="example@gmail.com" />
               </Form.Item>
+              <Typography.Text
+                style={{
+                  display: "flex",
+                  alignItems: "center",
+                  color: "#52c41a",
+                  marginTop: -16,
+                  marginBottom: 16,
+                  gap: 6,
+                }}
+              >
+                <CheckCircleOutlined />
+                Hóa đơn VAT khi mua hàng sẽ được gửi qua email này
+              </Typography.Text>
 
               <Form.Item
                 label="Mật khẩu"
