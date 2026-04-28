@@ -23,12 +23,15 @@ export const CategoryTable = (props) => {
   const [dataDetail, setDataDetail] = useState(null);
   const [openUpdate, setOpenUpdate] = useState(false);
   const [dataUpdate, setDataUpdate] = useState(null);
+  const [loading, setLoading] = useState(false);
 
   const { remove } = useCategory();
 
   const handleDelete = async (id) => {
+    setLoading(true);
     const res = await remove(id);
     if (res) await loadCategory();
+    setLoading(false);
   };
   const columns = [
     renderIndex(current, pageSize),
@@ -83,6 +86,7 @@ export const CategoryTable = (props) => {
           onDelete={() => handleDelete(record.id)}
           deleteTitle="Xóa danh mục"
           deleteDescription="Hành động này không thể hoàn tác!"
+          loading={loading}
         />
       ),
     },

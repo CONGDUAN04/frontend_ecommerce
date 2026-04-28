@@ -10,7 +10,7 @@ export default function CreateCategoryForm({ loadCategory }) {
   const [isOpen, setIsOpen] = useState(false);
   const [form] = Form.useForm();
   const { create } = useCategory();
-
+  const [loading, setLoading] = useState(false);
   const { preview, handleChangeFile, resetImage, uploading, logoValidator } =
     useImageUpload(form, {
       type: "category",
@@ -25,11 +25,13 @@ export default function CreateCategoryForm({ loadCategory }) {
   };
 
   const handleSubmit = async (values) => {
+    setLoading(true);
     const res = await create(values, form);
     if (res) {
       reset();
       await loadCategory();
     }
+    setLoading(false);
   };
 
   return (
@@ -42,6 +44,7 @@ export default function CreateCategoryForm({ loadCategory }) {
         onCancel={reset}
         okText="Tạo mới"
         title="Tạo danh mục"
+        confirmLoading={loading}
       >
         <Form form={form} layout="vertical" onFinish={handleSubmit}>
           <Form.Item

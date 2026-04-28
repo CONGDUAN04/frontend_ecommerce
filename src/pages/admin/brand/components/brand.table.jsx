@@ -19,15 +19,16 @@ export default function BrandTable({
 }) {
   const [openDetail, setOpenDetail] = useState(false);
   const [dataDetail, setDataDetail] = useState(null);
-
   const [openUpdate, setOpenUpdate] = useState(false);
   const [dataUpdate, setDataUpdate] = useState(null);
-
+  const [loading, setLoading] = useState(false);
   const { remove } = useBrand();
 
   const handleDelete = async (id) => {
+    setLoading(true);
     const res = await remove(id);
     if (res) await loadBrand();
+    setLoading(false);
   };
 
   const columns = [
@@ -56,6 +57,9 @@ export default function BrandTable({
             setOpenUpdate(true);
           }}
           onDelete={() => handleDelete(record.id)}
+          deleteTitle="Xóa thương hiệu"
+          deleteDescription="Hành động này không thể hoàn tác!"
+          loading={loading}
         />
       ),
     },

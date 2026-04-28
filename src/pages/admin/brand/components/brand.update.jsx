@@ -1,4 +1,4 @@
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { Form, Input } from "antd";
 import BaseModal from "../../../../components/common/BaseModal.jsx";
 import { useBrand } from "../hooks/useBrand.js";
@@ -14,7 +14,7 @@ export default function UpdateBrandForm({
 }) {
   const [form] = Form.useForm();
   const { update } = useBrand();
-
+  const [loading, setLoading] = useState(false);
   const {
     preview,
     handleChangeFile,
@@ -51,11 +51,13 @@ export default function UpdateBrandForm({
   };
 
   const handleSubmit = async (values) => {
+    setLoading(true);
     const res = await update(dataUpdate.id, values, form);
     if (res) {
       reset();
       await loadBrand();
     }
+    setLoading(false);
   };
 
   return (
@@ -65,6 +67,7 @@ export default function UpdateBrandForm({
       onCancel={reset}
       title="Cập nhật thương hiệu"
       okText="Cập nhật"
+      confirmLoading={loading}
     >
       <Form form={form} layout="vertical" onFinish={handleSubmit}>
         <Form.Item label="ID" name="id">

@@ -15,7 +15,7 @@ export default function UpdateUserForm({
 }) {
   const [form] = Form.useForm();
   const [roles, setRoles] = useState([]);
-
+  const [loading, setLoading] = useState(false);
   const { update } = useUser();
   const { getAll: getAllRoles } = useRole();
 
@@ -71,25 +71,17 @@ export default function UpdateUserForm({
   };
 
   const handleSubmit = async (values) => {
+    setLoading(true);
     const payload = { ...values };
-    console.log("Payload gửi lên:", payload); // ← Debug ở đây
-    console.log("Avatar:", payload.avatar);
-    console.log("AvatarId:", payload.avatarId);
     if (Number(payload.roleId) === Number(dataUpdate.role?.id)) {
       delete payload.roleId;
     }
-
     const res = await update(dataUpdate.id, payload, form);
-    console.log("========== RESPONSE API ==========");
-    console.log("Full response:", res);
-    console.log("Data trong response:", res?.data);
-    console.log("Avatar trong response:", res?.data?.avatar);
-    console.log("AvatarId trong response:", res?.data?.avatarId);
-
     if (res) {
       reset();
       await loadUser();
     }
+    setLoading(false);
   };
 
   return (
@@ -99,6 +91,7 @@ export default function UpdateUserForm({
       onCancel={reset}
       title="Cập nhật người dùng"
       okText="Cập nhật"
+      confirmLoading={loading}
     >
       <Form form={form} layout="vertical" onFinish={handleSubmit}>
         <Form.Item label="Email" name="username">

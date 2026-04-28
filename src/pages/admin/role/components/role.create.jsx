@@ -7,7 +7,7 @@ import { useRole } from "../hooks/useRole.js";
 export default function CreateRoleForm({ loadRole }) {
   const [isOpen, setIsOpen] = useState(false);
   const [form] = Form.useForm();
-
+  const [loading, setLoading] = useState(false);
   const { create } = useRole();
 
   const reset = () => {
@@ -16,12 +16,14 @@ export default function CreateRoleForm({ loadRole }) {
   };
 
   const handleSubmit = async (values) => {
+    setLoading(true);
     const res = await create(values, form);
 
     if (res) {
       reset();
       await loadRole();
     }
+    setLoading(false);
   };
 
   return (
@@ -33,6 +35,7 @@ export default function CreateRoleForm({ loadRole }) {
         onOk={() => form.submit()}
         onCancel={reset}
         title="Tạo role"
+        confirmLoading={loading}
       >
         <Form form={form} layout="vertical" onFinish={handleSubmit}>
           <Form.Item

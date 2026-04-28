@@ -10,7 +10,7 @@ export default function CreateBrandForm({ loadBrand }) {
   const [isOpen, setIsOpen] = useState(false);
   const [form] = Form.useForm();
   const { create } = useBrand();
-
+  const [loading, setLoading] = useState(false);
   const { preview, handleChangeFile, resetImage, uploading, logoValidator } =
     useImageUpload(form, {
       type: "brand",
@@ -25,11 +25,13 @@ export default function CreateBrandForm({ loadBrand }) {
   };
 
   const handleSubmit = async (values) => {
+    setLoading(true);
     const res = await create(values, form);
     if (res) {
       reset();
       await loadBrand();
     }
+    setLoading(false);
   };
 
   return (
@@ -45,6 +47,7 @@ export default function CreateBrandForm({ loadBrand }) {
         onCancel={reset}
         okText="Tạo mới"
         title="Tạo thương hiệu"
+        confirmLoading={loading}
       >
         <Form form={form} layout="vertical" onFinish={handleSubmit}>
           <Form.Item

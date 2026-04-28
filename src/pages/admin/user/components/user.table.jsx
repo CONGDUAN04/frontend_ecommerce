@@ -20,20 +20,28 @@ export default function UserTable({
 }) {
   const [openDetail, setOpenDetail] = useState(false);
   const [dataDetail, setDataDetail] = useState(null);
-
   const [openUpdate, setOpenUpdate] = useState(false);
   const [dataUpdate, setDataUpdate] = useState(null);
-
+  const [loading, setLoading] = useState(false);
+  const [loadingStatus, setLoadingStatus] = useState(false);
   const { remove, updateStatus } = useUser();
 
   const handleDelete = async (id) => {
+    setLoading(true);
     const res = await remove(id);
     if (res) await loadUser();
+    setLoading(false);
   };
 
   const handleToggleStatus = async (record, isActive) => {
-    const res = await updateStatus(record.id, { isActive });
-    if (res) await loadUser();
+    setLoadingStatus(true);
+    try {
+      const res = await updateStatus(record.id, { isActive });
+
+      if (res) await loadUser();
+    } finally {
+      setLoadingStatus(false);
+    }
   };
 
   const columns = [
@@ -57,6 +65,16 @@ export default function UserTable({
       dataIndex: ["role", "name"],
       align: "center",
       render: (role) => <Tag color="blue">{role}</Tag>,
+    },
+    {
+      title: "Xác thực",
+      dataIndex: "isVerified",
+      align: "center",
+      render: (isVerified) => (
+        <Tag color={isVerified ? "green" : "orange"}>
+          {isVerified ? "Đã xác thực" : "Chưa xác thực"}
+        </Tag>
+      ),
     },
     {
       title: "Trạng thái",
@@ -88,7 +106,7 @@ export default function UserTable({
               cancelText="Hủy"
               onConfirm={() => handleToggleStatus(record, !active)}
             >
-              <Switch size="small" checked={active} />
+              <Switch size="small" checked={active} loading={loadingStatus} />
             </Popconfirm>
           </div>
         );
@@ -110,6 +128,7 @@ export default function UserTable({
             setOpenUpdate(true);
           }}
           onDelete={() => handleDelete(record.id)}
+          loading={loading}
         />
       ),
     },

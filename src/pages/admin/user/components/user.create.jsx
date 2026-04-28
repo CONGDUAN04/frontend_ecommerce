@@ -11,7 +11,7 @@ export default function CreateUserForm({ loadUser }) {
   const [isOpen, setIsOpen] = useState(false);
   const [form] = Form.useForm();
   const [roles, setRoles] = useState([]);
-
+  const [loading, setLoading] = useState(false);
   const { create } = useUser();
   const { getAll: getAllRoles } = useRole();
 
@@ -41,11 +41,13 @@ export default function CreateUserForm({ loadUser }) {
   };
 
   const handleSubmit = async (values) => {
+    setLoading(true);
     const res = await create(values, form);
     if (res) {
       reset();
       await loadUser();
     }
+    setLoading(false);
   };
 
   return (
@@ -58,6 +60,7 @@ export default function CreateUserForm({ loadUser }) {
         onCancel={reset}
         title="Tạo người dùng"
         okText="Tạo mới"
+        confirmLoading={loading}
       >
         <Form form={form} layout="vertical" onFinish={handleSubmit}>
           <Form.Item

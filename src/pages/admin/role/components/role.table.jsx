@@ -17,12 +17,15 @@ export const RoleTable = (props) => {
   const [dataDetail, setDataDetail] = useState(null);
   const [openUpdate, setOpenUpdate] = useState(false);
   const [dataUpdate, setDataUpdate] = useState(null);
+  const [loading, setLoading] = useState(false);
 
   const { remove } = useRole();
 
   const handleDelete = async (id) => {
+    setLoading(true);
     const res = await remove(id);
     if (res) await loadRole();
+    setLoading(false);
   };
 
   const columns = [
@@ -53,6 +56,7 @@ export const RoleTable = (props) => {
           onDelete={() => handleDelete(record.id)}
           deleteTitle="Xóa vai trò"
           deleteDescription="Hành động này không thể hoàn tác!"
+          loading={loading}
         />
       ),
     },

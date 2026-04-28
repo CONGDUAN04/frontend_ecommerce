@@ -1,4 +1,4 @@
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { Form, Input } from "antd";
 import BaseModal from "../../../../components/common/BaseModal.jsx";
 import { useRole } from "../hooks/useRole.js";
@@ -11,6 +11,7 @@ export default function UpdateRoleForm({
   loadRole,
 }) {
   const [form] = Form.useForm();
+  const [loading, setLoading] = useState(false);
   const { update } = useRole();
 
   useEffect(() => {
@@ -30,17 +31,17 @@ export default function UpdateRoleForm({
   };
 
   const handleSubmit = async (values) => {
+    setLoading(true);
     const payload = {
       name: values.name,
       description: values.description,
     };
-
     const res = await update(dataUpdate.id, payload, form);
-
     if (res) {
       await loadRole();
       reset();
     }
+    setLoading(false);
   };
 
   return (
@@ -50,6 +51,7 @@ export default function UpdateRoleForm({
       onCancel={reset}
       title="Cập nhật role"
       okText="Cập nhật"
+      confirmLoading={loading}
     >
       <Form form={form} layout="vertical" onFinish={handleSubmit}>
         <Form.Item label="ID" name="id">
