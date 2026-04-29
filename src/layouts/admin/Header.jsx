@@ -1,4 +1,4 @@
-import { useContext, useState } from "react";
+import { useContext, useState, useMemo } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 import { AuthContext } from "../../contexts/auth.context.jsx";
 import { NotifyContext } from "../../contexts/notify.context.jsx";
@@ -11,25 +11,30 @@ import {
   LogOut,
   User,
   Settings,
-  Menu,
 } from "lucide-react";
 import "../../styles/admin/header.css";
 import { handleApiError, handleApiSuccess } from "../../utils/apiHandler.js";
-const ROUTE_TITLES = [
-  ["/admin/product-groups", "Nhóm sản phẩm"],
-  ["/admin/products/colors", "Sản phẩm / Màu sắc"],
-  ["/admin/products", "Sản phẩm"],
-  ["/admin/categories", "Danh mục"],
-  ["/admin/brands", "Thương hiệu"],
-  ["/admin/users", "Người dùng"],
-  ["/admin/roles", "Vai trò"],
-  ["/admin/settings", "Cài đặt"],
-];
 
-function usePageTitle(path) {
-  if (path === "/" || path === "/admin") return "Dashboard";
-  const match = ROUTE_TITLES.find(([r]) => path.startsWith(r));
-  return match ? match[1] : "Dashboard";
+const ROUTE_BREADCRUMB = {
+  "/admin": ["Dashboard"],
+  "/admin/product-groups": ["Nhóm sản phẩm"],
+  "/admin/products": ["Nhóm sản phẩm", "Sản phẩm"],
+  "/admin/products/variants": ["Nhóm sản phẩm", "Sản phẩm", "Biến thể"],
+  "/admin/categories": ["Danh mục"],
+  "/admin/brands": ["Thương hiệu"],
+  "/admin/users": ["Người dùng"],
+  "/admin/roles": ["Vai trò"],
+  "/admin/settings": ["Cài đặt"],
+};
+
+function useBreadcrumb(path) {
+  return useMemo(() => {
+    const match = Object.keys(ROUTE_BREADCRUMB)
+      .sort((a, b) => b.length - a.length)
+      .find((route) => path.startsWith(route));
+
+    return ROUTE_BREADCRUMB[match] || ["Dashboard"];
+  }, [path]);
 }
 
 export default function Header({ toggleSidebar }) {
@@ -37,16 +42,19 @@ export default function Header({ toggleSidebar }) {
   const navigate = useNavigate();
   const { user, setUser } = useContext(AuthContext);
   const { api } = useContext(NotifyContext);
-  const [dropOpen, setDropOpen] = useState(false);
 
-  const title = usePageTitle(location.pathname);
-  const parts = title.split(" / ");
-  const parent = parts.length > 1 ? parts[0] : "Trang chủ";
-  const current = parts[parts.length - 1];
+  const [dropOpen, setDropOpen] = useState(false);
   const [loading, setLoading] = useState(false);
+
+  const breadcrumb = useBreadcrumb(location.pathname);
+
+  const parent =
+    breadcrumb.length > 1 ? breadcrumb[breadcrumb.length - 2] : "Trang chủ";
+
+  const current = breadcrumb[breadcrumb.length - 1];
+
   const handleLogout = async () => {
     if (loading) return;
-
     setLoading(true);
 
     try {
@@ -56,7 +64,6 @@ export default function Header({ toggleSidebar }) {
       setUser(null);
 
       handleApiSuccess(api, "Đăng xuất thành công!");
-
       setDropOpen(false);
       navigate("/");
     } catch (err) {
@@ -72,27 +79,30 @@ export default function Header({ toggleSidebar }) {
     .join("")
     .slice(0, 2)
     .toUpperCase();
-
   return (
     <header className="header">
       <div className="header-container">
-        {/* title */}
         <div className="header-title">
-          <h1>{title}</h1>
+          <h1>{current}</h1>
+
           <div className="breadcrumb">
-            <span>{parent}</span>
-            <span>/</span>
-            <span className="active">{current}</span>
+            {breadcrumb.map((item, index) => (
+              <span
+                key={index}
+                className={index === breadcrumb.length - 1 ? "active" : ""}
+              >
+                {item}
+                {index < breadcrumb.length - 1 && " / "}
+              </span>
+            ))}
           </div>
         </div>
 
-        {/* search */}
         <div className="search-box">
           <Search size={14} />
           <input placeholder="Tìm kiếm..." />
         </div>
 
-        {/* actions */}
         <div className="header-actions">
           <div className="icon-btn">
             <Bell size={16} />
@@ -106,7 +116,6 @@ export default function Header({ toggleSidebar }) {
 
           <div className="divider" />
 
-          {/* user */}
           <div className="user" onClick={() => setDropOpen(!dropOpen)}>
             <div className="avatar">
               {user?.avatar ? <img src={user.avatar} alt="" /> : initials}
@@ -122,11 +131,6 @@ export default function Header({ toggleSidebar }) {
 
             {dropOpen && (
               <div className="dropdown">
-                <div className="dropdown-header">
-                  <p>{user?.fullName}</p>
-                  <span>{user?.email}</span>
-                </div>
-
                 <button onClick={() => navigate("/profile")}>
                   <User size={14} /> Hồ sơ
                 </button>

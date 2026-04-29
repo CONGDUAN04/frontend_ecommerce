@@ -1,149 +1,139 @@
-import { Button, Descriptions, Form, Input, message, Modal, Select } from "antd";
-import { PlusOutlined } from "@ant-design/icons";
-import { useEffect, useState, useContext } from "react";
-import {
-    createProductGroupAPI,
-    fetchAllBrandsAPI,
-    fetchAllCategoriesAPI
-} from "../../../../services/api.services.js";
-import { NotifyContext } from "../../context/notify.context.jsx";
-import { LoadingContext } from "../../context/loading.context.jsx";
+import { useEffect, useState } from "react";
+import { Form, Input, Select } from "antd";
+import BaseModal from "../../../../components/common/BaseModal.jsx";
+import BaseCreateButton from "../../../../components/common/BaseCreateButton.jsx";
+import { useProductGroup } from "../hooks/useProductGroup";
+import { useBrand } from "../../brand/hooks/useBrand";
+import { useCategory } from "../../category/hooks/useCategory";
+import { useImageUpload } from "../../../../hooks/useImageUpload.js";
+import UploadImage from "../../../../components/common/ImageUpload.jsx";
+
 export default function CreateProductGroupForm({ loadGroups }) {
-    const [isModalOpen, setIsModalOpen] = useState(false);
-    const [brands, setBrands] = useState([]);
-    const [categories, setCategories] = useState([]);
-    const { loading, setLoading } = useContext(LoadingContext);
-    const [form] = Form.useForm();
-    const { api } = useContext(NotifyContext);
+  const [isOpen, setIsOpen] = useState(false);
+  const [form] = Form.useForm();
+  const [brands, setBrands] = useState([]);
+  const [categories, setCategories] = useState([]);
+  const [loading, setLoading] = useState(false);
+  const { preview, handleChangeFile, resetImage, uploading, logoValidator } =
+    useImageUpload(form, {
+      type: "productGroup",
+      fieldName: "thumbnail",
+      fieldId: "thumbnailId",
+    });
 
-    useEffect(() => {
-        loadDropdownData();
-    }, []);
+  const { create } = useProductGroup();
+  const { getAll: getAllBrands } = useBrand();
+  const { getAll: getAllCategories } = useCategory();
 
-    const loadDropdownData = async () => {
-        const [b, c] = await Promise.all([
-            fetchAllBrandsAPI(),
-            fetchAllCategoriesAPI()
-        ]);
+  useEffect(() => {
+    if (!isOpen) return;
 
-        setBrands(b.data || []);
-        setCategories(c.data || []);
+    const loadOptions = async () => {
+      const [brandRes, categoryRes] = await Promise.all([
+        getAllBrands(),
+        getAllCategories(),
+      ]);
+
+      setBrands(brandRes?.data || []);
+      setCategories(categoryRes?.data || []);
     };
 
-    const handleSubmitBtn = async (values) => {
-        try {
-            setLoading(true);
-            console.log("Values gửi đi:", values);
+    loadOptions();
+  }, [isOpen]);
 
-            const res = await createProductGroupAPI(values);
+  const reset = () => {
+    form.resetFields();
+    setBrands([]);
+    setCategories([]);
+    setIsOpen(false);
+  };
 
-            api.success({
-                message: "Thành công",
-                description: res?.message,
-            });
+  const handleSubmit = async (values) => {
+    console.log(values);
+    setLoading(true);
+    const res = await create(values, form);
+    if (res) {
+      reset();
+      await loadGroups();
+    }
+    setLoading(false);
+  };
 
-            resetAndCloseModal();
-            await loadGroups();
-        } catch (error) {
-            if (error.errors?.length > 0) {
-                const formErrors = error.errors.map(err => ({
-                    name: err.field.replace("body.", ""),
-                    errors: [err.message],
-                }));
+  return (
+    <>
+      <BaseCreateButton
+        text="Tạo nhóm sản phẩm"
+        onClick={() => setIsOpen(true)}
+      />
 
-                console.log("Setting form errors:", formErrors);
-                form.setFields(formErrors);
-            } else {
-                api.error({
-                    message: "Thất bại",
-                    description: error.message || "Đã có lỗi xảy ra",
-                });
-            }
-        } finally {
-            setLoading(false);
-        }
-    };
+      <BaseModal
+        open={isOpen}
+        onOk={() => form.submit()}
+        onCancel={reset}
+        title="Tạo nhóm sản phẩm"
+        okText="Tạo mới"
+        confirmLoading={loading}
+      >
+        <Form form={form} layout="vertical" onFinish={handleSubmit}>
+          <Form.Item
+            label="Tên nhóm"
+            name="name"
+            rules={[{ required: true, message: "Không được để trống" }]}
+          >
+            <Input />
+          </Form.Item>
 
-    const resetAndCloseModal = () => {
-        form.resetFields();
-        setIsModalOpen(false);
-    };
+          <Form.Item label="Series" name="series">
+            <Input />
+          </Form.Item>
 
-    return (
-        <>
-            <div style={{
-                display: 'flex',
-                justifyContent: 'flex-end',
-                marginTop: 20,
-                paddingRight: 24
-            }}>
-                <Button
-                    type="primary"
-                    icon={<PlusOutlined />}
-                    onClick={() => setIsModalOpen(true)}
-                    size="large"
-                    style={{
-                        height: 42,
-                        padding: '0 24px',
-                        borderRadius: 8,
-                        fontSize: 15,
-                        fontWeight: 500,
-                        boxShadow: '0 2px 4px rgba(24, 144, 255, 0.2)'
-                    }}
-                >
-                    Tạo nhóm sản phẩm mới
-                </Button>
-            </div>
+          <Form.Item
+            label="Thương hiệu"
+            name="brandId"
+            rules={[{ required: true, message: "Vui lòng chọn thương hiệu" }]}
+          >
+            <Select
+              options={brands.map((b) => ({
+                label: b.name,
+                value: b.id,
+              }))}
+            />
+          </Form.Item>
 
-            <Modal
-                title="Tạo nhóm sản phẩm"
-                open={isModalOpen}
-                confirmLoading={loading}
-                onOk={() => form.submit()}
-                onCancel={resetAndCloseModal}
-                okText="Tạo mới"
-                cancelText="Hủy"
-                centered
-                maskClosable={false}
-            >
-                <Form form={form} layout="vertical" onFinish={handleSubmitBtn}>
-                    <Form.Item
-                        label="Tên nhóm"
-                        name="name"
-                        rules={[{ required: true, message: "Tên nhóm không được để trống" }]}
-                    >
-                        <Input placeholder="Iphone 17 Pro Max" />
-                    </Form.Item>
+          <Form.Item
+            label="Danh mục"
+            name="categoryId"
+            rules={[{ required: true, message: "Vui lòng chọn danh mục" }]}
+          >
+            <Select
+              options={categories.map((c) => ({
+                label: c.name,
+                value: c.id,
+              }))}
+            />
+          </Form.Item>
 
-                    <Form.Item
-                        label="Thương hiệu"
-                        name="brandId"
-                        rules={[{ required: true, message: "Thương hiệu không được để trống" }]}
-                    >
-                        <Select
-                            placeholder="Chọn brand"
-                            options={brands.map(b => ({
-                                label: b.name,
-                                value: b.id
-                            }))}
-                        />
-                    </Form.Item>
+          <Form.Item label="Mô tả" name="description">
+            <Input.TextArea rows={4} />
+          </Form.Item>
 
-                    <Form.Item
-                        label="Danh mục"
-                        name="categoryId"
-                        rules={[{ required: true, message: "Danh mục không được để trống" }]}
-                    >
-                        <Select
-                            placeholder="Chọn danh mục"
-                            options={categories.map(c => ({
-                                label: c.name,
-                                value: c.id
-                            }))}
-                        />
-                    </Form.Item>
-                </Form>
-            </Modal>
-        </>
-    );
+          <Form.Item
+            label="Ảnh đại diện"
+            name="thumbnail"
+            rules={[{ validator: logoValidator }]}
+          >
+            <UploadImage
+              preview={preview}
+              uploading={uploading}
+              onChange={handleChangeFile}
+            />
+          </Form.Item>
+
+          <Form.Item name="thumbnailId" hidden>
+            <Input />
+          </Form.Item>
+        </Form>
+      </BaseModal>
+    </>
+  );
 }

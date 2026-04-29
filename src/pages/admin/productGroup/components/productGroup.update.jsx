@@ -1,162 +1,145 @@
-import { Form, Input, Modal, Select } from "antd";
-import { useContext, useEffect, useState } from "react";
-import {
-    updateProductGroupAPI,
-    fetchAllBrandsAPI,
-    fetchAllCategoriesAPI,
-} from "../../../../services/api.services.js";
-import { LoadingContext } from "../../context/loading.context.jsx";
-import { NotifyContext } from "../../context/notify.context.jsx";
+import { useEffect, useState } from "react";
+import { Form, Input, Select } from "antd";
+import BaseModal from "../../../../components/common/BaseModal.jsx";
+import { useProductGroup } from "../hooks/useProductGroup";
+import { useBrand } from "../../brand/hooks/useBrand";
+import { useCategory } from "../../category/hooks/useCategory";
+import { useImageUpload } from "../../../../hooks/useImageUpload.js";
+import UploadImage from "../../../../components/common/ImageUpload.jsx";
 
 export default function UpdateProductGroupForm({
-    openUpdate,
-    setOpenUpdate,
-    dataUpdate,
-    setDataUpdate,
-    loadGroups,
+  openUpdate,
+  setOpenUpdate,
+  dataUpdate,
+  setDataUpdate,
+  loadGroups,
 }) {
-    const [form] = Form.useForm();
-    const [brands, setBrands] = useState([]);
-    const [categories, setCategories] = useState([]);
+  const [form] = Form.useForm();
+  const [brands, setBrands] = useState([]);
+  const [categories, setCategories] = useState([]);
+  const [loading, setLoading] = useState(false);
 
-    const { api, contextHolder } = useContext(NotifyContext);
-    const { loading, setLoading } = useContext(LoadingContext);
+  const {
+    preview,
+    handleChangeFile,
+    resetImage,
+    setPreviewFromUrl,
+    uploading,
+    logoValidator,
+  } = useImageUpload(form, {
+    type: "productGroup",
+    fieldName: "thumbnail",
+    fieldId: "thumbnailId",
+  });
+  const { update } = useProductGroup();
+  const { getAll: getAllBrands } = useBrand();
+  const { getAll: getAllCategories } = useCategory();
 
-    // load dropdown
-    useEffect(() => {
-        const loadDropdownData = async () => {
-            try {
-                const [b, c] = await Promise.all([
-                    fetchAllBrandsAPI(),
-                    fetchAllCategoriesAPI(),
-                ]);
+  useEffect(() => {
+    if (!openUpdate) return;
 
-                setBrands(b?.data || []);
-                setCategories(c?.data || []);
-            } catch (error) {
-                api.error({
-                    message: "Không thể tải dữ liệu",
-                    description: error.message,
-                });
-            }
-        };
+    const loadOptions = async () => {
+      const [brandRes, categoryRes] = await Promise.all([
+        getAllBrands(),
+        getAllCategories(),
+      ]);
 
-        loadDropdownData();
-    }, []);
-
-    useEffect(() => {
-        if (!dataUpdate) return;
-
-        form.setFieldsValue({
-            id: dataUpdate.id,
-            name: dataUpdate.name,
-            brandId: dataUpdate.brandId,
-            categoryId: dataUpdate.categoryId,
-        });
-    }, [dataUpdate, form]);
-
-    const handleSubmit = async (values) => {
-        setLoading(true);
-
-        try {
-            const res = await updateProductGroupAPI(dataUpdate.id, values);
-
-            api.success({
-                message: "Thành công",
-                description: res?.message || "Cập nhật nhóm sản phẩm thành công",
-            });
-
-            resetAndClose();
-            await loadGroups();
-        } catch (error) {
-            if (error.errors?.length > 0) {
-                const formErrors = error.errors.map(err => ({
-                    name: err.field.replace("body.", ""),
-                    errors: [err.message],
-                }));
-
-                console.log("Setting form errors:", formErrors);
-                form.setFields(formErrors);
-            } else {
-                api.error({
-                    message: "Thất bại",
-                    description: error.message || "Đã có lỗi xảy ra",
-                });
-            }
-        } finally {
-            setLoading(false);
-        }
+      setBrands(brandRes?.data || []);
+      setCategories(categoryRes?.data || []);
     };
 
-    const resetAndClose = () => {
-        form.resetFields();
-        setDataUpdate(null);
-        setOpenUpdate(false);
-    };
+    loadOptions();
+  }, [openUpdate]);
 
-    return (
-        <>
-            {contextHolder}
+  useEffect(() => {
+    if (!dataUpdate?.id) return;
 
-            <Modal
-                title={<div style={{ textAlign: "center" }}>Cập nhật nhóm sản phẩm</div>}
-                open={openUpdate}
-                confirmLoading={loading}
-                onOk={() => form.submit()}
-                onCancel={resetAndClose}
-                okText="Cập nhật"
-                cancelText="Huỷ"
-                centered
-                maskClosable={false}
-                width={600}
-            >
-                <Form
-                    key={dataUpdate?.id}
-                    form={form}
-                    layout="vertical"
-                    onFinish={handleSubmit}
-                >
-                    <Form.Item label="ID" name="id">
-                        <Input disabled />
-                    </Form.Item>
+    form.setFieldsValue({
+      name: dataUpdate.name,
+      series: dataUpdate.series,
+      description: dataUpdate.description,
+      brandId: dataUpdate.brand?.id,
+      categoryId: dataUpdate.category?.id,
+      thumbnail: dataUpdate.thumbnail,
+      thumbnailId: dataUpdate.thumbnailId,
+    });
+    if (dataUpdate.thumbnail && !preview) {
+      setPreviewFromUrl(dataUpdate.thumbnail);
+    }
+  }, [dataUpdate]);
 
-                    <Form.Item
-                        label="Tên nhóm"
-                        name="name"
-                        rules={[
-                            { required: true, message: "Tên nhóm không được để trống" },
-                        ]}
-                    >
-                        <Input />
-                    </Form.Item>
+  const reset = () => {
+    form.resetFields();
+    resetImage();
+    setBrands([]);
+    setCategories([]);
+    setDataUpdate(null);
+    setOpenUpdate(false);
+  };
 
-                    <Form.Item
-                        label="Brand"
-                        name="brandId"
-                        rules={[{ required: true, message: "Chọn brand" }]}
-                    >
-                        <Select
-                            options={brands.map((b) => ({
-                                label: b.name,
-                                value: b.id,
-                            }))}
-                        />
-                    </Form.Item>
+  const handleSubmit = async (values) => {
+    setLoading(true);
+    const res = await update(dataUpdate.id, values, form);
+    if (res) {
+      reset();
+      await loadGroups();
+    }
+    setLoading(false);
+  };
 
-                    <Form.Item
-                        label="Category"
-                        name="categoryId"
-                        rules={[{ required: true, message: "Chọn category" }]}
-                    >
-                        <Select
-                            options={categories.map((c) => ({
-                                label: c.name,
-                                value: c.id,
-                            }))}
-                        />
-                    </Form.Item>
-                </Form>
-            </Modal>
-        </>
-    );
+  return (
+    <BaseModal
+      open={openUpdate}
+      onOk={() => form.submit()}
+      onCancel={reset}
+      title="Cập nhật nhóm sản phẩm"
+      okText="Cập nhật"
+      confirmLoading={loading}
+    >
+      <Form form={form} layout="vertical" onFinish={handleSubmit}>
+        <Form.Item
+          label="Tên nhóm"
+          name="name"
+          rules={[{ required: true, message: "Không được để trống" }]}
+        >
+          <Input />
+        </Form.Item>
+
+        <Form.Item label="Series" name="series">
+          <Input />
+        </Form.Item>
+
+        <Form.Item label="Thương hiệu" name="brandId">
+          <Select
+            options={brands.map((b) => ({ label: b.name, value: b.id }))}
+          />
+        </Form.Item>
+
+        <Form.Item label="Danh mục" name="categoryId">
+          <Select
+            options={categories.map((c) => ({ label: c.name, value: c.id }))}
+          />
+        </Form.Item>
+
+        <Form.Item label="Mô tả" name="description">
+          <Input.TextArea rows={4} />
+        </Form.Item>
+        <Form.Item
+          label="Ảnh đại diện"
+          name="thumbnail"
+          rules={[{ validator: logoValidator }]}
+        >
+          <UploadImage
+            preview={preview}
+            uploading={uploading}
+            onChange={handleChangeFile}
+          />
+        </Form.Item>
+
+        <Form.Item name="thumbnailId" hidden>
+          <Input />
+        </Form.Item>
+      </Form>
+    </BaseModal>
+  );
 }

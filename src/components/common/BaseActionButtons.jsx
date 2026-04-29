@@ -6,6 +6,8 @@ const BaseActionButtons = ({
   onView,
   onEdit,
   onDelete,
+  disableEdit = false,
+  disableDelete = false,
   deleteTitle = "Xóa",
   deleteDescription = "Bạn có chắc chắn muốn xóa?",
 }) => {
@@ -31,40 +33,58 @@ const BaseActionButtons = ({
         />
       </Tooltip>
 
-      <Tooltip title="Chỉnh sửa">
+      <Tooltip
+        title={
+          disableEdit ? "Chỉ có thể chỉnh sửa khi đang hoạt động" : "Chỉnh sửa"
+        }
+      >
         <Button
           icon={<EditOutlined />}
+          disabled={disableEdit}
           style={{
-            backgroundColor: "#fff7e6",
-            color: "#fa8c16",
-            border: "1px solid #ffd591",
+            backgroundColor: disableEdit ? undefined : "#fff7e6",
+            color: disableEdit ? undefined : "#fa8c16",
+            border: disableEdit ? undefined : "1px solid #ffd591",
             borderRadius: 8,
           }}
-          onClick={() => onEdit(record)}
+          onClick={() => !disableEdit && onEdit(record)}
         />
       </Tooltip>
 
-      <Popconfirm
-        title={deleteTitle}
-        description={deleteDescription}
-        okText="Xóa"
-        cancelText="Hủy"
-        okButtonProps={{ danger: true }}
-        onConfirm={() => onDelete(record)}
-      >
-        <Tooltip title="Xóa">
+      {disableDelete ? (
+        <Tooltip title="Không thể xóa khi đang bị vô hiệu hóa">
           <Button
             icon={<DeleteOutlined />}
+            disabled
             danger
             style={{
-              backgroundColor: "#fff1f0",
-              color: "#ff4d4f",
-              border: "1px solid #ffccc7",
               borderRadius: 8,
             }}
           />
         </Tooltip>
-      </Popconfirm>
+      ) : (
+        <Popconfirm
+          title={deleteTitle}
+          description={deleteDescription}
+          okText="Xóa"
+          cancelText="Hủy"
+          okButtonProps={{ danger: true }}
+          onConfirm={() => onDelete(record)}
+        >
+          <Tooltip title="Xóa">
+            <Button
+              icon={<DeleteOutlined />}
+              danger
+              style={{
+                backgroundColor: "#fff1f0",
+                color: "#ff4d4f",
+                border: "1px solid #ffccc7",
+                borderRadius: 8,
+              }}
+            />
+          </Tooltip>
+        </Popconfirm>
+      )}
     </div>
   );
 };

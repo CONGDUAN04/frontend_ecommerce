@@ -11,6 +11,7 @@ import {
   BadgeCheck,
   Boxes,
   ShieldCheck,
+  Layers,
 } from "lucide-react";
 import { Link, useLocation } from "react-router-dom";
 import { AuthContext } from "../../contexts/auth.context.jsx";
@@ -52,51 +53,53 @@ export default function Sidebar({ isOpen, toggleSidebar }) {
       {
         id: "dashboard",
         label: "Dashboard",
-        icon: LayoutDashboard, // ✅ chuẩn
+        icon: LayoutDashboard,
         path: "/admin",
       },
       {
         id: "product-groups",
         label: "Nhóm sản phẩm",
-        icon: Boxes, // ✅ rất hợp (group)
+        icon: Boxes,
         path: "/admin/product-groups",
         subMenu: [
           {
             id: "products",
             label: "Sản phẩm",
             path: "/admin/products",
-            icon: Package, // ✅ sản phẩm
-          },
-          {
-            id: "colors",
-            label: "Màu sắc",
-            path: "/admin/products/colors",
-            icon: Droplet, // ✅ màu
+            icon: Package,
+            subMenu: [
+              {
+                id: "variants",
+                label: "Biến thể",
+                path: "/admin/products/variants",
+                icon: Layers,
+              },
+            ],
           },
         ],
       },
       {
         id: "categories",
         label: "Danh mục sản phẩm",
-        icon: Tags, // ✅ category
+        icon: Tags,
         path: "/admin/categories",
       },
       {
         id: "users",
         label: "Người dùng",
-        icon: Users, // ✅ user
+        icon: Users,
         path: "/admin/users",
       },
       {
         id: "brands",
         label: "Thương hiệu",
-        icon: BadgeCheck, // ✅ brand (badge = hợp lý)
+        icon: BadgeCheck,
         path: "/admin/brands",
       },
       {
         id: "roles",
         label: "Phân quyền",
-        icon: ShieldCheck, // 🔥 BEST CHOICE
+        icon: ShieldCheck,
         path: "/admin/roles",
       },
     ],
