@@ -56,7 +56,7 @@ export default function ProductGroupTable({
       title: "Series",
       dataIndex: "series",
       align: "center",
-      render: (value) => value || "N/A",
+      render: (value) => value || "-",
     },
     {
       title: "Thương hiệu",
@@ -87,7 +87,7 @@ export default function ProductGroupTable({
             }}
           >
             <Tag color={active ? "green" : "red"}>
-              {active ? "Hoạt động" : "Đã khóa"}
+              {active ? "Đang bán" : "Ngừng bán"}
             </Tag>
 
             <Popconfirm

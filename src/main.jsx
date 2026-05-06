@@ -23,6 +23,7 @@ import ForgotPassword from "./pages/auth/ForgotPassword.jsx";
 import ResetPassword from "./pages/auth/ResetPassword.jsx";
 import VerifyOtpPage from "./pages/auth/VerifyOTPPage.jsx";
 import ProductGroupPage from "./pages/admin/productGroup/index.jsx";
+import ProductPage from "./pages/admin/product/index.jsx";
 const router = createBrowserRouter([
   {
     path: "/admin",
@@ -38,6 +39,7 @@ const router = createBrowserRouter([
       { path: "users", element: <UserPage /> },
       { path: "roles", element: <RolePage /> },
       { path: "product-groups", element: <ProductGroupPage /> },
+      { path: "products", element: <ProductPage /> },
     ],
   },
   {

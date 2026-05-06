@@ -145,7 +145,7 @@
   padding: 14px 16px;
   border-radius: 12px;
   font-size: 14px;
-  font-weight: 500;
+  font-weight: 600;
   color: #94a3b8;
   border: 1px solid transparent;
   transition: 0.3s;
@@ -200,7 +200,8 @@
   gap: 10px;
   padding: 10px 12px;
   border-radius: 8px;
-  font-size: 13px;
+  font-size: 14px;
+  font-weight: 500;
   color: #94a3b8;
   transition: 0.2s;
 }

@@ -100,22 +100,34 @@ export default function UpdateProductGroupForm({
         <Form.Item
           label="Tên nhóm"
           name="name"
-          rules={[{ required: true, message: "Không được để trống" }]}
+          rules={[{ required: true, message: "Tên nhóm không được để trống" }]}
         >
           <Input />
         </Form.Item>
 
-        <Form.Item label="Series" name="series">
+        <Form.Item
+          label="Series"
+          name="series"
+          rules={[{ required: true, message: "series không được để trống" }]}
+        >
           <Input />
         </Form.Item>
 
-        <Form.Item label="Thương hiệu" name="brandId">
+        <Form.Item
+          label="Thương hiệu"
+          name="brandId"
+          rules={[{ required: true, message: "Vui lòng chọn thương hiệu" }]}
+        >
           <Select
             options={brands.map((b) => ({ label: b.name, value: b.id }))}
           />
         </Form.Item>
 
-        <Form.Item label="Danh mục" name="categoryId">
+        <Form.Item
+          label="Danh mục"
+          name="categoryId"
+          rules={[{ required: true, message: "Vui lòng chọn danh mục" }]}
+        >
           <Select
             options={categories.map((c) => ({ label: c.name, value: c.id }))}
           />
@@ -124,6 +136,7 @@ export default function UpdateProductGroupForm({
         <Form.Item label="Mô tả" name="description">
           <Input.TextArea rows={4} />
         </Form.Item>
+
         <Form.Item
           label="Ảnh đại diện"
           name="thumbnail"

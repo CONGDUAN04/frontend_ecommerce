@@ -43,6 +43,7 @@ export default function CreateProductGroupForm({ loadGroups }) {
 
   const reset = () => {
     form.resetFields();
+    resetImage();
     setBrands([]);
     setCategories([]);
     setIsOpen(false);
@@ -83,7 +84,11 @@ export default function CreateProductGroupForm({ loadGroups }) {
             <Input />
           </Form.Item>
 
-          <Form.Item label="Series" name="series">
+          <Form.Item
+            label="Series"
+            name="series"
+            rules={[{ required: true, message: "series không được để trống" }]}
+          >
             <Input />
           </Form.Item>
 

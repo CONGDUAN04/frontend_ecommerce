@@ -1,175 +1,124 @@
-import { Button, Form, Input, InputNumber, Modal } from "antd";
-import { PlusOutlined, UploadOutlined } from "@ant-design/icons";
-import { useContext, useState } from "react";
-import { createProductAPI } from "../../../../services/api.services.js";
-import { LoadingContext } from "../../context/loading.context.jsx";
-import { NotifyContext } from "../../context/notify.context.jsx";
+import { useEffect, useState } from "react";
+import { Form, Input, Select, InputNumber } from "antd";
+import BaseModal from "../../../../components/common/BaseModal.jsx";
+import BaseCreateButton from "../../../../components/common/BaseCreateButton.jsx";
+import { useProduct } from "../hooks/useProduct";
+import { useProductGroup } from "../../productGroup/hooks/useProductGroup";
+import { useImageUpload } from "../../../../hooks/useImageUpload";
+import UploadImage from "../../../../components/common/ImageUpload";
 
 export default function CreateProductForm({ loadProducts }) {
-    const [isModalOpen, setIsModalOpen] = useState(false);
-    const [form] = Form.useForm();
-    const [thumbnail, setThumbnail] = useState(null);
-    const [preview, setPreview] = useState(null);
-    const { api } = useContext(NotifyContext);
-    const { loading, setLoading } = useContext(LoadingContext);
+  const [isOpen, setIsOpen] = useState(false);
+  const [form] = Form.useForm();
+  const [groups, setGroups] = useState([]);
+  const [loading, setLoading] = useState(false);
 
-    const handleOnchangeFile = e => {
-        const file = e.target.files?.[0];
-        if (!file) return;
-        setThumbnail(file);
-        setPreview(URL.createObjectURL(file));
-        form.setFields([{ name: "thumbnail", errors: [] }]);
+  const { preview, handleChangeFile, resetImage, uploading, logoValidator } =
+    useImageUpload(form, {
+      type: "product",
+      fieldName: "thumbnail",
+      fieldId: "thumbnailId",
+    });
+
+  const { create } = useProduct();
+  const { getAll: getAllGroups } = useProductGroup();
+
+  useEffect(() => {
+    if (!isOpen) return;
+
+    const load = async () => {
+      const res = await getAllGroups();
+      setGroups(res?.data || []);
     };
 
-    const handleSubmitBtn = async values => {
-        setLoading(true);
-        try {
-            await createProductAPI({
-                ...values,
-                name: values.name.trim(),
-                thumbnail
-            });
+    load();
+  }, [isOpen]);
 
-            api.success({ message: "Thành công" });
-            reset();
-            loadProducts();
-        } catch (error) {
-            if (error.errors?.length > 0) {
-                const formErrors = error.errors.map(err => ({
-                    name: err.field.replace("body.", ""),
-                    errors: [err.message]
-                }));
+  const reset = () => {
+    form.resetFields();
+    resetImage();
+    setGroups([]);
+    setIsOpen(false);
+  };
 
-                form.setFields(formErrors);
-            } else {
-                api.error({
-                    message: "Thất bại",
-                    description: error.message || "Đã có lỗi xảy ra"
-                });
-            }
-        } finally {
-            setLoading(false);
-        }
-    };
+  const handleSubmit = async (values) => {
+    setLoading(true);
+    const res = await create(values, form);
+    if (res) {
+      reset();
+      await loadProducts();
+    }
+    setLoading(false);
+  };
 
-    const reset = () => {
-        form.resetFields();
-        setThumbnail(null);
-        setPreview(null);
-        setIsModalOpen(false);
-    };
+  return (
+    <>
+      <BaseCreateButton text="Tạo sản phẩm" onClick={() => setIsOpen(true)} />
+      <BaseModal
+        open={isOpen}
+        onOk={() => form.submit()}
+        onCancel={reset}
+        title="Tạo sản phẩm"
+        confirmLoading={loading}
+        okText="Tạo mới"
+      >
+        <Form form={form} layout="vertical" onFinish={handleSubmit}>
+          <Form.Item
+            name="name"
+            label="Tên"
+            rules={[
+              { required: true, message: "Tên sản phẩm không được để trống" },
+            ]}
+          >
+            <Input />
+          </Form.Item>
 
-    return (
-        <>
-            <div style={{
-                display: 'flex',
-                justifyContent: 'flex-end',
-                marginTop: 20,
-                paddingRight: 24
-            }}>
-                <Button
-                    type="primary"
-                    icon={<PlusOutlined />}
-                    onClick={() => setIsModalOpen(true)}
-                    size="large"
-                    style={{
-                        height: 42,
-                        padding: '0 24px',
-                        borderRadius: 8,
-                        fontSize: 15,
-                        fontWeight: 500,
-                        boxShadow: '0 2px 4px rgba(24, 144, 255, 0.2)'
-                    }}
-                >
-                    Tạo sản phẩm mới
-                </Button>
-            </div>
+          <Form.Item
+            name="groupId"
+            label="Nhóm"
+            rules={[
+              { required: true, message: "Nhóm sản phẩm không được để trống" },
+            ]}
+          >
+            <Select
+              showSearch
+              placeholder="Tìm nhóm sản phẩm..."
+              optionFilterProp="label"
+              filterOption={(input, option) =>
+                option.label.toLowerCase().includes(input.toLowerCase())
+              }
+              options={groups.map((g) => ({
+                label: g.name,
+                value: g.id,
+              }))}
+            />
+          </Form.Item>
 
+          <Form.Item name="storage" label="Dung lượng">
+            <Input />
+          </Form.Item>
 
-            <Modal
-                title="Tạo sản phẩm"
-                open={isModalOpen}
-                confirmLoading={loading}
-                onOk={() => form.submit()}
-                onCancel={reset}
-                okText="Tạo mới"
-                cancelText="Hủy"
-                centered
-                maskClosable={false}
-            >
-                <Form form={form} layout="vertical" onFinish={handleSubmitBtn}>
-                    <Form.Item
-                        label="Product Group ID"
-                        name="productGroupId"
-                        rules={[{ required: true, message: "ID không được bỏ trống" }]}
-                    >
-                        <InputNumber
-                            style={{ width: "100%" }}
-                            min={0} placeholder="Nhập số: 1 2 3 4 5" />
-                    </Form.Item>
+          <Form.Item name="description" label="Mô tả">
+            <Input.TextArea />
+          </Form.Item>
 
-                    <Form.Item
-                        label="Phiên bản"
-                        name="name"
-                        rules={[{ required: true, message: "Phiên bản không được bỏ trống" }]}
-                    >
-                        <Input placeholder="VD: 256GB / Reno15 / Reno15F" />
-                    </Form.Item>
+          <Form.Item
+            name="thumbnail"
+            label="Ảnh"
+            rules={[{ validator: logoValidator }]}
+          >
+            <UploadImage
+              preview={preview}
+              uploading={uploading}
+              onChange={handleChangeFile}
+            />
+          </Form.Item>
 
-                    <Form.Item label="Mô tả" name="description">
-                        <Input.TextArea rows={3} />
-                    </Form.Item>
-
-                    <Form.Item
-                        label="Ảnh sản phẩm"
-                        name="thumbnail"
-                        rules={[{ required: true, message: "Vui lòng chọn ảnh sản phẩm" }]}
-                    >
-                        <div style={{ textAlign: "center", marginBottom: 12 }}>
-                            <label
-                                htmlFor="upload"
-                                style={{
-                                    padding: "10px 20px",
-                                    background: "#1677ff",
-                                    color: "#fff",
-                                    borderRadius: 6,
-                                    cursor: "pointer",
-                                    display: "inline-block"
-                                }}
-                            >
-                                <UploadOutlined /> Upload ảnh sản phẩm
-                            </label>
-
-                            <input
-                                id="upload"
-                                type="file"
-                                hidden
-                                accept="image/*"
-                                onChange={handleOnchangeFile}
-                            />
-                        </div>
-
-                        {preview && (
-                            <div
-                                style={{
-                                    marginTop: 12,
-                                    height: 200,
-                                    border: "1px dashed #ccc",
-                                    display: "flex",
-                                    justifyContent: "center",
-                                    alignItems: "center"
-                                }}
-                            >
-                                <img
-                                    src={preview}
-                                    alt="preview"
-                                    style={{ maxHeight: "100%", maxWidth: "100%" }}
-                                />
-                            </div>
-                        )}
-                    </Form.Item>
-                </Form>
-            </Modal>
-        </>
-    );
+          <Form.Item name="thumbnailId" hidden>
+            <Input />
+          </Form.Item>
+        </Form>
+      </BaseModal>
+    </>
+  );
 }

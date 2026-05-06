@@ -1,53 +1,40 @@
-// src/component/admin/pages/product.jsx
-import { useEffect, useState, useContext } from "react";
-import ProductTable from "../../../component/admin/products/product.table.jsx";
-import CreateProductForm from "../../../component/admin/products/product.create.jsx";
-import { message } from "antd";
-import AdminLayout from "../layout/AdminLayout";
-import { LoadingContext } from "../../context/loading.context.jsx";
-import { fetchProductsAPI } from "../../../services/api.services.js";
-const ProductPage = () => {
-    const [dataProducts, setDataProducts] = useState([]);
-    const [current, setCurrent] = useState(1);
-    const [pageSize, setPageSize] = useState(10);
-    const [total, setTotal] = useState(0);
+import { useEffect, useState } from "react";
+import { usePagination } from "../../../hooks/usePagination";
+import { useProduct } from "./hooks/useProduct";
+import CreateProductForm from "./components/product.create";
+import ProductTable from "./components/product.table";
 
-    const { setLoading } = useContext(LoadingContext);
-    useEffect(() => {
-        loadProducts();
-    }, [current, pageSize]);
+export default function ProductPage() {
+  const [dataProducts, setDataProducts] = useState([]);
+  const [total, setTotal] = useState(0);
 
-    const loadProducts = async () => {
-        try {
-            setLoading(true);
-            const res = await fetchProductsAPI(current, pageSize);
+  const { current, pageSize, updatePagination } = usePagination();
+  const { getAll } = useProduct();
 
-            if (res?.ErrorCode === 0) {
-                setDataProducts(res.data || []);
-                setTotal(res.pagination?.total || 0);
-            }
-        } catch (error) {
-            message.error("Lỗi khi tải danh sách sản phẩm");
-        } finally {
-            setLoading(false);
-        }
-    };
-    return (
-        <>
-            <CreateProductForm loadProducts={loadProducts} />
-            <AdminLayout>
-                <ProductTable
-                    dataProducts={dataProducts}
-                    loadProducts={loadProducts}
-                    current={current}
-                    pageSize={pageSize}
-                    total={total}
-                    setCurrent={setCurrent}
-                    setPageSize={setPageSize}
-                />
-            </AdminLayout>
-        </>
-    );
-};
+  const loadProducts = async () => {
+    const res = await getAll(current, pageSize);
+    if (res?.data) {
+      setDataProducts(res.data);
+      setTotal(res.meta.total);
+    }
+  };
 
-export default ProductPage;
+  useEffect(() => {
+    if (!current || !pageSize) return;
+    loadProducts();
+  }, [current, pageSize]);
+
+  return (
+    <>
+      <CreateProductForm loadProducts={loadProducts} />
+      <ProductTable
+        dataProducts={dataProducts}
+        loadProducts={loadProducts}
+        current={current}
+        pageSize={pageSize}
+        total={total}
+        updatePagination={updatePagination}
+      />
+    </>
+  );
+}

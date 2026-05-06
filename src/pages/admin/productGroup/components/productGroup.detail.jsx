@@ -37,7 +37,7 @@ export default function ProductGroupDetail({
         </Descriptions.Item>
         <Descriptions.Item label="Slug">{dataDetail.slug}</Descriptions.Item>
         <Descriptions.Item label="Series">
-          {dataDetail.series || "N/A"}
+          {dataDetail.series || "-"}
         </Descriptions.Item>
         <Descriptions.Item label="Thương hiệu">
           <Tag color="blue">{dataDetail.brand?.name}</Tag>
@@ -47,7 +47,7 @@ export default function ProductGroupDetail({
         </Descriptions.Item>
         <Descriptions.Item label="Trạng thái">
           <Tag color={dataDetail.isActive ? "green" : "red"}>
-            {dataDetail.isActive ? "Hoạt động" : "Ngừng hoạt động"}
+            {dataDetail.isActive ? "Đang bán" : "Ngừng bán"}
           </Tag>
         </Descriptions.Item>
         <Descriptions.Item label="Thumbnail">
