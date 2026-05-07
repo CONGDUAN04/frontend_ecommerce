@@ -109,10 +109,6 @@ export default function UpdateProductForm({
           />
         </Form.Item>
 
-        <Form.Item name="storage" label="Dung lượng">
-          <Input />
-        </Form.Item>
-
         <Form.Item name="thumbnail" label="Ảnh">
           <UploadImage
             preview={preview}

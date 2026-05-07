@@ -49,10 +49,6 @@ export default function ProductDetail({
           <Tag color="purple">{dataDetail.category?.name}</Tag>
         </Descriptions.Item>
 
-        <Descriptions.Item label="Dung lượng">
-          {dataDetail.storage || "-"}
-        </Descriptions.Item>
-
         <Descriptions.Item label="Mô tả">
           {dataDetail.description || "-"}
         </Descriptions.Item>

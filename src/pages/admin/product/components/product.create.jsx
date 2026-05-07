@@ -94,10 +94,6 @@ export default function CreateProductForm({ loadProducts }) {
             />
           </Form.Item>
 
-          <Form.Item name="storage" label="Dung lượng">
-            <Input />
-          </Form.Item>
-
           <Form.Item name="description" label="Mô tả">
             <Input.TextArea />
           </Form.Item>

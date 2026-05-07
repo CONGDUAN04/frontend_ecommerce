@@ -54,14 +54,6 @@ export default function ProductTable({
       dataIndex: "name",
       align: "center",
     },
-
-    {
-      title: "Dung lượng",
-      dataIndex: "storage",
-      align: "center",
-      render: (value) => value || "-",
-    },
-
     {
       title: "Nhóm",
       dataIndex: ["group", "name"],
