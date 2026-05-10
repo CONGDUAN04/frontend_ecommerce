@@ -24,6 +24,9 @@ import ResetPassword from "./pages/auth/ResetPassword.jsx";
 import VerifyOtpPage from "./pages/auth/VerifyOTPPage.jsx";
 import ProductGroupPage from "./pages/admin/productGroup/index.jsx";
 import ProductPage from "./pages/admin/product/index.jsx";
+import VariantPage from "./pages/admin/variant/index.jsx";
+import ColorPage from "./pages/admin/color/index.jsx";
+import ProductColorPage from "./pages/admin/productColor/index.jsx";
 const router = createBrowserRouter([
   {
     path: "/admin",
@@ -40,6 +43,9 @@ const router = createBrowserRouter([
       { path: "roles", element: <RolePage /> },
       { path: "product-groups", element: <ProductGroupPage /> },
       { path: "products", element: <ProductPage /> },
+      { path: "variants", element: <VariantPage /> },
+      { path: "colors", element: <ColorPage /> },
+      { path: "product-colors", element: <ProductColorPage /> },
     ],
   },
   {

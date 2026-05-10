@@ -12,6 +12,7 @@ import {
   Boxes,
   ShieldCheck,
   Layers,
+  Palette,
 } from "lucide-react";
 import { Link, useLocation } from "react-router-dom";
 import { AuthContext } from "../../contexts/auth.context.jsx";
@@ -19,14 +20,54 @@ import "../../styles/admin/sidebar.css";
 
 const getActiveMenuFromPath = (path) => {
   const routeMap = {
-    "/admin/product-groups": { menu: "product-groups", subMenu: null },
-    "/admin/products": { menu: "product-groups", subMenu: "products" },
-    "/admin/products/colors": { menu: "product-groups", subMenu: "colors" },
-    "/admin/categories": { menu: "categories", subMenu: null },
-    "/admin/brands": { menu: "brands", subMenu: null },
-    "/admin/users": { menu: "users", subMenu: null },
-    "/admin/roles": { menu: "roles", subMenu: null },
-    "/admin/targets": { menu: "targets", subMenu: null },
+    "/admin/product-groups": {
+      menu: "product-groups",
+      subMenu: null,
+    },
+
+    "/admin/products": {
+      menu: "product-groups",
+      subMenu: "products",
+    },
+
+    "/admin/variants": {
+      menu: "product-groups",
+      subMenu: "variants",
+    },
+    "/admin/product-colors": {
+      menu: "product-groups",
+      subMenu: "product-colors",
+    },
+
+    "/admin/colors": {
+      menu: "product-groups",
+      subMenu: "colors",
+    },
+
+    "/admin/categories": {
+      menu: "categories",
+      subMenu: null,
+    },
+
+    "/admin/brands": {
+      menu: "brands",
+      subMenu: null,
+    },
+
+    "/admin/users": {
+      menu: "users",
+      subMenu: null,
+    },
+
+    "/admin/roles": {
+      menu: "roles",
+      subMenu: null,
+    },
+
+    "/admin/targets": {
+      menu: "targets",
+      subMenu: null,
+    },
   };
 
   const matched = routeMap[path] ||
@@ -34,7 +75,10 @@ const getActiveMenuFromPath = (path) => {
       Object.keys(routeMap)
         .sort((a, b) => b.length - a.length)
         .find((key) => path.startsWith(key))
-    ] || { menu: "dashboard", subMenu: null };
+    ] || {
+      menu: "dashboard",
+      subMenu: null,
+    };
 
   return matched;
 };
@@ -56,46 +100,62 @@ export default function Sidebar({ isOpen, toggleSidebar }) {
         icon: LayoutDashboard,
         path: "/admin",
       },
+
       {
         id: "product-groups",
         label: "Nhóm sản phẩm",
         icon: Boxes,
         path: "/admin/product-groups",
+
         subMenu: [
           {
             id: "products",
             label: "Sản phẩm",
             path: "/admin/products",
             icon: Package,
-            subMenu: [
-              {
-                id: "variants",
-                label: "Biến thể",
-                path: "/admin/products/variants",
-                icon: Layers,
-              },
-            ],
+          },
+          {
+            id: "colors",
+            label: "Màu sắc",
+            path: "/admin/colors",
+            icon: Palette,
+          },
+          {
+            id: "product-colors",
+            label: "Màu theo sản phẩm",
+            path: "/admin/product-colors",
+            icon: Droplet,
+          },
+          {
+            id: "variants",
+            label: "Biến thể",
+            path: "/admin/variants",
+            icon: Layers,
           },
         ],
       },
+
       {
         id: "categories",
         label: "Danh mục sản phẩm",
         icon: Tags,
         path: "/admin/categories",
       },
+
       {
         id: "users",
         label: "Người dùng",
         icon: Users,
         path: "/admin/users",
       },
+
       {
         id: "brands",
         label: "Thương hiệu",
         icon: BadgeCheck,
         path: "/admin/brands",
       },
+
       {
         id: "roles",
         label: "Phân quyền",

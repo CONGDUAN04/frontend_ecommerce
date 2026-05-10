@@ -1,92 +1,161 @@
+/* eslint-disable no-useless-catch */
 import { useState, useRef } from "react";
 import { validateImageFile } from "../utils/fileValidator";
 import { uploadToCloudinary } from "../utils/uploadCloudinary";
+import { deleteFileAPI } from "../services/api.upload";
+import { compressImage } from "../utils/imageCompress";
 
 export const useImageUpload = (form, config) => {
   const { type, fieldName, fieldId } = config;
 
   const [preview, setPreview] = useState(null);
-  const [uploading, setUploading] = useState(false);
+  const [error, setError] = useState(null);
+  const [isUploading, setIsUploading] = useState(false);
+  const [uploadProgress, setUploadProgress] = useState(0);
+  const [uploadTime, setUploadTime] = useState(0);
 
   const objectUrlRef = useRef(null);
-  const pendingFileRef = useRef(null);
+  const inputRef = useRef(null);
+  const uploadPromiseRef = useRef(null);
+  const uploadStartTimeRef = useRef(null);
 
   const setPreviewFromUrl = (url) => {
     if (objectUrlRef.current) {
       URL.revokeObjectURL(objectUrlRef.current);
       objectUrlRef.current = null;
     }
-
-    pendingFileRef.current = null;
     setPreview(url);
+    setError(null);
+    setUploadTime(0);
+    setUploadProgress(0);
   };
 
   const handleChangeFile = async (e) => {
     const file = e?.target?.files?.[0];
     if (!file) return;
 
-    if (objectUrlRef.current) URL.revokeObjectURL(objectUrlRef.current);
+    if (inputRef.current) {
+      inputRef.current.value = "";
+    }
 
-    const objectUrl = URL.createObjectURL(file);
-    objectUrlRef.current = objectUrl;
-    setPreview(objectUrl);
+    const check = validateImageFile(file);
+    if (!check.valid) {
+      setError(check.message);
+      return;
+    }
 
-    pendingFileRef.current = file;
-
-    form.setFieldsValue({ [fieldName]: file, [fieldId]: null });
-
-    setUploading(true);
+    setIsUploading(true);
+    setError(null);
+    setUploadProgress(0);
+    setUploadTime(0);
 
     try {
-      const check = validateImageFile(file);
-
-      if (!check.valid) {
-        await new Promise((r) => setTimeout(r, 500));
-        return;
+      let fileToUpload = file;
+      try {
+        fileToUpload = await compressImage(file, 1200, 1200, 0.8);
+      } catch (compressErr) {
+        console.warn("Compress failed, upload original:", compressErr);
       }
 
-      const { imageUrl, publicId } = await uploadToCloudinary(file, type);
+      if (objectUrlRef.current) {
+        URL.revokeObjectURL(objectUrlRef.current);
+      }
 
-      setPreview(imageUrl);
+      const objectUrl = URL.createObjectURL(fileToUpload);
+      objectUrlRef.current = objectUrl;
+      setPreview(objectUrl);
 
-      form.setFieldsValue({ [fieldName]: imageUrl, [fieldId]: publicId });
+      uploadStartTimeRef.current = Date.now();
 
-      pendingFileRef.current = null;
-    } catch {
-      form.setFields([{ name: fieldName, errors: ["Upload thất bại"] }]);
+      uploadPromiseRef.current = (async () => {
+        try {
+          const oldPublicId = form.getFieldValue(fieldId);
+
+          const { imageUrl, publicId } = await uploadToCloudinary(
+            fileToUpload,
+            type,
+            (percent) => {
+              setUploadProgress(percent);
+            },
+          );
+
+          const elapsed = Date.now() - uploadStartTimeRef.current;
+          setUploadTime(elapsed);
+
+          form.setFieldsValue({
+            [fieldName]: imageUrl,
+            [fieldId]: publicId,
+          });
+
+          setPreview(imageUrl);
+          setUploadProgress(100);
+          setIsUploading(false);
+
+          if (oldPublicId) {
+            deleteFileAPI(oldPublicId).catch((err) => {
+              console.log("Delete old image failed:", err);
+            });
+          }
+        } catch (err) {
+          throw err;
+        }
+      })();
+    } catch (err) {
+      setError("Upload thất bại");
       setPreview(null);
-    } finally {
-      setUploading(false);
+      setIsUploading(false);
+      setUploadProgress(0);
+      form.setFieldsValue({
+        [fieldName]: null,
+        [fieldId]: null,
+      });
     }
   };
 
   const logoValidator = async (_, value) => {
-    const file = pendingFileRef.current;
+    if (isUploading) {
+      return Promise.resolve();
+    }
+    if (preview && preview.startsWith("blob:")) {
+      if (!uploadPromiseRef.current) {
+        return Promise.reject("Vui lòng chọn ảnh");
+      }
 
-    if (!file && !value) {
-      return Promise.reject("Vui lòng chọn ảnh");
+      try {
+        await uploadPromiseRef.current;
+        return Promise.resolve();
+      } catch {
+        return Promise.reject("Upload thất bại");
+      }
     }
 
     if (typeof value === "string" && value.startsWith("http")) {
       return Promise.resolve();
     }
 
-    const check = validateImageFile(file);
-    if (!check.valid) {
-      return Promise.reject(check.message);
+    if (preview) {
+      return Promise.resolve();
     }
 
-    return Promise.resolve();
+    return Promise.reject("Vui lòng chọn ảnh");
   };
 
   const resetImage = () => {
+    if (inputRef.current) {
+      inputRef.current.value = "";
+    }
+
     if (objectUrlRef.current) {
       URL.revokeObjectURL(objectUrlRef.current);
       objectUrlRef.current = null;
     }
 
-    pendingFileRef.current = null;
     setPreview(null);
+    setError(null);
+    setIsUploading(false);
+    setUploadProgress(0);
+    setUploadTime(0);
+    uploadPromiseRef.current = null;
 
     form.setFieldsValue({ [fieldName]: null, [fieldId]: null });
     form.setFields([{ name: fieldName, errors: [] }]);
@@ -94,10 +163,14 @@ export const useImageUpload = (form, config) => {
 
   return {
     preview,
-    uploading,
+    error,
+    isUploading,
+    uploadProgress,
+    uploadTime,
     handleChangeFile,
     logoValidator,
     resetImage,
     setPreviewFromUrl,
+    inputRef,
   };
 };

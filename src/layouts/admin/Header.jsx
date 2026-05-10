@@ -17,13 +17,25 @@ import { handleApiError, handleApiSuccess } from "../../utils/apiHandler.js";
 
 const ROUTE_BREADCRUMB = {
   "/admin": ["Dashboard"],
+
   "/admin/product-groups": ["Nhóm sản phẩm"],
+
   "/admin/products": ["Nhóm sản phẩm", "Sản phẩm"],
-  "/admin/products/variants": ["Nhóm sản phẩm", "Sản phẩm", "Biến thể"],
+
+  "/admin/colors": ["Nhóm sản phẩm", "Màu sắc"],
+
+  "/admin/product-colors": ["Nhóm sản phẩm", "Màu theo sản phẩm"],
+
+  "/admin/variants": ["Nhóm sản phẩm", "Biến thể"],
+
   "/admin/categories": ["Danh mục"],
+
   "/admin/brands": ["Thương hiệu"],
+
   "/admin/users": ["Người dùng"],
+
   "/admin/roles": ["Vai trò"],
+
   "/admin/settings": ["Cài đặt"],
 };
 

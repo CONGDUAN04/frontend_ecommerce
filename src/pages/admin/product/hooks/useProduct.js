@@ -12,16 +12,18 @@ import {
 
 import { createCrudHook } from "../../../../hooks/createCrudHook";
 
+const useProductCrud = createCrudHook({
+  name: "Sản phẩm",
+  apis: {
+    getAll: fetchAllProductsAPI,
+    create: createProductAPI,
+    update: updateProductAPI,
+    delete: deleteProductAPI,
+  },
+});
+
 export const useProduct = () => {
-  const crud = createCrudHook({
-    name: "Sản phẩm",
-    apis: {
-      getAll: fetchAllProductsAPI,
-      create: createProductAPI,
-      update: updateProductAPI,
-      delete: deleteProductAPI,
-    },
-  })();
+  const crud = useProductCrud();
 
   const { api } = useContext(NotifyContext);
 

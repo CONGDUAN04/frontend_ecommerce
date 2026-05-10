@@ -5,11 +5,10 @@ import { Spin } from "antd";
 export default function UploadImage({
   preview,
   onChange,
-  uploading,
+  isUploading,
+  uploadProgress = 0,
   label = "Upload ảnh",
   disabled = false,
-
-  // 👇 thêm 2 props từ Form.Item
   status,
   help,
 }) {
@@ -32,7 +31,6 @@ export default function UploadImage({
         width: "100%",
       }}
     >
-      {/* BUTTON */}
       <label
         style={{
           padding: "10px 18px",
@@ -49,6 +47,7 @@ export default function UploadImage({
       >
         <UploadOutlined />
         {label}
+
         <input
           ref={inputRef}
           type="file"
@@ -59,7 +58,6 @@ export default function UploadImage({
         />
       </label>
 
-      {/* PREVIEW */}
       {preview && (
         <div
           style={{
@@ -72,8 +70,6 @@ export default function UploadImage({
             display: "flex",
             justifyContent: "center",
             alignItems: "center",
-
-            // 🔥 highlight lỗi
             border: isError ? "2px solid #ff4d4f" : "1px solid #ddd",
           }}
         >
@@ -86,8 +82,7 @@ export default function UploadImage({
               objectFit: "cover",
             }}
           />
-
-          {uploading && (
+          {isUploading && (
             <div
               style={{
                 position: "absolute",
@@ -101,13 +96,14 @@ export default function UploadImage({
               }}
             >
               <Spin size="small" />
-              <span style={{ fontSize: 12 }}>Đang tải...</span>
+              <span style={{ fontSize: 14, fontWeight: 500 }}>
+                {uploadProgress}%
+              </span>
             </div>
           )}
         </div>
       )}
 
-      {/* 🔴 ERROR TEXT */}
       {isError && help && (
         <div
           style={{
