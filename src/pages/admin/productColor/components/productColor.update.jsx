@@ -1,13 +1,13 @@
 import { useEffect, useState } from "react";
-import { Form, Select, Input } from "antd";
-
+import { Form, Input } from "antd";
 import BaseModal from "../../../../components/common/BaseModal";
+import BaseSelect from "../../../../components/common/BaseSelect";
+import UploadImage from "../../../../components/common/ImageUpload";
 import { useProductColor } from "../hooks/useProductColor";
 import { useColor } from "../../color/hooks/useColor";
-
-import UploadImage from "../../../../components/common/ImageUpload";
 import { useImageUpload } from "../../../../hooks/useImageUpload";
-import { universalFilterOption } from "../../../../utils/selectFilter";
+import { mapOptions } from "../../../../utils/mapOptions";
+
 export default function UpdateProductColor({
   openUpdate,
   setOpenUpdate,
@@ -18,9 +18,11 @@ export default function UpdateProductColor({
   const [form] = Form.useForm();
 
   const [colors, setColors] = useState([]);
+
   const [loading, setLoading] = useState(false);
 
   const { update } = useProductColor();
+
   const { getAll: getColors } = useColor();
 
   const {
@@ -43,6 +45,7 @@ export default function UpdateProductColor({
 
     const loadColors = async () => {
       const res = await getColors(1, 100);
+
       setColors(res?.data || []);
     };
 
@@ -61,12 +64,14 @@ export default function UpdateProductColor({
     if (dataUpdate.image) {
       setPreviewFromUrl(dataUpdate.image);
     }
-  }, [dataUpdate]);
+  }, [dataUpdate, form]);
 
   const reset = () => {
     form.resetFields();
     resetImage();
+
     setColors([]);
+
     setOpenUpdate(false);
     setDataUpdate(null);
   };
@@ -104,15 +109,9 @@ export default function UpdateProductColor({
             },
           ]}
         >
-          <Select
+          <BaseSelect
             placeholder="Tìm kiếm màu sắc..."
-            showSearch
-            optionFilterProp="label"
-            filterOption={universalFilterOption}
-            options={colors.map((c) => ({
-              label: c.name,
-              value: c.id,
-            }))}
+            options={mapOptions(colors)}
           />
         </Form.Item>
 

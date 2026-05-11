@@ -1,22 +1,38 @@
 import { useState } from "react";
+
 import { Form, Input } from "antd";
+
 import BaseModal from "../../../../components/common/BaseModal.jsx";
 import BaseCreateButton from "../../../../components/common/BaseCreateButton.jsx";
-import { useCategory } from "../hooks/useCategory.js";
+
 import UploadImage from "../../../../components/common/ImageUpload.jsx";
+
+import { useCategory } from "../hooks/useCategory.js";
+
 import { useImageUpload } from "../../../../hooks/useImageUpload.js";
 
 export default function CreateCategoryForm({ loadCategory }) {
   const [isOpen, setIsOpen] = useState(false);
-  const [form] = Form.useForm();
-  const { create } = useCategory();
+
   const [loading, setLoading] = useState(false);
-  const { preview, handleChangeFile, resetImage, uploading, logoValidator } =
-    useImageUpload(form, {
-      type: "category",
-      fieldName: "icon",
-      fieldId: "iconId",
-    });
+
+  const [form] = Form.useForm();
+
+  const { create } = useCategory();
+
+  const {
+    preview,
+    error,
+    isUploading,
+    uploadProgress,
+    handleChangeFile,
+    resetImage,
+    logoValidator,
+  } = useImageUpload(form, {
+    type: "category",
+    fieldName: "icon",
+    fieldId: "iconId",
+  });
 
   const reset = () => {
     form.resetFields();
@@ -26,44 +42,55 @@ export default function CreateCategoryForm({ loadCategory }) {
 
   const handleSubmit = async (values) => {
     setLoading(true);
+
     const res = await create(values, form);
+
     if (res) {
       reset();
       await loadCategory();
     }
+
     setLoading(false);
   };
 
   return (
     <>
-      <BaseCreateButton onClick={() => setIsOpen(true)} text="Tạo danh mục" />
+      <BaseCreateButton text="Tạo danh mục" onClick={() => setIsOpen(true)} />
 
       <BaseModal
         open={isOpen}
         onOk={() => form.submit()}
         onCancel={reset}
-        okText="Tạo mới"
         title="Tạo danh mục"
+        okText="Tạo mới"
         confirmLoading={loading}
       >
         <Form form={form} layout="vertical" onFinish={handleSubmit}>
           <Form.Item
-            label="Tên danh mục"
             name="name"
-            rules={[{ required: true, message: "Không được để trống" }]}
+            label="Tên danh mục"
+            rules={[
+              {
+                required: true,
+                message: "Tên danh mục không được để trống",
+              },
+            ]}
           >
-            <Input />
+            <Input placeholder="Nhập tên danh mục..." />
           </Form.Item>
 
           <Form.Item
-            label="Icon"
             name="icon"
+            label="Icon"
             rules={[{ validator: logoValidator }]}
           >
             <UploadImage
               preview={preview}
-              uploading={uploading}
+              isUploading={isUploading}
+              uploadProgress={uploadProgress}
               onChange={handleChangeFile}
+              status={error ? "error" : ""}
+              help={error}
             />
           </Form.Item>
 

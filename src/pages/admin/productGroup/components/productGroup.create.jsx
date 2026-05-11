@@ -1,29 +1,43 @@
 import { useEffect, useState } from "react";
-import { Form, Input, Select } from "antd";
+import { Form, Input } from "antd";
 import BaseModal from "../../../../components/common/BaseModal.jsx";
 import BaseCreateButton from "../../../../components/common/BaseCreateButton.jsx";
+import BaseSelect from "../../../../components/common/BaseSelect";
+import UploadImage from "../../../../components/common/ImageUpload.jsx";
 import { useProductGroup } from "../hooks/useProductGroup";
 import { useBrand } from "../../brand/hooks/useBrand";
 import { useCategory } from "../../category/hooks/useCategory";
 import { useImageUpload } from "../../../../hooks/useImageUpload.js";
-import UploadImage from "../../../../components/common/ImageUpload.jsx";
+import { mapOptions } from "../../../../utils/mapOptions";
 
 export default function CreateProductGroupForm({ loadGroups }) {
   const [isOpen, setIsOpen] = useState(false);
-  const [form] = Form.useForm();
+
   const [brands, setBrands] = useState([]);
   const [categories, setCategories] = useState([]);
+
   const [loading, setLoading] = useState(false);
-  const { preview, handleChangeFile, resetImage, uploading, logoValidator } =
-    useImageUpload(form, {
-      type: "productGroup",
-      fieldName: "thumbnail",
-      fieldId: "thumbnailId",
-    });
+
+  const [form] = Form.useForm();
 
   const { create } = useProductGroup();
+
   const { getAll: getAllBrands } = useBrand();
   const { getAll: getAllCategories } = useCategory();
+
+  const {
+    preview,
+    error,
+    isUploading,
+    uploadProgress,
+    handleChangeFile,
+    resetImage,
+    logoValidator,
+  } = useImageUpload(form, {
+    type: "productGroup",
+    fieldName: "thumbnail",
+    fieldId: "thumbnailId",
+  });
 
   useEffect(() => {
     if (!isOpen) return;
@@ -43,20 +57,26 @@ export default function CreateProductGroupForm({ loadGroups }) {
 
   const reset = () => {
     form.resetFields();
+
     resetImage();
+
     setBrands([]);
     setCategories([]);
+
     setIsOpen(false);
   };
 
   const handleSubmit = async (values) => {
-    console.log(values);
     setLoading(true);
+
     const res = await create(values, form);
+
     if (res) {
       reset();
+
       await loadGroups();
     }
+
     setLoading(false);
   };
 
@@ -77,60 +97,79 @@ export default function CreateProductGroupForm({ loadGroups }) {
       >
         <Form form={form} layout="vertical" onFinish={handleSubmit}>
           <Form.Item
-            label="Tên nhóm"
             name="name"
-            rules={[{ required: true, message: "Không được để trống" }]}
+            label="Tên nhóm"
+            rules={[
+              {
+                required: true,
+                message: "Tên nhóm không được để trống",
+              },
+            ]}
           >
-            <Input />
+            <Input placeholder="Nhập tên nhóm..." />
           </Form.Item>
 
           <Form.Item
-            label="Series"
             name="series"
-            rules={[{ required: true, message: "series không được để trống" }]}
+            label="Series"
+            rules={[
+              {
+                required: true,
+                message: "Series không được để trống",
+              },
+            ]}
           >
-            <Input />
+            <Input placeholder="Nhập series..." />
           </Form.Item>
 
           <Form.Item
-            label="Thương hiệu"
             name="brandId"
-            rules={[{ required: true, message: "Vui lòng chọn thương hiệu" }]}
+            label="Thương hiệu"
+            rules={[
+              {
+                required: true,
+                message: "Vui lòng chọn thương hiệu",
+              },
+            ]}
           >
-            <Select
-              options={brands.map((b) => ({
-                label: b.name,
-                value: b.id,
-              }))}
+            <BaseSelect
+              placeholder="Tìm kiếm thương hiệu..."
+              options={mapOptions(brands)}
             />
           </Form.Item>
 
           <Form.Item
-            label="Danh mục"
             name="categoryId"
-            rules={[{ required: true, message: "Vui lòng chọn danh mục" }]}
+            label="Danh mục"
+            rules={[
+              {
+                required: true,
+                message: "Vui lòng chọn danh mục",
+              },
+            ]}
           >
-            <Select
-              options={categories.map((c) => ({
-                label: c.name,
-                value: c.id,
-              }))}
+            <BaseSelect
+              placeholder="Tìm kiếm danh mục..."
+              options={mapOptions(categories)}
             />
           </Form.Item>
 
-          <Form.Item label="Mô tả" name="description">
+          <Form.Item name="description" label="Mô tả">
             <Input.TextArea rows={4} />
           </Form.Item>
 
           <Form.Item
-            label="Ảnh đại diện"
             name="thumbnail"
+            label="Ảnh đại diện"
             rules={[{ validator: logoValidator }]}
           >
             <UploadImage
               preview={preview}
-              uploading={uploading}
+              isUploading={isUploading}
+              uploadProgress={uploadProgress}
               onChange={handleChangeFile}
+              status={error ? "error" : ""}
+              help={error}
             />
           </Form.Item>
 

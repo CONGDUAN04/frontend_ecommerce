@@ -1,13 +1,13 @@
-import { createCrudHook } from "../../../../hooks/createCrudHook.js";
+import { createCrudHook } from "../../../../hooks/createCrudHook";
 import {
   fetchAllCategoriesAPI,
   createCategoryAPI,
   updateCategoryAPI,
   deleteCategoryAPI,
-} from "../../../../services/api.category.js";
+} from "../../../../services/api.category";
 
-export const useCategory = createCrudHook({
-  name: "danh mục",
+const useCategoryCrud = createCrudHook({
+  name: "Danh mục",
   apis: {
     getAll: fetchAllCategoriesAPI,
     create: createCategoryAPI,
@@ -15,3 +15,7 @@ export const useCategory = createCrudHook({
     delete: deleteCategoryAPI,
   },
 });
+
+export const useCategory = () => {
+  return useCategoryCrud();
+};

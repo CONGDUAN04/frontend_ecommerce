@@ -1,11 +1,13 @@
 import { createCrudHook } from "../../../../hooks/createCrudHook";
+
 import {
   fetchAllRolesAPI,
   createRoleAPI,
   updateRoleAPI,
   deleteRoleAPI,
 } from "../../../../services/api.role";
-export const useRole = createCrudHook({
+
+const useRoleCrud = createCrudHook({
   name: "Vai trò",
   apis: {
     getAll: fetchAllRolesAPI,
@@ -14,3 +16,7 @@ export const useRole = createCrudHook({
     delete: deleteRoleAPI,
   },
 });
+
+export const useRole = () => {
+  return useRoleCrud();
+};

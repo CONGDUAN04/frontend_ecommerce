@@ -1,7 +1,6 @@
-// src/pages/admin/color/components/color.update.jsx
-
 import { useEffect, useState } from "react";
-import { Form, Input, ColorPicker } from "antd";
+
+import { ColorPicker, Form, Input } from "antd";
 
 import BaseModal from "../../../../components/common/BaseModal.jsx";
 
@@ -16,19 +15,19 @@ export default function UpdateColorForm({
 }) {
   const [form] = Form.useForm();
 
-  const { update } = useColor();
-
   const [loading, setLoading] = useState(false);
 
+  const { update } = useColor();
+
   useEffect(() => {
-    if (!dataUpdate?.id) return;
+    if (!dataUpdate) return;
 
     form.setFieldsValue({
       id: dataUpdate.id,
       name: dataUpdate.name,
       code: dataUpdate.code,
     });
-  }, [dataUpdate]);
+  }, [dataUpdate, form]);
 
   const reset = () => {
     form.resetFields();
@@ -65,8 +64,8 @@ export default function UpdateColorForm({
         </Form.Item>
 
         <Form.Item
-          label="Tên màu"
           name="name"
+          label="Tên màu"
           rules={[
             {
               required: true,
@@ -74,12 +73,12 @@ export default function UpdateColorForm({
             },
           ]}
         >
-          <Input />
+          <Input placeholder="Nhập tên màu..." />
         </Form.Item>
 
         <Form.Item
-          label="Mã màu"
           name="code"
+          label="Mã màu"
           rules={[
             {
               required: true,
@@ -89,6 +88,7 @@ export default function UpdateColorForm({
         >
           <ColorPicker
             format="hex"
+            showText
             onChange={(color) => {
               form.setFieldValue("code", color.toHexString());
             }}

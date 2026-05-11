@@ -1,13 +1,13 @@
-import { createCrudHook } from "../../../../hooks/createCrudHook.js";
+import { createCrudHook } from "../../../../hooks/createCrudHook";
 import {
   fetchAllBrandsAPI,
   createBrandAPI,
   updateBrandAPI,
   deleteBrandAPI,
-} from "../../../../services/api.brand.js";
+} from "../../../../services/api.brand";
 
-export const useBrand = createCrudHook({
-  name: "thương hiệu",
+const useBrandCrud = createCrudHook({
+  name: "Thương hiệu",
   apis: {
     getAll: fetchAllBrandsAPI,
     create: createBrandAPI,
@@ -15,3 +15,7 @@ export const useBrand = createCrudHook({
     delete: deleteBrandAPI,
   },
 });
+
+export const useBrand = () => {
+  return useBrandCrud();
+};

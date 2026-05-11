@@ -1,9 +1,14 @@
 import { useEffect, useState } from "react";
+
 import { Form, Input } from "antd";
+
 import BaseModal from "../../../../components/common/BaseModal.jsx";
-import { useCategory } from "../hooks/useCategory.js";
-import { useImageUpload } from "../../../../hooks/useImageUpload.js";
+
 import UploadImage from "../../../../components/common/ImageUpload.jsx";
+
+import { useCategory } from "../hooks/useCategory.js";
+
+import { useImageUpload } from "../../../../hooks/useImageUpload.js";
 
 export default function UpdateCategoryForm({
   openUpdate,
@@ -13,14 +18,19 @@ export default function UpdateCategoryForm({
   loadCategory,
 }) {
   const [form] = Form.useForm();
-  const { update } = useCategory();
+
   const [loading, setLoading] = useState(false);
+
+  const { update } = useCategory();
+
   const {
     preview,
+    error,
+    isUploading,
+    uploadProgress,
     handleChangeFile,
     setPreviewFromUrl,
     resetImage,
-    uploading,
     logoValidator,
   } = useImageUpload(form, {
     type: "category",
@@ -29,7 +39,7 @@ export default function UpdateCategoryForm({
   });
 
   useEffect(() => {
-    if (!dataUpdate?.id) return;
+    if (!dataUpdate) return;
 
     form.setFieldsValue({
       id: dataUpdate.id,
@@ -38,25 +48,29 @@ export default function UpdateCategoryForm({
       iconId: dataUpdate.iconId,
     });
 
-    if (dataUpdate.icon && !preview) {
+    if (dataUpdate.icon) {
       setPreviewFromUrl(dataUpdate.icon);
     }
-  }, [dataUpdate]);
+  }, [dataUpdate, form]);
 
   const reset = () => {
     form.resetFields();
     resetImage();
+
     setDataUpdate(null);
     setOpenUpdate(false);
   };
 
   const handleSubmit = async (values) => {
     setLoading(true);
+
     const res = await update(dataUpdate.id, values, form);
+
     if (res) {
       reset();
       await loadCategory();
     }
+
     setLoading(false);
   };
 
@@ -75,22 +89,30 @@ export default function UpdateCategoryForm({
         </Form.Item>
 
         <Form.Item
-          label="Tên danh mục"
           name="name"
-          rules={[{ required: true, message: "Không được để trống" }]}
+          label="Tên danh mục"
+          rules={[
+            {
+              required: true,
+              message: "Tên danh mục không được để trống",
+            },
+          ]}
         >
-          <Input />
+          <Input placeholder="Nhập tên danh mục..." />
         </Form.Item>
 
         <Form.Item
-          label="Icon"
           name="icon"
+          label="Icon"
           rules={[{ validator: logoValidator }]}
         >
           <UploadImage
             preview={preview}
-            uploading={uploading}
+            isUploading={isUploading}
+            uploadProgress={uploadProgress}
             onChange={handleChangeFile}
+            status={error ? "error" : ""}
+            help={error}
           />
         </Form.Item>
 

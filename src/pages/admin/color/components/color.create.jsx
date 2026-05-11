@@ -1,7 +1,6 @@
-// src/pages/admin/color/components/color.create.jsx
-
 import { useState } from "react";
-import { Form, Input, ColorPicker } from "antd";
+
+import { ColorPicker, Form, Input } from "antd";
 
 import BaseModal from "../../../../components/common/BaseModal.jsx";
 import BaseCreateButton from "../../../../components/common/BaseCreateButton.jsx";
@@ -10,11 +9,12 @@ import { useColor } from "../hooks/useColor.js";
 
 export default function CreateColorForm({ loadColor }) {
   const [isOpen, setIsOpen] = useState(false);
+
+  const [loading, setLoading] = useState(false);
+
   const [form] = Form.useForm();
 
   const { create } = useColor();
-
-  const [loading, setLoading] = useState(false);
 
   const reset = () => {
     form.resetFields();
@@ -48,8 +48,8 @@ export default function CreateColorForm({ loadColor }) {
       >
         <Form form={form} layout="vertical" onFinish={handleSubmit}>
           <Form.Item
-            label="Tên màu"
             name="name"
+            label="Tên màu"
             rules={[
               {
                 required: true,
@@ -57,11 +57,12 @@ export default function CreateColorForm({ loadColor }) {
               },
             ]}
           >
-            <Input />
+            <Input placeholder="Nhập tên màu..." />
           </Form.Item>
+
           <Form.Item
-            label="Mã màu"
             name="code"
+            label="Mã màu"
             rules={[
               {
                 required: true,
@@ -71,6 +72,7 @@ export default function CreateColorForm({ loadColor }) {
           >
             <ColorPicker
               format="hex"
+              showText
               onChange={(color) => {
                 form.setFieldValue("code", color.toHexString());
               }}

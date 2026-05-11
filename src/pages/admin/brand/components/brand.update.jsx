@@ -1,9 +1,14 @@
 import { useEffect, useState } from "react";
+
 import { Form, Input } from "antd";
+
 import BaseModal from "../../../../components/common/BaseModal.jsx";
-import { useBrand } from "../hooks/useBrand.js";
-import { useImageUpload } from "../../../../hooks/useImageUpload.js";
+
 import UploadImage from "../../../../components/common/ImageUpload.jsx";
+
+import { useBrand } from "../hooks/useBrand.js";
+
+import { useImageUpload } from "../../../../hooks/useImageUpload.js";
 
 export default function UpdateBrandForm({
   openUpdate,
@@ -13,14 +18,19 @@ export default function UpdateBrandForm({
   loadBrand,
 }) {
   const [form] = Form.useForm();
-  const { update } = useBrand();
+
   const [loading, setLoading] = useState(false);
+
+  const { update } = useBrand();
+
   const {
     preview,
+    error,
+    isUploading,
+    uploadProgress,
     handleChangeFile,
     setPreviewFromUrl,
     resetImage,
-    uploading,
     logoValidator,
   } = useImageUpload(form, {
     type: "brand",
@@ -29,7 +39,7 @@ export default function UpdateBrandForm({
   });
 
   useEffect(() => {
-    if (!dataUpdate?.id) return;
+    if (!dataUpdate) return;
 
     form.setFieldsValue({
       id: dataUpdate.id,
@@ -38,25 +48,29 @@ export default function UpdateBrandForm({
       logoId: dataUpdate.logoId,
     });
 
-    if (dataUpdate.logo && !preview) {
+    if (dataUpdate.logo) {
       setPreviewFromUrl(dataUpdate.logo);
     }
-  }, [dataUpdate]);
+  }, [dataUpdate, form]);
 
   const reset = () => {
     form.resetFields();
     resetImage();
+
     setDataUpdate(null);
     setOpenUpdate(false);
   };
 
   const handleSubmit = async (values) => {
     setLoading(true);
+
     const res = await update(dataUpdate.id, values, form);
+
     if (res) {
       reset();
       await loadBrand();
     }
+
     setLoading(false);
   };
 
@@ -75,22 +89,30 @@ export default function UpdateBrandForm({
         </Form.Item>
 
         <Form.Item
-          label="Tên thương hiệu"
           name="name"
-          rules={[{ required: true, message: "Không được để trống" }]}
+          label="Tên thương hiệu"
+          rules={[
+            {
+              required: true,
+              message: "Tên thương hiệu không được để trống",
+            },
+          ]}
         >
-          <Input />
+          <Input placeholder="Nhập tên thương hiệu..." />
         </Form.Item>
 
         <Form.Item
-          label="Logo"
           name="logo"
+          label="Logo"
           rules={[{ validator: logoValidator }]}
         >
           <UploadImage
             preview={preview}
-            uploading={uploading}
+            isUploading={isUploading}
+            uploadProgress={uploadProgress}
             onChange={handleChangeFile}
+            status={error ? "error" : ""}
+            help={error}
           />
         </Form.Item>
 

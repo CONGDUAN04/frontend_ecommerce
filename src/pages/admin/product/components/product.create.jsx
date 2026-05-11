@@ -1,59 +1,80 @@
 import { useEffect, useState } from "react";
-import { Form, Input, Select, InputNumber } from "antd";
+import { Form, Input } from "antd";
 import BaseModal from "../../../../components/common/BaseModal.jsx";
 import BaseCreateButton from "../../../../components/common/BaseCreateButton.jsx";
+import BaseSelect from "../../../../components/common/BaseSelect";
+import UploadImage from "../../../../components/common/ImageUpload";
 import { useProduct } from "../hooks/useProduct";
 import { useProductGroup } from "../../productGroup/hooks/useProductGroup";
 import { useImageUpload } from "../../../../hooks/useImageUpload";
-import UploadImage from "../../../../components/common/ImageUpload";
+import { mapOptions } from "../../../../utils/mapOptions";
 
 export default function CreateProductForm({ loadProducts }) {
   const [isOpen, setIsOpen] = useState(false);
-  const [form] = Form.useForm();
+
   const [groups, setGroups] = useState([]);
   const [loading, setLoading] = useState(false);
 
-  const { preview, handleChangeFile, resetImage, uploading, logoValidator } =
-    useImageUpload(form, {
-      type: "product",
-      fieldName: "thumbnail",
-      fieldId: "thumbnailId",
-    });
+  const [form] = Form.useForm();
 
   const { create } = useProduct();
+
   const { getAll: getAllGroups } = useProductGroup();
+
+  const {
+    preview,
+    error,
+    isUploading,
+    uploadProgress,
+    handleChangeFile,
+    resetImage,
+    logoValidator,
+  } = useImageUpload(form, {
+    type: "product",
+    fieldName: "thumbnail",
+    fieldId: "thumbnailId",
+  });
 
   useEffect(() => {
     if (!isOpen) return;
 
-    const load = async () => {
+    const loadData = async () => {
       const res = await getAllGroups();
+
       setGroups(res?.data || []);
     };
 
-    load();
+    loadData();
   }, [isOpen]);
 
   const reset = () => {
     form.resetFields();
+
     resetImage();
+
     setGroups([]);
+
     setIsOpen(false);
   };
 
   const handleSubmit = async (values) => {
     setLoading(true);
+
     const res = await create(values, form);
+
     if (res) {
       reset();
+
       await loadProducts();
     }
+
     setLoading(false);
   };
 
   return (
     <>
       <BaseCreateButton text="Tạo sản phẩm" onClick={() => setIsOpen(true)} />
+
       <BaseModal
         open={isOpen}
         onOk={() => form.submit()}
@@ -65,48 +86,49 @@ export default function CreateProductForm({ loadProducts }) {
         <Form form={form} layout="vertical" onFinish={handleSubmit}>
           <Form.Item
             name="name"
-            label="Tên"
+            label="Tên sản phẩm"
             rules={[
-              { required: true, message: "Tên sản phẩm không được để trống" },
+              {
+                required: true,
+                message: "Tên sản phẩm không được để trống",
+              },
             ]}
           >
-            <Input />
+            <Input placeholder="Nhập tên sản phẩm..." />
           </Form.Item>
 
           <Form.Item
             name="groupId"
-            label="Nhóm"
+            label="Nhóm sản phẩm"
             rules={[
-              { required: true, message: "Nhóm sản phẩm không được để trống" },
+              {
+                required: true,
+                message: "Nhóm sản phẩm không được để trống",
+              },
             ]}
           >
-            <Select
-              showSearch
-              placeholder="Tìm nhóm sản phẩm..."
-              optionFilterProp="label"
-              filterOption={(input, option) =>
-                option.label.toLowerCase().includes(input.toLowerCase())
-              }
-              options={groups.map((g) => ({
-                label: g.name,
-                value: g.id,
-              }))}
+            <BaseSelect
+              placeholder="Tìm kiếm nhóm sản phẩm..."
+              options={mapOptions(groups)}
             />
           </Form.Item>
 
           <Form.Item name="description" label="Mô tả">
-            <Input.TextArea />
+            <Input.TextArea rows={4} />
           </Form.Item>
 
           <Form.Item
             name="thumbnail"
-            label="Ảnh"
+            label="Ảnh sản phẩm"
             rules={[{ validator: logoValidator }]}
           >
             <UploadImage
               preview={preview}
-              uploading={uploading}
+              isUploading={isUploading}
+              uploadProgress={uploadProgress}
               onChange={handleChangeFile}
+              status={error ? "error" : ""}
+              help={error}
             />
           </Form.Item>
 

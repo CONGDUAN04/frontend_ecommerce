@@ -1,10 +1,12 @@
 import { useEffect, useState } from "react";
-import { Form, Input, Select } from "antd";
+import { Form, Input } from "antd";
 import BaseModal from "../../../../components/common/BaseModal.jsx";
+import BaseSelect from "../../../../components/common/BaseSelect.jsx";
+import UploadImage from "../../../../components/common/ImageUpload.jsx";
 import { useUser } from "../hooks/useUser.js";
 import { useRole } from "../../role/hooks/useRole.js";
 import { useImageUpload } from "../../../../hooks/useImageUpload.js";
-import UploadImage from "../../../../components/common/ImageUpload.jsx";
+import { mapOptions } from "../../../../utils/mapOptions.js";
 
 export default function UpdateUserForm({
   openUpdate,
@@ -14,17 +16,21 @@ export default function UpdateUserForm({
   loadUser,
 }) {
   const [form] = Form.useForm();
+
   const [roles, setRoles] = useState([]);
   const [loading, setLoading] = useState(false);
+
   const { update } = useUser();
   const { getAll: getAllRoles } = useRole();
 
   const {
     preview,
+    error,
+    isUploading,
+    uploadProgress,
     handleChangeFile,
     resetImage,
     setPreviewFromUrl,
-    uploading,
     logoValidator,
   } = useImageUpload(form, {
     type: "user",
@@ -32,21 +38,20 @@ export default function UpdateUserForm({
     fieldId: "avatarId",
   });
 
-  // load roles
   useEffect(() => {
     if (!openUpdate) return;
 
     const loadRoles = async () => {
       const res = await getAllRoles();
+
       setRoles(res?.data || []);
     };
 
     loadRoles();
   }, [openUpdate]);
 
-  // fill data
   useEffect(() => {
-    if (!dataUpdate?.id) return;
+    if (!dataUpdate) return;
 
     form.setFieldsValue({
       username: dataUpdate.username,
@@ -57,30 +62,37 @@ export default function UpdateUserForm({
       avatarId: dataUpdate.avatarId,
     });
 
-    if (dataUpdate.avatar && !preview) {
+    if (dataUpdate.avatar) {
       setPreviewFromUrl(dataUpdate.avatar);
     }
-  }, [dataUpdate]);
+  }, [dataUpdate, form]);
 
   const reset = () => {
     form.resetFields();
     resetImage();
+
+    setRoles([]);
+
     setDataUpdate(null);
     setOpenUpdate(false);
-    setRoles([]);
   };
 
   const handleSubmit = async (values) => {
     setLoading(true);
+
     const payload = { ...values };
+
     if (Number(payload.roleId) === Number(dataUpdate.role?.id)) {
       delete payload.roleId;
     }
+
     const res = await update(dataUpdate.id, payload, form);
+
     if (res) {
       reset();
       await loadUser();
     }
+
     setLoading(false);
   };
 
@@ -99,43 +111,59 @@ export default function UpdateUserForm({
         </Form.Item>
 
         <Form.Item
-          label="Họ và tên"
           name="fullName"
-          rules={[{ required: true, message: "Không được để trống" }]}
+          label="Họ và tên"
+          rules={[
+            {
+              required: true,
+              message: "Họ và tên không được để trống",
+            },
+          ]}
         >
-          <Input />
+          <Input placeholder="Nhập họ và tên..." />
         </Form.Item>
 
         <Form.Item
-          label="Số điện thoại"
           name="phone"
-          rules={[{ required: true, message: "Không được để trống" }]}
+          label="Số điện thoại"
+          rules={[
+            {
+              required: true,
+              message: "Số điện thoại không được để trống",
+            },
+          ]}
         >
-          <Input />
+          <Input placeholder="Nhập số điện thoại..." />
         </Form.Item>
 
         <Form.Item
-          label="Phân quyền"
           name="roleId"
-          rules={[{ required: true, message: "Không được để trống" }]}
+          label="Phân quyền"
+          rules={[
+            {
+              required: true,
+              message: "Vui lòng chọn phân quyền",
+            },
+          ]}
         >
-          <Select
-            options={roles.map((r) => ({
-              label: r.name,
-              value: r.id,
-            }))}
+          <BaseSelect
+            placeholder="Tìm kiếm phân quyền..."
+            options={mapOptions(roles)}
           />
         </Form.Item>
 
         <Form.Item
-          label="Avatar"
           name="avatar"
+          label="Avatar"
           rules={[{ validator: logoValidator }]}
         >
           <UploadImage
             preview={preview}
-            uploading={uploading}
+            isUploading={isUploading}
+            uploadProgress={uploadProgress}
             onChange={handleChangeFile}
+            status={error ? "error" : ""}
+            help={error}
           />
         </Form.Item>
 

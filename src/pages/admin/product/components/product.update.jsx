@@ -1,10 +1,18 @@
 import { useEffect, useState } from "react";
-import { Form, Input, Select, InputNumber } from "antd";
+
+import { Form, Input } from "antd";
+
 import BaseModal from "../../../../components/common/BaseModal";
+import BaseSelect from "../../../../components/common/BaseSelect";
+
+import UploadImage from "../../../../components/common/ImageUpload";
+
 import { useProduct } from "../hooks/useProduct";
 import { useProductGroup } from "../../productGroup/hooks/useProductGroup";
+
 import { useImageUpload } from "../../../../hooks/useImageUpload";
-import UploadImage from "../../../../components/common/ImageUpload";
+
+import { mapOptions } from "../../../../utils/mapOptions";
 
 export default function UpdateProductForm({
   openUpdate,
@@ -14,15 +22,22 @@ export default function UpdateProductForm({
   loadProducts,
 }) {
   const [form] = Form.useForm();
+
   const [groups, setGroups] = useState([]);
   const [loading, setLoading] = useState(false);
 
+  const { update } = useProduct();
+
+  const { getAll: getAllGroups } = useProductGroup();
+
   const {
     preview,
+    error,
+    isUploading,
+    uploadProgress,
     handleChangeFile,
     resetImage,
     setPreviewFromUrl,
-    uploading,
     logoValidator,
   } = useImageUpload(form, {
     type: "product",
@@ -30,42 +45,57 @@ export default function UpdateProductForm({
     fieldId: "thumbnailId",
   });
 
-  const { update } = useProduct();
-  const { getAll: getAllGroups } = useProductGroup();
-
   useEffect(() => {
     if (!openUpdate) return;
-    getAllGroups().then((res) => setGroups(res?.data || []));
+
+    const loadGroups = async () => {
+      const res = await getAllGroups();
+
+      setGroups(res?.data || []);
+    };
+
+    loadGroups();
   }, [openUpdate]);
 
   useEffect(() => {
     if (!dataUpdate) return;
 
     form.setFieldsValue({
-      ...dataUpdate,
+      name: dataUpdate.name,
+      description: dataUpdate.description,
       groupId: dataUpdate.group?.id,
+      thumbnail: dataUpdate.thumbnail,
+      thumbnailId: dataUpdate.thumbnailId,
     });
 
-    if (dataUpdate.thumbnail && !preview) {
+    if (dataUpdate.thumbnail) {
       setPreviewFromUrl(dataUpdate.thumbnail);
     }
   }, [dataUpdate]);
 
   const reset = () => {
     form.resetFields();
+
     resetImage();
+
     setGroups([]);
+
     setDataUpdate(null);
+
     setOpenUpdate(false);
   };
 
   const handleSubmit = async (values) => {
     setLoading(true);
+
     const res = await update(dataUpdate.id, values, form);
+
     if (res) {
       reset();
+
       await loadProducts();
     }
+
     setLoading(false);
   };
 
@@ -76,44 +106,54 @@ export default function UpdateProductForm({
       onCancel={reset}
       title="Cập nhật sản phẩm"
       confirmLoading={loading}
+      okText="Cập nhật"
     >
       <Form form={form} layout="vertical" onFinish={handleSubmit}>
         <Form.Item
           name="name"
-          label="Tên"
+          label="Tên sản phẩm"
           rules={[
-            { required: true, message: "Tên sản phẩm không được để trống" },
+            {
+              required: true,
+              message: "Tên sản phẩm không được để trống",
+            },
           ]}
         >
-          <Input />
+          <Input placeholder="Nhập tên sản phẩm..." />
         </Form.Item>
 
         <Form.Item
           name="groupId"
-          label="Nhóm"
+          label="Nhóm sản phẩm"
           rules={[
-            { required: true, message: "Nhóm sản phẩm không được để trống" },
+            {
+              required: true,
+              message: "Nhóm sản phẩm không được để trống",
+            },
           ]}
         >
-          <Select
-            showSearch
-            placeholder="Tìm nhóm sản phẩm..."
-            optionFilterProp="label"
-            filterOption={(input, option) =>
-              option.label.toLowerCase().includes(input.toLowerCase())
-            }
-            options={groups.map((g) => ({
-              label: g.name,
-              value: g.id,
-            }))}
+          <BaseSelect
+            placeholder="Tìm kiếm nhóm sản phẩm..."
+            options={mapOptions(groups)}
           />
         </Form.Item>
 
-        <Form.Item name="thumbnail" label="Ảnh">
+        <Form.Item name="description" label="Mô tả">
+          <Input.TextArea rows={4} />
+        </Form.Item>
+
+        <Form.Item
+          name="thumbnail"
+          label="Ảnh sản phẩm"
+          rules={[{ validator: logoValidator }]}
+        >
           <UploadImage
             preview={preview}
-            uploading={uploading}
+            isUploading={isUploading}
+            uploadProgress={uploadProgress}
             onChange={handleChangeFile}
+            status={error ? "error" : ""}
+            help={error}
           />
         </Form.Item>
 

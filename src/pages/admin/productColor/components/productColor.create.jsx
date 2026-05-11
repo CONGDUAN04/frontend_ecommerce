@@ -1,19 +1,15 @@
 import { useEffect, useState } from "react";
-
-import { Form, Input, Select } from "antd";
-
+import { Form, Input } from "antd";
 import BaseModal from "../../../../components/common/BaseModal";
 import BaseCreateButton from "../../../../components/common/BaseCreateButton";
-
+import BaseSelect from "../../../../components/common/BaseSelect";
 import UploadImage from "../../../../components/common/ImageUpload";
-
 import { useProductColor } from "../hooks/useProductColor";
-
 import { useProduct } from "../../product/hooks/useProduct";
 import { useColor } from "../../color/hooks/useColor";
-
 import { useImageUpload } from "../../../../hooks/useImageUpload";
-import { universalFilterOption } from "../../../../utils/selectFilter";
+import { mapOptions } from "../../../../utils/mapOptions";
+
 export default function CreateProductColorForm({ loadProductColors }) {
   const [isOpen, setIsOpen] = useState(false);
 
@@ -27,7 +23,6 @@ export default function CreateProductColorForm({ loadProductColors }) {
   const { create } = useProductColor();
 
   const { getAll: getProducts } = useProduct();
-
   const { getAll: getColors } = useColor();
 
   const {
@@ -63,8 +58,10 @@ export default function CreateProductColorForm({ loadProductColors }) {
   const reset = () => {
     form.resetFields();
     resetImage();
+
     setProducts([]);
     setColors([]);
+
     setIsOpen(false);
   };
 
@@ -107,15 +104,9 @@ export default function CreateProductColorForm({ loadProductColors }) {
               },
             ]}
           >
-            <Select
+            <BaseSelect
               placeholder="Tìm kiếm sản phẩm..."
-              showSearch
-              optionFilterProp="label"
-              filterOption={universalFilterOption}
-              options={products.map((p) => ({
-                label: p.name,
-                value: p.id,
-              }))}
+              options={mapOptions(products)}
             />
           </Form.Item>
 
@@ -129,15 +120,9 @@ export default function CreateProductColorForm({ loadProductColors }) {
               },
             ]}
           >
-            <Select
+            <BaseSelect
               placeholder="Tìm kiếm màu sắc..."
-              showSearch
-              optionFilterProp="label"
-              filterOption={universalFilterOption}
-              options={colors.map((c) => ({
-                label: c.name,
-                value: c.id,
-              }))}
+              options={mapOptions(colors)}
             />
           </Form.Item>
 
