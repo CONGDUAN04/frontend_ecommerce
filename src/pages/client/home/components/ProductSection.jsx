@@ -1,5 +1,5 @@
-import ProductCard from "../../product-detail/ProductCard";
-import ProductSkeleton from "../../product-detail/ProductSkeleton";
+import ProductCard from "../../shared/ProductCard";
+import ProductSkeleton from "../../shared/ProductSkeleton";
 
 const ProductSection = ({ title, tabs, products, loading }) => {
   return (
