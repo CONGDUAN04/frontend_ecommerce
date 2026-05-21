@@ -15,7 +15,7 @@ export default function ProductColorPage() {
   const { getAll } = useProductColor();
 
   const loadProductColors = async () => {
-    const res = await getAll();
+    const res = await getAll(current, pageSize);
 
     if (res?.data) {
       setDataProductColors(res.data);
@@ -24,8 +24,10 @@ export default function ProductColorPage() {
   };
 
   useEffect(() => {
+    if (!current || !pageSize) return;
+
     loadProductColors();
-  }, []);
+  }, [current, pageSize]);
 
   return (
     <>

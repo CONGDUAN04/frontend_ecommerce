@@ -1,6 +1,9 @@
 import axios from "./axios.customize";
 
-export const fetchAllVariantsAPI = () => axios.get("/api/admin/variants");
+export const fetchAllVariantsAPI = (page, limit) =>
+  axios.get("/api/admin/variants", {
+    params: { page, limit },
+  });
 
 export const fetchVariantByIdAPI = (id) => {
   if (!id) throw new Error("variantId is required");

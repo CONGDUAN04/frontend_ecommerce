@@ -1,8 +1,8 @@
 import { useEffect, useState } from "react";
 import { Form, Input } from "antd";
-import BaseModal from "../../../../components/common/BaseModal.jsx";
-import BaseSelect from "../../../../components/common/BaseSelect.jsx";
-import UploadImage from "../../../../components/common/ImageUpload.jsx";
+import BaseModal from "../../../../components/common/admin/BaseModal.jsx";
+import BaseSelect from "../../../../components/common/admin/BaseSelect.jsx";
+import UploadImage from "../../../../components/common/admin/ImageUpload.jsx";
 import { useUser } from "../hooks/useUser.js";
 import { useRole } from "../../role/hooks/useRole.js";
 import { useImageUpload } from "../../../../hooks/useImageUpload.js";

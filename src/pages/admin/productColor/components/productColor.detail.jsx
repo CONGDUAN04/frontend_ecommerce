@@ -1,8 +1,8 @@
 import { Descriptions, Empty, Tag, Table } from "antd";
 
-import BaseModal from "../../../../components/common/BaseModal";
+import BaseModal from "../../../../components/common/admin/BaseModal";
 
-import ImagePreviewItem from "../../../../components/common/ImagePreviewItem";
+import ImagePreviewItem from "../../../../components/common/admin/ImagePreviewItem";
 
 import { formatDateTime } from "../../../../utils/formatDate";
 

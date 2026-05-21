@@ -1,0 +1,45 @@
+.homepage .flash-sale {
+  margin-top: 24px;
+
+  padding: 20px;
+
+  border-radius: 18px;
+
+  background: linear-gradient(
+    135deg,
+    #d70018,
+    #ff4d4f
+  );
+
+  color: white;
+}
+
+.homepage .flash-sale-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+
+  margin-bottom: 20px;
+}
+
+.homepage .flash-timer {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+
+  font-weight: 700;
+}
+
+.homepage .flash-timer span {
+  width: 34px;
+  height: 34px;
+
+  background: white;
+  color: #d70018;
+
+  border-radius: 8px;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}

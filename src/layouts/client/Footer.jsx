@@ -1,41 +1,49 @@
+import "../../styles/client/layouts/footer.css";
+
 const Footer = () => {
-    return (
-        <footer className="bg-white mt-16 border-t">
-            <div className="max-w-7xl mx-auto px-4 py-10 grid md:grid-cols-4 gap-8 text-sm">
-                <div>
-                    <h4 className="font-bold text-[#e53935] text-lg">
-                        TechZone
-                    </h4>
-                    <p className="text-gray-600 mt-2">
-                        Nền tảng bán lẻ thiết bị công nghệ hiện đại
-                    </p>
-                </div>
+  return (
+    <footer className="footer">
+      <div className="footer-container">
+        {/* COL */}
+        <div className="footer-col">
+          <h3>TechZone</h3>
 
-                <div>
-                    <h5 className="font-semibold mb-3">Hỗ trợ</h5>
-                    <p>Hotline: 1900 9999</p>
-                    <p>Email: support@techzone.vn</p>
-                </div>
+          <p>Hệ thống bán lẻ công nghệ hiện đại, chính hãng toàn quốc.</p>
+        </div>
 
-                <div>
-                    <h5 className="font-semibold mb-3">Chính sách</h5>
-                    <p>Bảo hành</p>
-                    <p>Đổi trả</p>
-                    <p>Thanh toán</p>
-                </div>
+        {/* COL */}
+        <div className="footer-col">
+          <h4>Hỗ trợ khách hàng</h4>
 
-                <div>
-                    <h5 className="font-semibold mb-3">Theo dõi</h5>
-                    <p>Facebook</p>
-                    <p>YouTube</p>
-                    <p>TikTok</p>
-                </div>
-            </div>
+          <span>Hotline: 1900 9999</span>
+          <span>Email: support@techzone.vn</span>
+          <span>Hỗ trợ kỹ thuật 24/7</span>
+        </div>
 
-            <div className="text-center text-xs text-gray-500 py-4 border-t">
-                © 2024 TechZone – Modern E-commerce UI
-            </div>
-        </footer>
-    );
+        {/* COL */}
+        <div className="footer-col">
+          <h4>Chính sách</h4>
+
+          <span>Bảo hành</span>
+          <span>Đổi trả</span>
+          <span>Vận chuyển</span>
+          <span>Thanh toán</span>
+        </div>
+
+        {/* COL */}
+        <div className="footer-col">
+          <h4>Kết nối với chúng tôi</h4>
+
+          <span>Facebook</span>
+          <span>YouTube</span>
+          <span>TikTok</span>
+          <span>Zalo</span>
+        </div>
+      </div>
+
+      <div className="footer-bottom">© 2026 TechZone. All rights reserved.</div>
+    </footer>
+  );
 };
+
 export default Footer;

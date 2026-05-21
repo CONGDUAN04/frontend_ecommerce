@@ -2,9 +2,9 @@ import { useEffect, useState } from "react";
 
 import { Form, Input } from "antd";
 
-import BaseModal from "../../../../components/common/BaseModal.jsx";
+import BaseModal from "../../../../components/common/admin/BaseModal.jsx";
 
-import UploadImage from "../../../../components/common/ImageUpload.jsx";
+import UploadImage from "../../../../components/common/admin/ImageUpload.jsx";
 
 import { useCategory } from "../hooks/useCategory.js";
 

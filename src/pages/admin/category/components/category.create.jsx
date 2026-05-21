@@ -2,10 +2,10 @@ import { useState } from "react";
 
 import { Form, Input } from "antd";
 
-import BaseModal from "../../../../components/common/BaseModal.jsx";
-import BaseCreateButton from "../../../../components/common/BaseCreateButton.jsx";
+import BaseModal from "../../../../components/common/admin/BaseModal.jsx";
+import BaseCreateButton from "../../../../components/common/admin/BaseCreateButton.jsx";
 
-import UploadImage from "../../../../components/common/ImageUpload.jsx";
+import UploadImage from "../../../../components/common/admin/ImageUpload.jsx";
 
 import { useCategory } from "../hooks/useCategory.js";
 

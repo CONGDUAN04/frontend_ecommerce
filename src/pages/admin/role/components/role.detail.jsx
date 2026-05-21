@@ -1,5 +1,5 @@
 import { Descriptions, Empty } from "antd";
-import BaseModal from "../../../../components/common/BaseModal.jsx";
+import BaseModal from "../../../../components/common/admin/BaseModal.jsx";
 import { formatDateTime } from "../../../../utils/formatDate.js";
 
 export default function RoleDetail({ dataDetail, openDetail, setOpenDetail }) {

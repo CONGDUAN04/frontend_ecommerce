@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 
 import { Form, Input, InputNumber, Select } from "antd";
 
-import BaseModal from "../../../../components/common/BaseModal";
+import BaseModal from "../../../../components/common/admin/BaseModal";
 
 import { useVariant } from "../hooks/useVariant";
 

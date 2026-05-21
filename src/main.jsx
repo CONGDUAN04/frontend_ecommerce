@@ -12,7 +12,7 @@ import CategoryPage from "./pages/admin/category/index.jsx";
 import BrandPage from "./pages/admin/brand/index.jsx";
 import LoginPage from "./pages/auth/login.jsx";
 import RegisterPage from "./pages/auth/register.jsx";
-import HomePageUser from "./pages/client/homepage.jsx";
+import HomePageUser from "./pages/client/home/page/HomePageUser.jsx";
 
 import { AuthWrapper } from "./contexts/auth.context.jsx";
 import NotifyProvider from "./contexts/notify.provider.jsx";

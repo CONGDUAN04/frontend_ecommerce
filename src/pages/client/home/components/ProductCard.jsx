@@ -1,0 +1,69 @@
+import { Heart, Star } from "lucide-react";
+
+const ProductCard = ({ product }) => {
+  const { badges, rating, price, comparePrice, flashPrice, thumbnail, name } =
+    product;
+
+  const displayPrice = flashPrice || price;
+
+  const formatPrice = (value) => {
+    return Number(value || 0).toLocaleString("vi-VN") + "đ";
+  };
+
+  return (
+    <div className="product-card">
+      {badges?.discountPercent > 0 && (
+        <div className="badge-discount">Giảm {badges.discountPercent}%</div>
+      )}
+
+      {badges?.isInstallment && (
+        <div className="badge-installment">Trả góp 0%</div>
+      )}
+
+      <div className="card-img-wrap">
+        <img
+          src={thumbnail}
+          alt={name}
+          loading="lazy"
+          onError={(e) => {
+            e.target.src = "https://via.placeholder.com/300x300?text=No+Image";
+          }}
+        />
+      </div>
+
+      <div className="card-body">
+        <p className="card-name">{name}</p>
+
+        <div className="card-price-row">
+          <span className="card-price">{formatPrice(displayPrice)}</span>
+
+          {comparePrice > displayPrice && (
+            <span className="card-compare">{formatPrice(comparePrice)}</span>
+          )}
+        </div>
+
+        {comparePrice > displayPrice && (
+          <div className="card-smember">
+            Smember giảm đến{" "}
+            {formatPrice(Math.round((comparePrice - displayPrice) * 0.01))}
+          </div>
+        )}
+
+        <div className="card-footer">
+          <div className="card-rating">
+            <Star size={15} fill="#f59e0b" color="#f59e0b" />
+
+            <span>{rating?.average > 0 ? rating.average : "Chưa có"}</span>
+          </div>
+
+          <button className="card-wishlist">
+            <Heart size={15} />
+            Yêu thích
+          </button>
+        </div>
+      </div>
+    </div>
+  );
+};
+
+export default ProductCard;

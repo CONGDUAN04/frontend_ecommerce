@@ -1,9 +1,9 @@
 import { useEffect, useState } from "react";
 import { Form, Input } from "antd";
-import BaseModal from "../../../../components/common/BaseModal";
-import BaseCreateButton from "../../../../components/common/BaseCreateButton";
-import BaseSelect from "../../../../components/common/BaseSelect";
-import UploadImage from "../../../../components/common/ImageUpload";
+import BaseModal from "../../../../components/common/admin/BaseModal";
+import BaseCreateButton from "../../../../components/common/admin/BaseCreateButton";
+import BaseSelect from "../../../../components/common/admin/BaseSelect";
+import UploadImage from "../../../../components/common/admin/ImageUpload";
 import { useProductColor } from "../hooks/useProductColor";
 import { useProduct } from "../../product/hooks/useProduct";
 import { useColor } from "../../color/hooks/useColor";

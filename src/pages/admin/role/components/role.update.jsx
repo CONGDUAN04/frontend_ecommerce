@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { Form, Input } from "antd";
-import BaseModal from "../../../../components/common/BaseModal.jsx";
+import BaseModal from "../../../../components/common/admin/BaseModal.jsx";
 import { useRole } from "../hooks/useRole.js";
 
 export default function UpdateRoleForm({

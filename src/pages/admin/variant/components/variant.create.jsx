@@ -2,8 +2,8 @@ import { useEffect, useState } from "react";
 
 import { Form, Input, InputNumber, Select } from "antd";
 
-import BaseModal from "../../../../components/common/BaseModal";
-import BaseCreateButton from "../../../../components/common/BaseCreateButton";
+import BaseModal from "../../../../components/common/admin/BaseModal";
+import BaseCreateButton from "../../../../components/common/admin/BaseCreateButton";
 
 import { useVariant } from "../hooks/useVariant";
 import { useProduct } from "../../product/hooks/useProduct";

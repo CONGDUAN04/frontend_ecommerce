@@ -2,7 +2,7 @@ import { useState } from "react";
 import { Outlet } from "react-router-dom";
 import Header from "./layouts/admin/Header.jsx";
 import Sidebar from "./layouts/admin/Sidebar.jsx";
-import GlobalSpin from "./components/common/global.spin.jsx";
+import GlobalSpin from "./components/common/admin/global.spin.jsx";
 
 export default function AppAdmin() {
   const [sidebarOpen, setSidebarOpen] = useState(true);

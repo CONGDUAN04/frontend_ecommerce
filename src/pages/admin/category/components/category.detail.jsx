@@ -1,6 +1,6 @@
 import { Descriptions, Empty } from "antd";
-import BaseModal from "../../../../components/common/BaseModal.jsx";
-import ImagePreviewItem from "../../../../components/common/ImagePreviewItem.jsx";
+import BaseModal from "../../../../components/common/admin/BaseModal.jsx";
+import ImagePreviewItem from "../../../../components/common/admin/ImagePreviewItem.jsx";
 import { formatDateTime } from "../../../../utils/formatDate.js";
 
 export default function CategoryDetail({

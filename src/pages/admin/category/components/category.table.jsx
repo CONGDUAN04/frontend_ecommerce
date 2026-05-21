@@ -1,13 +1,13 @@
 import { useState } from "react";
-import BaseTable from "../../../../components/common/BaseTable.jsx"; // ✅ FIX
-import BaseActionButtons from "../../../../components/common/BaseActionButtons.jsx";
+import BaseTable from "../../../../components/common/admin/BaseTable.jsx"; // ✅ FIX
+import BaseActionButtons from "../../../../components/common/admin/BaseActionButtons.jsx";
 import UpdateCategoryForm from "./category.update";
 import CategoryDetail from "./category.detail";
 import { useCategory } from "../hooks/useCategory.js";
 import {
   renderIndex,
   renderId,
-} from "../../../../components/common/tableColumns.jsx";
+} from "../../../../components/common/admin/tableColumns.jsx";
 
 export const CategoryTable = (props) => {
   const {

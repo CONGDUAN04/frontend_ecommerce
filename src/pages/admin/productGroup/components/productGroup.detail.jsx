@@ -1,7 +1,7 @@
 import { Descriptions, Empty, Tag } from "antd";
-import BaseModal from "../../../../components/common/BaseModal.jsx";
+import BaseModal from "../../../../components/common/admin/BaseModal.jsx";
 import { formatDateTime } from "../../../../utils/formatDate";
-import ImagePreviewItem from "../../../../components/common/ImagePreviewItem.jsx";
+import ImagePreviewItem from "../../../../components/common/admin/ImagePreviewItem.jsx";
 
 export default function ProductGroupDetail({
   dataDetail,

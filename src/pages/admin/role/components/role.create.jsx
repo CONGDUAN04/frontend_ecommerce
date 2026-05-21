@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { Form, Input } from "antd";
-import BaseModal from "../../../../components/common/BaseModal.jsx";
-import BaseCreateButton from "../../../../components/common/BaseCreateButton.jsx";
+import BaseModal from "../../../../components/common/admin/BaseModal.jsx";
+import BaseCreateButton from "../../../../components/common/admin/BaseCreateButton.jsx";
 import { useRole } from "../hooks/useRole.js";
 
 export default function CreateRoleForm({ loadRole }) {

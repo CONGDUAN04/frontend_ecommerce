@@ -3,7 +3,7 @@ import { Link, useNavigate } from "react-router-dom";
 import { getAccountAPI, loginUserAPI } from "../../services/api.auth.js";
 import { useContext, useState } from "react";
 import { NotifyContext } from "../../contexts/notify.context.jsx";
-import "../../styles/login.css";
+import "../../styles/auth/login.css";
 import { handleApiError, handleApiSuccess } from "../../utils/apiHandler.js";
 import { AuthContext } from "../../contexts/auth.context.jsx";
 

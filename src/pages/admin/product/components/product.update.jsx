@@ -2,10 +2,10 @@ import { useEffect, useState } from "react";
 
 import { Form, Input } from "antd";
 
-import BaseModal from "../../../../components/common/BaseModal";
-import BaseSelect from "../../../../components/common/BaseSelect";
+import BaseModal from "../../../../components/common/admin/BaseModal";
+import BaseSelect from "../../../../components/common/admin/BaseSelect";
 
-import UploadImage from "../../../../components/common/ImageUpload";
+import UploadImage from "../../../../components/common/admin/ImageUpload";
 
 import { useProduct } from "../hooks/useProduct";
 import { useProductGroup } from "../../productGroup/hooks/useProductGroup";

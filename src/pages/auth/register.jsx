@@ -4,7 +4,7 @@ import { Link, useNavigate } from "react-router-dom";
 import { registerUserAPI } from "../../services/api.auth.js";
 import { useContext, useState } from "react";
 import { NotifyContext } from "../../contexts/notify.context.jsx";
-import "../../styles/register.css";
+import "../../styles/auth/register.css";
 import { handleApiError, handleApiSuccess } from "../../utils/apiHandler.js";
 
 const RegisterPage = () => {

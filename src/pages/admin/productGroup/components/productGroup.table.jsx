@@ -1,11 +1,11 @@
 import { useState } from "react";
 import { Tag, Switch, Popconfirm } from "antd";
-import BaseTable from "../../../../components/common/BaseTable.jsx";
-import BaseActionButtons from "../../../../components/common/BaseActionButtons.jsx";
+import BaseTable from "../../../../components/common/admin/BaseTable.jsx";
+import BaseActionButtons from "../../../../components/common/admin/BaseActionButtons.jsx";
 import {
   renderIndex,
   renderId,
-} from "../../../../components/common/tableColumns.jsx";
+} from "../../../../components/common/admin/tableColumns.jsx";
 import ProductGroupDetail from "./productGroup.detail";
 import UpdateProductGroupForm from "./productGroup.update";
 import { useProductGroup } from "../hooks/useProductGroup";

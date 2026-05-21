@@ -1,13 +1,13 @@
 import { useState } from "react";
-import BaseTable from "../../../../components/common/BaseTable.jsx";
-import BaseActionButtons from "../../../../components/common/BaseActionButtons.jsx";
+import BaseTable from "../../../../components/common/admin/BaseTable.jsx";
+import BaseActionButtons from "../../../../components/common/admin/BaseActionButtons.jsx";
 import UpdateRoleForm from "./role.update.jsx";
 import RoleDetail from "./role.detail.jsx";
 import { useRole } from "../hooks/useRole.js";
 import {
   renderIndex,
   renderId,
-} from "../../../../components/common/tableColumns.jsx";
+} from "../../../../components/common/admin/tableColumns.jsx";
 
 export const RoleTable = (props) => {
   const { dataRoles, loadRole, current, pageSize, total, updatePagination } =

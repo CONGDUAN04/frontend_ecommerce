@@ -1,11 +1,11 @@
 import { useState } from "react";
 import { Tag, Switch, Popconfirm } from "antd";
-import BaseTable from "../../../../components/common/BaseTable";
-import BaseActionButtons from "../../../../components/common/BaseActionButtons";
+import BaseTable from "../../../../components/common/admin/BaseTable";
+import BaseActionButtons from "../../../../components/common/admin/BaseActionButtons";
 import {
   renderIndex,
   renderId,
-} from "../../../../components/common/tableColumns";
+} from "../../../../components/common/admin/tableColumns";
 
 import { useProduct } from "../hooks/useProduct";
 import ProductDetail from "./product.detail";

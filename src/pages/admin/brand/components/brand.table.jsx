@@ -1,13 +1,13 @@
 import { useState } from "react";
-import BaseTable from "../../../../components/common/BaseTable.jsx";
-import BaseActionButtons from "../../../../components/common/BaseActionButtons.jsx";
+import BaseTable from "../../../../components/common/admin/BaseTable.jsx";
+import BaseActionButtons from "../../../../components/common/admin/BaseActionButtons.jsx";
 import BrandDetail from "./brand.detail.jsx";
 import UpdateBrandForm from "./brand.update.jsx";
 import { useBrand } from "../hooks/useBrand.js";
 import {
   renderIndex,
   renderId,
-} from "../../../../components/common/tableColumns.jsx";
+} from "../../../../components/common/admin/tableColumns.jsx";
 
 export default function BrandTable({
   dataBrands,

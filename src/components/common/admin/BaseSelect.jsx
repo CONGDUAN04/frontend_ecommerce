@@ -1,6 +1,6 @@
 import { Select } from "antd";
 
-import { universalFilterOption } from "../../utils/selectFilter";
+import { universalFilterOption } from "../../../utils/selectFilter";
 
 export default function BaseSelect({
   showSearch = true,

@@ -1,0 +1,188 @@
+.homepage .product-card {
+  position: relative;
+
+  background: white;
+
+  border-radius: 16px;
+
+  overflow: hidden;
+
+  display: flex;
+  flex-direction: column;
+
+  transition: 0.3s ease;
+
+  border: 1px solid #ececec;
+
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
+}
+
+.homepage .product-card:hover {
+  transform: translateY(-6px);
+
+  box-shadow: 0 14px 28px rgba(0, 0, 0, 0.12);
+}
+
+.homepage .badge-discount {
+  position: absolute;
+  top: 10px;
+  left: 10px;
+
+  background: #e53935;
+  color: white;
+
+  padding: 4px 8px;
+
+  border-radius: 6px;
+
+  font-size: 11px;
+  font-weight: 700;
+
+  z-index: 2;
+}
+
+.homepage .badge-installment {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+
+  background: #eff6ff;
+  color: #2563eb;
+
+  padding: 4px 8px;
+
+  border-radius: 6px;
+
+  font-size: 11px;
+  font-weight: 700;
+
+  z-index: 2;
+}
+
+.homepage .card-img-wrap {
+  height: 220px;
+
+  padding: 8px;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.homepage .card-img-wrap img {
+  width: 100%;
+  height: 100%;
+
+  object-fit: contain;
+
+  transition: 0.35s ease;
+}
+
+.homepage .product-card:hover img {
+  transform: scale(1.08);
+}
+
+.homepage .card-body {
+  padding: 12px;
+
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+}
+
+.homepage .card-name {
+  font-size: 14px;
+  font-weight: 700;
+
+  line-height: 1.5;
+
+  min-height: 42px;
+}
+
+.homepage .card-price-row {
+  display: flex;
+  align-items: center;
+
+  gap: 8px;
+
+  margin-top: 8px;
+}
+
+.homepage .card-price {
+  color: #d70018;
+
+  font-size: 22px;
+  font-weight: 800;
+}
+
+.homepage .card-compare {
+  color: #9ca3af;
+
+  font-size: 12px;
+
+  text-decoration: line-through;
+}
+
+.homepage .card-smember,
+.homepage .card-installment {
+  margin-top: 8px;
+
+  padding: 6px 8px;
+
+  border-radius: 8px;
+
+  font-size: 11px;
+}
+
+.homepage .card-smember {
+  background: #eff6ff;
+  color: #2563eb;
+}
+
+.homepage .card-installment {
+  border: 1px solid #ececec;
+}
+
+.homepage .card-footer {
+  margin-top: auto;
+  padding-top: 12px;
+
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.homepage .card-rating,
+.homepage .card-wishlist {
+  display: flex;
+  align-items: center;
+
+  gap: 4px;
+
+  font-size: 13px;
+}
+
+.homepage .card-wishlist {
+  border: none;
+  background: none;
+
+  color: #2563eb;
+
+  cursor: pointer;
+
+  transition: 0.2s;
+}
+
+.homepage .card-wishlist:hover {
+  color: #d70018;
+}
+
+@media (max-width: 480px) {
+  .homepage .card-img-wrap {
+    height: 140px;
+  }
+
+  .homepage .card-price {
+    font-size: 18px;
+  }
+}

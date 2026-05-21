@@ -2,16 +2,16 @@ import { useState } from "react";
 
 import { Tag, Image } from "antd";
 
-import BaseTable from "../../../../components/common/BaseTable";
+import BaseTable from "../../../../components/common/admin/BaseTable";
 
-import BaseActionButtons from "../../../../components/common/BaseActionButtons";
+import BaseActionButtons from "../../../../components/common/admin/BaseActionButtons";
 
 import {
   renderIndex,
   renderId,
-} from "../../../../components/common/tableColumns";
+} from "../../../../components/common/admin/tableColumns";
 
-import ImagePreviewItem from "../../../../components/common/ImagePreviewItem";
+import ImagePreviewItem from "../../../../components/common/admin/ImagePreviewItem";
 
 import { useProductColor } from "../hooks/useProductColor";
 
