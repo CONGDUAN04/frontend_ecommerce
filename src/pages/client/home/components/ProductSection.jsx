@@ -1,5 +1,5 @@
-import ProductCard from "./ProductCard";
-import ProductSkeleton from "./ProductSkeleton";
+import ProductCard from "../../product-detail/ProductCard";
+import ProductSkeleton from "../../product-detail/ProductSkeleton";
 
 const ProductSection = ({ title, tabs, products, loading }) => {
   return (

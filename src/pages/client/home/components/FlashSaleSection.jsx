@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import ProductCard from "./ProductCard";
+import ProductCard from "../../product-detail/ProductCard";
 
 const FlashSaleSection = ({ products }) => {
   const [timeLeft, setTimeLeft] = useState({
