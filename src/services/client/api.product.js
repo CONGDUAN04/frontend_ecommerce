@@ -1,19 +1,70 @@
 import axios from "../axios.customize";
 
-// FLASH SALE / HOME PRODUCTS
-export const getHomeProductsAPI = () =>
-  axios.get("/api/client/products", {
+/* ─────────────────────────────────────────────
+   HOME PRODUCTS
+───────────────────────────────────────────── */
+
+export const getHomeProductsAPI = async (params = {}) => {
+  return axios.get("/api/client/products", {
     params: {
       limit: 100,
       sort: "popular",
+      ...params,
     },
   });
+};
 
-// PRODUCTS BY BRAND
-export const getProductsByBrandAPI = (brandId, limit = 10) =>
-  axios.get("/api/client/products", {
+/* ─────────────────────────────────────────────
+   PRODUCTS BY BRAND
+───────────────────────────────────────────── */
+
+export const getProductsByBrandAPI = async (brandId, limit = 10) => {
+  return axios.get("/api/client/products", {
     params: {
       brandId,
       limit,
     },
   });
+};
+
+/* ─────────────────────────────────────────────
+   PRODUCT DETAIL
+───────────────────────────────────────────── */
+
+export const getProductDetailAPI = async (slug) => {
+  return axios.get(`/api/client/products/${slug}`);
+};
+
+/* ─────────────────────────────────────────────
+   RELATED PRODUCTS
+───────────────────────────────────────────── */
+
+export const getRelatedProductsAPI = async (slug) => {
+  return axios.get(`/api/client/products/${slug}/related`);
+};
+
+/* ─────────────────────────────────────────────
+   SEARCH PRODUCTS
+───────────────────────────────────────────── */
+
+export const searchProductsAPI = async (params = {}) => {
+  return axios.get("/api/client/products/search", {
+    params,
+  });
+};
+
+/* ─────────────────────────────────────────────
+   PRODUCT GROUPS
+───────────────────────────────────────────── */
+
+export const getProductGroupsAPI = async () => {
+  return axios.get("/api/client/products/groups");
+};
+
+/* ─────────────────────────────────────────────
+   PRODUCT GROUP DETAIL
+───────────────────────────────────────────── */
+
+export const getProductGroupDetailAPI = async (slug) => {
+  return axios.get(`/api/client/products/groups/${slug}`);
+};

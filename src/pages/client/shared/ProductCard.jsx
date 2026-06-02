@@ -1,8 +1,19 @@
 import { Heart, Star } from "lucide-react";
+import { useNavigate } from "react-router-dom";
 
 const ProductCard = ({ product }) => {
-  const { badges, rating, price, comparePrice, flashPrice, thumbnail, name } =
-    product;
+  const navigate = useNavigate();
+
+  const {
+    badges,
+    rating,
+    price,
+    comparePrice,
+    flashPrice,
+    thumbnail,
+    name,
+    slug,
+  } = product;
 
   const displayPrice = flashPrice || price;
 
@@ -11,7 +22,7 @@ const ProductCard = ({ product }) => {
   };
 
   return (
-    <div className="product-card">
+    <div className="product-card" onClick={() => navigate(`/product/${slug}`)}>
       {badges?.discountPercent > 0 && (
         <div className="badge-discount">Giảm {badges.discountPercent}%</div>
       )}
@@ -56,7 +67,10 @@ const ProductCard = ({ product }) => {
             <span>{rating?.average > 0 ? rating.average : "Chưa có"}</span>
           </div>
 
-          <button className="card-wishlist">
+          <button
+            className="card-wishlist"
+            onClick={(e) => e.stopPropagation()}
+          >
             <Heart size={15} />
             Yêu thích
           </button>

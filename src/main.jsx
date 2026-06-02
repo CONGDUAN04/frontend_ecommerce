@@ -27,6 +27,7 @@ import ProductPage from "./pages/admin/product/index.jsx";
 import VariantPage from "./pages/admin/variant/index.jsx";
 import ColorPage from "./pages/admin/color/index.jsx";
 import ProductColorPage from "./pages/admin/productColor/index.jsx";
+import ProductDetailPage from "./pages/client/product-detail/page/ProductDetailPage.jsx";
 const router = createBrowserRouter([
   {
     path: "/admin",
@@ -51,8 +52,19 @@ const router = createBrowserRouter([
   {
     path: "/",
     element: <AppClient />,
-    children: [{ index: true, element: <HomePageUser /> }],
+    children: [
+      {
+        index: true,
+        element: <HomePageUser />,
+      },
+
+      {
+        path: "/product/:slug",
+        element: <ProductDetailPage />,
+      },
+    ],
   },
+
   {
     path: "/login",
     element: <LoginPage />,
