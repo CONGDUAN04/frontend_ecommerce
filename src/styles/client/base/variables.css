@@ -1,17 +1,35 @@
-* {
-  margin: 0;
-  padding: 0;
-  box-sizing: border-box;
-}
-
 :root {
-  --primary: #d70018;
-  --border: #ececec;
-  --blue: #2563eb;
-  --bg: #f3f4f6;
-}
+  /* Màu thương hiệu chính */
+  --primary-color: #d70018;
+  --primary-hover: #b50012;
+  --primary-light: #fdf2f2;
+  --blue-color: #2563eb;
+  
+  /* Màu mạng xã hội */
+  --color-facebook: #1877f2;
+  --color-youtube: #ff0000;
+  --color-zalo: #0068ff;
 
-body {
-  background: var(--bg);
-  font-family: Arial, Helvetica, sans-serif;
+  /* Màu chữ */
+  --text-main: #111111;
+  --text-muted: #555555;
+  --text-light: #f8fafc;
+  --text-slate: #718096;
+  --text-gray-placeholder: #9ca3af;
+
+  /* Màu nền */
+  --bg-light: #f3f4f6;
+  --bg-white: #ffffff;
+  --bg-badge-gray: #fafafa;
+  --bg-footer-bottom: #f8fafc;
+  --bg-avatar-default: #e5e7eb;
+
+  /* Đường viền & Trạng thái */
+  --border-color: #e5e7eb;
+  --color-online: #22c55e;
+  --color-success: #52c41a;
+  --color-danger: #ff4d4f;
+
+  /* Hiệu ứng chuyển động mượt */
+  --transition-smooth: cubic-bezier(0.4, 0, 0.2, 1);
 }

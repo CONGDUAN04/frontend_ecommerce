@@ -1,13 +1,6 @@
-:root {
-    --primary-color: #d70018;
-    --primary-hover: #b50012;
-    --text-main: #111111;
-    --text-muted: #555555;
-    --bg-light: #f3f4f6;
-    --border-color: #e5e7eb;
-    --transition-smooth: cubic-bezier(0.4, 0, 0.2, 1);
-}.footer {
-    background: #ffffff;
+@import "../../../styles/client/base/variables.css";
+.footer {
+    background: var(--bg-white);
     border-top: 1px solid var(--border-color);
     width: 100%;
 }
@@ -15,7 +8,7 @@
 .footer-trust-badges {
     border-bottom: 1px solid var(--border-color);
     padding: 24px 0;
-    background: #fafafa;
+    background: var(--bg-badge-gray);
 }
 
 .trust-badges-container {

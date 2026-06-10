@@ -3,7 +3,6 @@
 @import "../sections/product-section.css";
 @import "../sections/flash-sale.css";
 @import "../components/product-card.css";
-@import "../components/skeleton.css";
 
 .homepage {
   max-width: 1320px;
