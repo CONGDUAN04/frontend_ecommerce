@@ -20,54 +20,19 @@ import "../../styles/admin/sidebar.css";
 
 const getActiveMenuFromPath = (path) => {
   const routeMap = {
-    "/admin/product-groups": {
-      menu: "product-groups",
-      subMenu: null,
-    },
-
-    "/admin/products": {
-      menu: "product-groups",
-      subMenu: "products",
-    },
-
-    "/admin/variants": {
-      menu: "product-groups",
-      subMenu: "variants",
-    },
+    "/admin/product-groups": { menu: "product-groups", subMenu: null },
+    "/admin/products": { menu: "product-groups", subMenu: "products" },
+    "/admin/variants": { menu: "product-groups", subMenu: "variants" },
     "/admin/product-colors": {
       menu: "product-groups",
       subMenu: "product-colors",
     },
-
-    "/admin/colors": {
-      menu: "product-groups",
-      subMenu: "colors",
-    },
-
-    "/admin/categories": {
-      menu: "categories",
-      subMenu: null,
-    },
-
-    "/admin/brands": {
-      menu: "brands",
-      subMenu: null,
-    },
-
-    "/admin/users": {
-      menu: "users",
-      subMenu: null,
-    },
-
-    "/admin/roles": {
-      menu: "roles",
-      subMenu: null,
-    },
-
-    "/admin/targets": {
-      menu: "targets",
-      subMenu: null,
-    },
+    "/admin/colors": { menu: "product-groups", subMenu: "colors" },
+    "/admin/categories": { menu: "categories", subMenu: null },
+    "/admin/brands": { menu: "brands", subMenu: null },
+    "/admin/users": { menu: "users", subMenu: null },
+    "/admin/roles": { menu: "roles", subMenu: null },
+    "/admin/targets": { menu: "targets", subMenu: null },
   };
 
   const matched = routeMap[path] ||
@@ -75,10 +40,7 @@ const getActiveMenuFromPath = (path) => {
       Object.keys(routeMap)
         .sort((a, b) => b.length - a.length)
         .find((key) => path.startsWith(key))
-    ] || {
-      menu: "dashboard",
-      subMenu: null,
-    };
+    ] || { menu: "dashboard", subMenu: null };
 
   return matched;
 };
@@ -88,7 +50,6 @@ export default function Sidebar({ isOpen, toggleSidebar }) {
   const { setUser } = useContext(AuthContext);
 
   const initialActive = getActiveMenuFromPath(location.pathname);
-
   const [activeMenu, setActiveMenu] = useState(initialActive.menu);
   const [activeSubMenu, setActiveSubMenu] = useState(initialActive.subMenu);
 
@@ -100,13 +61,11 @@ export default function Sidebar({ isOpen, toggleSidebar }) {
         icon: LayoutDashboard,
         path: "/admin",
       },
-
       {
         id: "product-groups",
         label: "Nhóm sản phẩm",
         icon: Boxes,
         path: "/admin/product-groups",
-
         subMenu: [
           {
             id: "products",
@@ -134,28 +93,19 @@ export default function Sidebar({ isOpen, toggleSidebar }) {
           },
         ],
       },
-
       {
         id: "categories",
         label: "Danh mục sản phẩm",
         icon: Tags,
         path: "/admin/categories",
       },
-
-      {
-        id: "users",
-        label: "Người dùng",
-        icon: Users,
-        path: "/admin/users",
-      },
-
+      { id: "users", label: "Người dùng", icon: Users, path: "/admin/users" },
       {
         id: "brands",
         label: "Thương hiệu",
         icon: BadgeCheck,
         path: "/admin/brands",
       },
-
       {
         id: "roles",
         label: "Phân quyền",
@@ -173,49 +123,33 @@ export default function Sidebar({ isOpen, toggleSidebar }) {
   }, [location.pathname]);
 
   return (
-    <aside className={`sidebar ${isOpen ? "open" : "closed"}`}>
+    <aside
+      className={`ts-sidebar ${isOpen ? "ts-sidebar--open" : "ts-sidebar--closed"}`}
+    >
       {/* HEADER */}
-      <div className="sidebar-header">
-        <div className="sidebar-header-line"></div>
+      <div className="ts-sidebar__header">
+        <div className="ts-sidebar__header-line"></div>
 
-        {isOpen ? (
-          <>
-            <div className="logo">
-              <div className="logo-box">T</div>
-
-              <div>
-                <div className="logo-title">TeachPhone</div>
-                <div className="logo-sub">Admin Panel</div>
-              </div>
+        <div className="ts-sidebar__brand">
+          <div className="ts-sidebar__logo-box">T</div>
+          {isOpen && (
+            <div className="ts-sidebar__logo-text">
+              <div className="ts-sidebar__logo-title">TeachPhone</div>
+              <div className="ts-sidebar__logo-sub">Admin Panel</div>
             </div>
+          )}
+        </div>
 
-            <button className="icon-btn" onClick={toggleSidebar}>
-              <X size={18} />
-            </button>
-          </>
-        ) : (
-          <div
-            style={{ width: "100%", display: "flex", justifyContent: "center" }}
-          >
-            <button className="icon-btn" onClick={toggleSidebar}>
-              <Menu size={20} />
-            </button>
-          </div>
-        )}
+        <button className="ts-sidebar__toggle-btn" onClick={toggleSidebar}>
+          {isOpen ? <X size={18} /> : <Menu size={18} />}
+        </button>
       </div>
 
       {/* NAVIGATION */}
-      <nav className="nav">
+      <nav className="ts-sidebar__nav">
         {isOpen && (
-          <div className="menu-title">
-            <div
-              style={{
-                width: 8,
-                height: 8,
-                borderRadius: "50%",
-                background: "#60a5fa",
-              }}
-            />
+          <div className="ts-sidebar__section-title">
+            <span className="ts-sidebar__section-dot"></span>
             MENU
           </div>
         )}
@@ -226,32 +160,29 @@ export default function Sidebar({ isOpen, toggleSidebar }) {
           const hasSub = item.subMenu?.length > 0;
 
           return (
-            <div key={item.id}>
+            <div key={item.id} className="ts-sidebar__item-wrapper">
               {/* MAIN ITEM */}
               <Link
                 to={item.path}
-                className={`menu-item ${isActive ? "active" : ""}`}
+                className={`ts-sidebar__item ${isActive ? "ts-sidebar__item--active" : ""}`}
                 onClick={() => setActiveMenu(item.id)}
+                title={!isOpen ? item.label : ""}
               >
-                <Icon className="menu-icon" size={22} />
-
-                {isOpen && <span>{item.label}</span>}
-
+                <Icon className="ts-sidebar__item-icon" size={20} />
+                {isOpen && (
+                  <span className="ts-sidebar__item-label">{item.label}</span>
+                )}
                 {isOpen && hasSub && (
                   <ChevronRight
-                    size={18}
-                    style={{
-                      marginLeft: "auto",
-                      transform: isActive ? "rotate(90deg)" : "rotate(0deg)",
-                      transition: "0.3s",
-                    }}
+                    size={16}
+                    className={`ts-sidebar__arrow ${isActive ? "ts-sidebar__arrow--rotated" : ""}`}
                   />
                 )}
               </Link>
 
               {/* SUB MENU */}
               {isOpen && hasSub && isActive && (
-                <div className="submenu">
+                <div className="ts-sidebar__submenu">
                   {item.subMenu.map((sub) => {
                     const SubIcon = sub.icon;
                     const activeSub = activeSubMenu === sub.id;
@@ -260,10 +191,13 @@ export default function Sidebar({ isOpen, toggleSidebar }) {
                       <Link
                         key={sub.id}
                         to={sub.path}
-                        className={`submenu-item ${activeSub ? "active" : ""}`}
+                        className={`ts-sidebar__subitem ${activeSub ? "ts-sidebar__subitem--active" : ""}`}
                         onClick={() => setActiveSubMenu(sub.id)}
                       >
-                        <SubIcon size={18} />
+                        <SubIcon
+                          size={16}
+                          className="ts-sidebar__subitem-icon"
+                        />
                         <span>{sub.label}</span>
                       </Link>
                     );

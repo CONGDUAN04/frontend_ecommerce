@@ -1,229 +1,300 @@
-/* ========== SIDEBAR WRAPPER ========== */
-.sidebar {
+/* ========== CONFIG VARIABLES ========== */
+:root {
+  --ts-sidebar-bg: linear-gradient(180deg, #090d16 0%, #0f172a 50%, #020617 100%);
+  --ts-sidebar-border: rgba(51, 65, 85, 0.35);
+  --ts-text-main: #94a3b8;
+  --ts-text-light: #f8fafc;
+  --ts-accent: #3b82f6;
+  --ts-accent-glow: rgba(59, 130, 246, 0.15);
+}
+
+/* ========== MAIN SIDEBAR CONTAINER ========== */
+.ts-sidebar {
   position: sticky;
   top: 0;
   height: 100vh;
   display: flex;
   flex-direction: column;
   overflow: hidden;
-  transition: all 0.5s ease-in-out;
-  z-index: 50;
-
-  background: linear-gradient(to bottom, #020617, #0f172a, #020617);
-  border-right: 1px solid rgba(51, 65, 85, 0.3);
-  backdrop-filter: blur(20px);
+  transition: width 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+  z-index: 100;
+  background: var(--ts-sidebar-bg);
+  border-right: 1px solid var(--ts-sidebar-border);
+  backdrop-filter: blur(24px);
+  box-sizing: border-box;
 }
 
-.sidebar.open {
-  width: 18rem; /* 72 */
+.ts-sidebar--open {
+  width: 17.5rem; /* ~280px mượt mà hơn 18rem */
 }
 
-.sidebar.closed {
-  width: 6rem; /* 24 */
+.ts-sidebar--closed {
+  width: 5.5rem; /* ~88px vừa vặn cho icon */
 }
 
-/* background effects */
-.sidebar::before {
+/* Hiệu ứng ánh sáng Neon ngầm siêu sang */
+.ts-sidebar::before {
   content: "";
   position: absolute;
   inset: 0;
-  background: radial-gradient(circle at 50% 0%, rgba(59, 130, 246, 0.1), transparent 50%);
+  background: radial-gradient(circle at 50% 0%, rgba(59, 130, 246, 0.08), transparent 60%);
   pointer-events: none;
 }
 
-.sidebar::after {
-  content: "";
-  position: absolute;
-  top: -10rem;
-  right: -10rem;
-  width: 24rem;
-  height: 24rem;
-  background: rgba(59, 130, 246, 0.1);
-  border-radius: 9999px;
-  filter: blur(60px);
-  pointer-events: none;
-}
-
-/* ========== HEADER ========== */
-.sidebar-header {
-  height: 80px;
-  padding: 16px 20px;
-  border-bottom: 1px solid rgba(51, 65, 85, 0.2);
+/* ========== HEADER SECTION ========== */
+.ts-sidebar__header {
+  height: 76px;
+  padding: 0 18px;
+  border-bottom: 1px solid rgba(51, 65, 85, 0.25);
   display: flex;
   justify-content: space-between;
   align-items: center;
   position: relative;
 }
 
-.sidebar-header-line {
-  position: absolute;
-  bottom: 0;
-  left: 20px;
-  right: 20px;
-  height: 1px;
-  background: linear-gradient(to right, transparent, rgba(59,130,246,0.3), transparent);
+.ts-sidebar--closed .ts-sidebar__header {
+  justify-content: center;
 }
 
-/* logo */
-.logo {
+.ts-sidebar__header-line {
+  position: absolute;
+  bottom: 0;
+  left: 16px;
+  right: 16px;
+  height: 1px;
+  background: linear-gradient(to right, transparent, rgba(59, 130, 246, 0.3), transparent);
+}
+
+.ts-sidebar__brand {
   display: flex;
   align-items: center;
   gap: 12px;
 }
 
-.logo-box {
-  width: 48px;
-  height: 48px;
-  border-radius: 16px;
-  background: linear-gradient(135deg, #3b82f6, #2563eb, #06b6d4);
+.ts-sidebar__logo-box {
+  width: 40px;
+  height: 40px;
+  border-radius: 12px;
+  background: linear-gradient(135deg, #3b82f6, #06b6d4);
   display: flex;
   align-items: center;
   justify-content: center;
   color: white;
-  font-weight: 900;
+  font-weight: 800;
   font-size: 18px;
-  box-shadow: 0 10px 25px rgba(59,130,246,0.4);
+  box-shadow: 0 8px 20px rgba(59, 130, 246, 0.3);
+  flex-shrink: 0;
 }
 
-.logo-title {
+.ts-sidebar__logo-title {
   font-weight: 700;
-  color: white;
+  font-size: 15px;
+  color: var(--ts-text-light);
+  letter-spacing: 0.5px;
+  line-height: 1.2;
 }
 
-.logo-sub {
-  font-size: 12px;
-  color: rgba(96,165,250,0.7);
+.ts-sidebar__logo-sub {
+  font-size: 11px;
+  color: #60a5fa;
+  opacity: 0.8;
 }
 
-/* buttons */
-.icon-btn {
+/* Button đóng/mở */
+.ts-sidebar__toggle-btn {
+  width: 34px;
+  height: 34px;
+  border-radius: 10px;
+  background: rgba(30, 41, 59, 0.5);
+  border: 1px solid rgba(51, 65, 85, 0.5);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #cbd5e1;
+  cursor: pointer;
+  transition: all 0.25s ease;
+}
+
+.ts-sidebar__toggle-btn:hover {
+  background: var(--ts-accent-glow);
+  border-color: rgba(59, 130, 246, 0.5);
+  color: #60a5fa;
+  transform: scale(1.05);
+}
+
+.ts-sidebar--closed .ts-sidebar__toggle-btn {
+  position: absolute;
+  opacity: 0;
+  width: 100%;
+  height: 100%;
+  left: 0;
+  top: 0;
+  background: transparent;
+  border: none;
+}
+/* Khi đóng, hover vào vùng header sẽ hiện lại icon menu ẩn */
+.ts-sidebar--closed .ts-sidebar__header:hover .ts-sidebar__toggle-btn {
+  opacity: 1;
+  background: rgba(30, 41, 59, 0.5);
   width: 36px;
   height: 36px;
-  border-radius: 12px;
-  background: rgba(30,41,59,0.4);
-  border: 1px solid rgba(51,65,85,0.4);
-
-  display: flex;
-  align-items: center;
-  justify-content: center;
-
-  color: #cbd5e1; /* <-- FIX: sáng hơn #94a3b8 */
-  cursor: pointer;
-  transition: 0.3s;
+  position: relative;
+}
+.ts-sidebar--closed .ts-sidebar__header:hover .ts-sidebar__brand {
+  display: none;
 }
 
-.icon-btn:hover {
-  background: rgba(59,130,246,0.15);
-  border-color: rgba(59,130,246,0.4);
-  color: #60a5fa;
-  transform: scale(1.1);
-}
-
-/* ========== NAV ========== */
-.nav {
+/* ========== NAVIGATION & MENUS ========== */
+.ts-sidebar__nav {
   flex: 1;
   overflow-y: auto;
-  padding: 12px;
+  padding: 16px 12px;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
 }
 
-.menu-title {
+/* Ẩn scrollbar thô kệch */
+.ts-sidebar__nav::-webkit-scrollbar {
+  width: 4px;
+}
+.ts-sidebar__nav::-webkit-scrollbar-thumb {
+  background: rgba(148, 163, 184, 0.1);
+  border-radius: 4px;
+}
+
+.ts-sidebar__section-title {
   font-size: 11px;
   font-weight: 700;
-  color: #64748b;
-  text-transform: uppercase;
-  padding: 12px 16px;
+  color: #475569;
+  letter-spacing: 1px;
+  padding: 10px 14px;
   display: flex;
   align-items: center;
   gap: 8px;
 }
 
-/* ========== MENU ITEM ========== */
-.menu-item {
+.ts-sidebar__section-dot {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: #3b82f6;
+  box-shadow: 0 0 8px #3b82f6;
+}
+
+/* ========== MAIN MENU ITEM ========== */
+.ts-sidebar__item-wrapper {
+  display: flex;
+  flex-direction: column;
+}
+
+.ts-sidebar__item {
   display: flex;
   align-items: center;
   gap: 12px;
-  padding: 14px 16px;
+  padding: 12px 14px;
   border-radius: 12px;
   font-size: 14px;
-  font-weight: 600;
-  color: #94a3b8;
+  font-weight: 500;
+  color: var(--ts-text-main);
+  text-decoration: none;
   border: 1px solid transparent;
-  transition: 0.3s;
+  transition: all 0.25s ease;
   position: relative;
-  overflow: hidden;
 }
 
-.menu-item:hover {
-  background: rgba(30,41,59,0.5);
-  color: white;
+.ts-sidebar--closed .ts-sidebar__item {
+  justify-content: center;
+  padding: 12px 0;
 }
 
-.menu-item.active {
-  background: linear-gradient(90deg, rgba(59,130,246,0.3), rgba(34,211,238,0.15));
-  color: white;
-  border-color: rgba(59,130,246,0.4);
+.ts-sidebar__item:hover {
+  background: rgba(30, 41, 59, 0.4);
+  color: var(--ts-text-light);
+}
+
+.ts-sidebar__item:hover .ts-sidebar__item-icon {
+  color: #60a5fa;
+  transform: scale(1.05);
+}
+
+/* Active State */
+.ts-sidebar__item--active {
+  background: linear-gradient(90deg, rgba(59, 130, 246, 0.15) 0%, rgba(6, 182, 212, 0.05) 100%);
+  color: #3b82f6;
+  border-color: rgba(59, 130, 246, 0.25);
   font-weight: 600;
 }
 
-/* active bar */
-.menu-item.active::before {
+.ts-sidebar__item--active .ts-sidebar__item-icon {
+  color: #3b82f6;
+}
+
+/* Vạch màu chỉ thị bên trái item đang active */
+.ts-sidebar__item--active::before {
   content: "";
   position: absolute;
   left: 0;
   top: 25%;
   bottom: 25%;
-  width: 6px;
-  background: linear-gradient(to bottom, #60a5fa, #06b6d4);
-  border-radius: 0 8px 8px 0;
+  width: 4px;
+  background: linear-gradient(180deg, #3b82f6, #06b6d4);
+  border-radius: 0 4px 4px 0;
 }
 
-/* icon */
-.menu-icon {
-  font-size: 20px;
-  transition: 0.3s;
+.ts-sidebar__item-label {
+  white-space: nowrap;
 }
 
-.menu-item:hover .menu-icon {
-  color: #60a5fa;
-  transform: scale(1.1);
+.ts-sidebar__arrow {
+  margin-left: auto;
+  transition: transform 0.3s ease;
+  color: #64748b;
 }
 
-/* sub menu */
-.submenu {
-  padding-left: 44px;
-  margin-top: 6px;
+.ts-sidebar__arrow--rotated {
+  transform: rotate(90deg);
+  color: #3b82f6;
 }
 
-.submenu-item {
+/* ========== SUBMENU SECTION ========== */
+.ts-sidebar__submenu {
+  padding-left: 20px;
+  margin: 4px 0 8px 14px;
+  border-left: 1px dashed rgba(71, 85, 105, 0.4);
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.ts-sidebar__subitem {
   display: flex;
   align-items: center;
   gap: 10px;
-  padding: 10px 12px;
+  padding: 9px 12px;
   border-radius: 8px;
-  font-size: 14px;
+  font-size: 13.5px;
   font-weight: 500;
-  color: #94a3b8;
-  transition: 0.2s;
+  color: #64748b;
+  text-decoration: none;
+  transition: all 0.2s ease;
 }
 
-.submenu-item:hover {
-  background: rgba(30,41,59,0.4);
-  color: white;
+.ts-sidebar__subitem:hover {
+  color: var(--ts-text-light);
+  background: rgba(30, 41, 59, 0.3);
 }
 
-.submenu-item.active {
-  background: rgba(59,130,246,0.2);
-  color: #bfdbfe;
-  position: relative;
+.ts-sidebar__subitem--active {
+  color: #60a5fa;
+  font-weight: 600;
 }
 
-.submenu-item.active::before {
-  content: "";
-  position: absolute;
-  left: 0;
-  top: 0;
-  bottom: 0;
-  width: 4px;
-  background: linear-gradient(to bottom, #60a5fa, #06b6d4);
-  border-radius: 0 6px 6px 0;
+.ts-sidebar__subitem-icon {
+  opacity: 0.7;
+}
+
+.ts-sidebar__subitem--active .ts-sidebar__subitem-icon {
+  opacity: 1;
+  color: #60a5fa;
 }

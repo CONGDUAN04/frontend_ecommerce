@@ -1,8 +1,10 @@
-import { useContext, useState, useMemo } from "react";
+import { useContext, useState, useMemo, useEffect, useRef } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 import { AuthContext } from "../../contexts/auth.context.jsx";
 import { NotifyContext } from "../../contexts/notify.context.jsx";
 import { logoutAPI } from "../../services/api.auth.js";
+import { handleApiError, handleApiSuccess } from "../../utils/apiHandler.js";
+import "../../styles/admin/header.css";
 import {
   Search,
   Bell,
@@ -12,30 +14,18 @@ import {
   User,
   Settings,
 } from "lucide-react";
-import "../../styles/admin/header.css";
-import { handleApiError, handleApiSuccess } from "../../utils/apiHandler.js";
 
 const ROUTE_BREADCRUMB = {
   "/admin": ["Dashboard"],
-
   "/admin/product-groups": ["Nhóm sản phẩm"],
-
   "/admin/products": ["Nhóm sản phẩm", "Sản phẩm"],
-
   "/admin/colors": ["Nhóm sản phẩm", "Màu sắc"],
-
   "/admin/product-colors": ["Nhóm sản phẩm", "Màu theo sản phẩm"],
-
   "/admin/variants": ["Nhóm sản phẩm", "Biến thể"],
-
   "/admin/categories": ["Danh mục"],
-
   "/admin/brands": ["Thương hiệu"],
-
   "/admin/users": ["Người dùng"],
-
   "/admin/roles": ["Vai trò"],
-
   "/admin/settings": ["Cài đặt"],
 };
 
@@ -49,7 +39,7 @@ function useBreadcrumb(path) {
   }, [path]);
 }
 
-export default function Header({ toggleSidebar }) {
+export default function Header() {
   const location = useLocation();
   const navigate = useNavigate();
   const { user, setUser } = useContext(AuthContext);
@@ -57,24 +47,28 @@ export default function Header({ toggleSidebar }) {
 
   const [dropOpen, setDropOpen] = useState(false);
   const [loading, setLoading] = useState(false);
+  const dropdownRef = useRef(null);
 
   const breadcrumb = useBreadcrumb(location.pathname);
-
-  const parent =
-    breadcrumb.length > 1 ? breadcrumb[breadcrumb.length - 2] : "Trang chủ";
-
   const current = breadcrumb[breadcrumb.length - 1];
+
+  useEffect(() => {
+    function handleClickOutside(event) {
+      if (dropdownRef.current && !dropdownRef.current.contains(event.target)) {
+        setDropOpen(false);
+      }
+    }
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => document.removeEventListener("mousedown", handleClickOutside);
+  }, []);
 
   const handleLogout = async () => {
     if (loading) return;
     setLoading(true);
-
     try {
       await logoutAPI();
-
       localStorage.clear();
       setUser(null);
-
       handleApiSuccess(api, "Đăng xuất thành công!");
       setDropOpen(false);
       navigate("/");
@@ -91,70 +85,112 @@ export default function Header({ toggleSidebar }) {
     .join("")
     .slice(0, 2)
     .toUpperCase();
+
   return (
-    <header className="header">
-      <div className="header-container">
-        <div className="header-title">
-          <h1>{current}</h1>
+    <header className="th-header">
+      <div className="th-header__container">
+        {/* LEFT: TIÊU ĐỀ & BREADCRUMB */}
+        <div className="th-header__left">
+          <div className="th-header__title-area">
+            <h1 className="th-header__title">{current}</h1>
+            <div className="th-header__breadcrumb">
+              {breadcrumb.map((item, index) => (
+                <span
+                  key={index}
+                  className={`th-header__breadcrumb-item ${
+                    index === breadcrumb.length - 1
+                      ? "th-header__breadcrumb-item--active"
+                      : ""
+                  }`}
+                >
+                  {item}
+                  {index < breadcrumb.length - 1 && (
+                    <span className="th-header__breadcrumb-sep">/</span>
+                  )}
+                </span>
+              ))}
+            </div>
+          </div>
+        </div>
 
-          <div className="breadcrumb">
-            {breadcrumb.map((item, index) => (
-              <span
-                key={index}
-                className={index === breadcrumb.length - 1 ? "active" : ""}
-              >
-                {item}
-                {index < breadcrumb.length - 1 && " / "}
+        {/* CENTER: THANH TÌM KIẾM */}
+        <div className="th-header__search-box">
+          <Search size={15} className="th-header__search-icon" />
+          <input
+            className="th-header__search-input"
+            placeholder="Tìm kiếm nhanh..."
+          />
+        </div>
+
+        {/* RIGHT: THÔNG BÁO & USER */}
+        <div className="th-header__right">
+          <div className="th-header__actions">
+            <div className="th-header__action-btn">
+              <Bell size={18} />
+              <span className="th-header__badge">3</span>
+            </div>
+
+            <div className="th-header__action-btn">
+              <MessageSquare size={18} />
+              <span className="th-header__dot" />
+            </div>
+          </div>
+
+          <div className="th-header__divider" />
+
+          <div
+            className="th-header__user"
+            onClick={() => setDropOpen(!dropOpen)}
+            ref={dropdownRef}
+          >
+            <div className="th-header__avatar">
+              {user?.avatar ? <img src={user.avatar} alt="avatar" /> : initials}
+              <span className="th-header__status-online" />
+            </div>
+
+            <div className="th-header__user-info">
+              <span className="th-header__name">
+                {user?.fullName || user?.email}
               </span>
-            ))}
-          </div>
-        </div>
-
-        <div className="search-box">
-          <Search size={14} />
-          <input placeholder="Tìm kiếm..." />
-        </div>
-
-        <div className="header-actions">
-          <div className="icon-btn">
-            <Bell size={16} />
-            <span className="badge">3</span>
-          </div>
-
-          <div className="icon-btn">
-            <MessageSquare size={16} />
-            <span className="dot" />
-          </div>
-
-          <div className="divider" />
-
-          <div className="user" onClick={() => setDropOpen(!dropOpen)}>
-            <div className="avatar">
-              {user?.avatar ? <img src={user.avatar} alt="" /> : initials}
-              <span className="online" />
+              <span className="th-header__role">
+                {user?.role?.name || "Administrator"}
+              </span>
             </div>
 
-            <div className="user-info">
-              <span className="name">{user?.fullName || user?.email}</span>
-              <span className="role">{user?.role?.name}</span>
-            </div>
-
-            <ChevronDown size={14} className={dropOpen ? "rotate" : ""} />
+            <ChevronDown
+              size={14}
+              className={`th-header__chevron ${dropOpen ? "th-header__chevron--rotated" : ""}`}
+            />
 
             {dropOpen && (
-              <div className="dropdown">
-                <button onClick={() => navigate("/profile")}>
-                  <User size={14} /> Hồ sơ
+              <div className="th-header__dropdown">
+                <div className="th-header__dropdown-welcome">
+                  Xin chào,{" "}
+                  <strong>{user?.fullName?.split(" ").pop() || "Admin"}</strong>{" "}
+                  👋
+                </div>
+
+                <button
+                  className="th-header__dropdown-item"
+                  onClick={() => navigate("/profile")}
+                >
+                  <User size={14} /> <span>Hồ sơ cá nhân</span>
                 </button>
 
-                <button onClick={() => navigate("/settings")}>
-                  <Settings size={14} /> Cài đặt
+                <button
+                  className="th-header__dropdown-item"
+                  onClick={() => navigate("/settings")}
+                >
+                  <Settings size={14} /> <span>Cài đặt hệ thống</span>
                 </button>
 
-                <div className="divider-line" />
+                <div className="th-header__dropdown-divider" />
 
-                <button className="logout" onClick={handleLogout}>
-                  <LogOut size={14} /> Đăng xuất
+                <button
+                  className="th-header__dropdown-item th-header__dropdown-item--logout"
+                  onClick={handleLogout}
+                >
+                  <LogOut size={14} /> <span>Đăng xuất</span>
                 </button>
               </div>
             )}
