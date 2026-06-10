@@ -10,11 +10,8 @@ import "../../../../styles/client/pages/homepage.css";
 
 const HomePageUser = () => {
   const banners = [banner1, banner2];
-
   const [currentBanner, setCurrentBanner] = useState(0);
-
   const [products, setProducts] = useState([]);
-
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
@@ -23,7 +20,7 @@ const HomePageUser = () => {
     }, 4000);
 
     return () => clearInterval(timer);
-  }, []);
+  }, [banners.length]);
 
   useEffect(() => {
     fetchProducts();
@@ -32,28 +29,19 @@ const HomePageUser = () => {
   const fetchProducts = async () => {
     try {
       setLoading(true);
-
       const res = await getHomeProductsAPI();
-
-      console.log(res.data);
-
       setProducts(res.data || []);
     } catch (error) {
-      console.log(error);
+      console.error("Lỗi lấy dữ liệu trang chủ:", error);
     } finally {
       setLoading(false);
     }
   };
 
-  // Điện thoại
   const phoneProducts = products.filter(
     (p) => p.category?.slug === "dien-thoai",
   );
-
-  // Laptop
   const laptopProducts = products.filter((p) => p.category?.slug === "laptop");
-
-  // Flash sale
   const flashProducts = products.filter(
     (product) => product.badges?.isFlashSale,
   );
@@ -65,20 +53,30 @@ const HomePageUser = () => {
         currentBanner={currentBanner}
         setCurrentBanner={setCurrentBanner}
       />
-      {flashProducts.length > 0 && (
-        <FlashSaleSection products={flashProducts} />
+
+      {loading ? (
+        <ProductSection
+          title="⚡ FLASH SALE"
+          tabs={[]}
+          products={[]}
+          loading={true}
+        />
+      ) : (
+        flashProducts.length > 0 && (
+          <FlashSaleSection products={flashProducts} />
+        )
       )}
 
       <ProductSection
-        title="📱 ĐIỆN THOẠI"
-        tabs={["iPhone", "Samsung", "Xiaomi", "OPPO"]}
+        title="📱 ĐIỆN THOẠI NỔI BẬT"
+        tabs={["Tất cả", "iPhone", "Samsung", "Xiaomi"]}
         products={phoneProducts}
         loading={loading}
       />
 
       <ProductSection
-        title="💻 LAPTOP"
-        tabs={["MacBook", "Asus", "Dell", "Lenovo"]}
+        title="💻 LAPTOP BÁN CHẠY"
+        tabs={["Tất cả", "MacBook", "Asus", "Dell"]}
         products={laptopProducts}
         loading={loading}
       />

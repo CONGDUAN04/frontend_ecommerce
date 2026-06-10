@@ -1,90 +1,74 @@
+/* Thẻ sản phẩm chính */
 .homepage .product-card {
   position: relative;
-
-  background: white;
-
-  border-radius: 16px;
-
+  background: var(--bg-white);
+  border-radius: 12px;
   overflow: hidden;
-
   display: flex;
   flex-direction: column;
-
-  transition: 0.3s ease;
-
-  border: 1px solid #ececec;
-
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
+  transition: all 0.3s var(--transition-smooth);
+  border: 1px solid var(--border-color);
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.02);
+  cursor: pointer;
 }
 
 .homepage .product-card:hover {
-  transform: translateY(-6px);
-
-  box-shadow: 0 14px 28px rgba(0, 0, 0, 0.12);
+  transform: translateY(-4px);
+  box-shadow: 0 10px 20px rgba(0, 0, 0, 0.08);
+  border-color: rgba(215, 0, 24, 0.2);
 }
 
+/* Các loại nhãn đè (Badges) */
 .homepage .badge-discount {
   position: absolute;
-  top: 10px;
-  left: 10px;
-
-  background: #e53935;
-  color: white;
-
-  padding: 4px 8px;
-
-  border-radius: 6px;
-
+  top: 8px;
+  left: 8px;
+  background: var(--primary-color);
+  color: var(--text-light);
+  padding: 3px 6px;
+  border-radius: 4px;
   font-size: 11px;
   font-weight: 700;
-
   z-index: 2;
 }
 
 .homepage .badge-installment {
   position: absolute;
-  top: 10px;
-  right: 10px;
-
-  background: #eff6ff;
-  color: #2563eb;
-
-  padding: 4px 8px;
-
-  border-radius: 6px;
-
+  top: 8px;
+  right: 8px;
+  background: var(--primary-light);
+  color: var(--blue-color);
+  padding: 3px 6px;
+  border-radius: 4px;
   font-size: 11px;
   font-weight: 700;
-
   z-index: 2;
 }
 
+/* Khối bao bọc hình ảnh */
 .homepage .card-img-wrap {
-  height: 220px;
-
-  padding: 8px;
-
+  height: 180px;
+  padding: 12px;
   display: flex;
   align-items: center;
   justify-content: center;
+  background: #ffffff;
 }
 
 .homepage .card-img-wrap img {
   width: 100%;
   height: 100%;
-
   object-fit: contain;
-
-  transition: 0.35s ease;
+  transition: transform 0.4s var(--transition-smooth);
 }
 
 .homepage .product-card:hover img {
-  transform: scale(1.08);
+  transform: scale(1.05);
 }
 
+/* Phần nội dung thẻ */
 .homepage .card-body {
   padding: 12px;
-
   display: flex;
   flex-direction: column;
   flex: 1;
@@ -92,97 +76,144 @@
 
 .homepage .card-name {
   font-size: 14px;
-  font-weight: 700;
-
-  line-height: 1.5;
-
-  min-height: 42px;
+  font-weight: 600;
+  color: var(--text-main);
+  line-height: 1.4;
+  min-height: 38px;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
 }
 
+/* Khu vực hiển thị giá tiền */
 .homepage .card-price-row {
   display: flex;
-  align-items: center;
-
-  gap: 8px;
-
-  margin-top: 8px;
+  align-items: baseline;
+  gap: 6px;
+  margin-top: 6px;
+  flex-wrap: wrap;
 }
 
 .homepage .card-price {
-  color: #d70018;
-
-  font-size: 22px;
-  font-weight: 800;
+  color: var(--primary-color);
+  font-size: 16px;
+  font-weight: 700;
 }
 
 .homepage .card-compare {
-  color: #9ca3af;
-
+  color: var(--text-gray-placeholder);
   font-size: 12px;
-
   text-decoration: line-through;
 }
 
+/* Khối khuyến mãi bổ sung */
 .homepage .card-smember,
 .homepage .card-installment {
   margin-top: 8px;
-
   padding: 6px 8px;
-
-  border-radius: 8px;
-
+  border-radius: 6px;
   font-size: 11px;
+  font-weight: 500;
 }
 
 .homepage .card-smember {
-  background: #eff6ff;
-  color: #2563eb;
+  background: var(--primary-light);
+  color: var(--primary-color);
+  border: 1px dashed rgba(215, 0, 24, 0.2);
 }
 
 .homepage .card-installment {
-  border: 1px solid #ececec;
+  background: var(--bg-light);
+  color: var(--text-muted);
 }
 
+/* Chân của thẻ */
 .homepage .card-footer {
   margin-top: auto;
-  padding-top: 12px;
-
+  padding-top: 10px;
   display: flex;
   align-items: center;
   justify-content: space-between;
+  border-top: 1px solid #f8fafc;
 }
 
 .homepage .card-rating,
 .homepage .card-wishlist {
   display: flex;
   align-items: center;
-
   gap: 4px;
-
-  font-size: 13px;
+  font-size: 12px;
+  color: var(--text-muted);
 }
 
 .homepage .card-wishlist {
   border: none;
   background: none;
-
-  color: #2563eb;
-
   cursor: pointer;
-
-  transition: 0.2s;
+  transition: color 0.2s;
 }
 
 .homepage .card-wishlist:hover {
-  color: #d70018;
+  color: var(--primary-color);
 }
 
-@media (max-width: 480px) {
-  .homepage .card-img-wrap {
-    height: 140px;
-  }
+/* ==========================================================================
+   HỆ THỐNG HIỆU ỨNG SKELETON LOADING (SHIMMER EFFECT) MƯỢT MÀ
+   ========================================================================== */
+.skeleton-card {
+  cursor: default !important;
+  pointer-events: none;
+}
 
-  .homepage .card-price {
-    font-size: 18px;
-  }
+.skeleton {
+  background: linear-gradient(90deg, #f3f4f6 25%, #e5e7eb 50%, #f3f4f6 75%);
+  background-size: 200% 100%;
+  animation: shimmer-pulse 1.5s infinite linear;
+  border-radius: 6px;
+}
+
+@keyframes shimmer-pulse {
+  0% { background-position: 200% 0; }
+  100% { background-position: -200% 0; }
+}
+
+.skeleton-image {
+  width: 85%;
+  height: 85%;
+  border-radius: 8px;
+}
+
+.skeleton-title {
+  width: 90%;
+  height: 16px;
+  margin-bottom: 12px;
+}
+
+.skeleton-price {
+  width: 50%;
+  height: 20px;
+  margin-bottom: 12px;
+}
+
+.skeleton-text {
+  width: 100%;
+  height: 28px;
+  margin-bottom: 10px;
+}
+
+.skeleton-footer-left {
+  width: 35px;
+  height: 14px;
+}
+
+.skeleton-footer-right {
+  width: 60px;
+  height: 14px;
+}
+
+/* Điện thoại thu nhỏ ảnh */
+@media (max-width: 480px) {
+  .homepage .card-img-wrap { height: 130px; }
+  .homepage .card-price { font-size: 14px; }
 }

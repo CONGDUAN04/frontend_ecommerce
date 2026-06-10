@@ -4,6 +4,8 @@ import { useNavigate } from "react-router-dom";
 const ProductCard = ({ product }) => {
   const navigate = useNavigate();
 
+  if (!product) return null;
+
   const {
     badges,
     rating,
@@ -47,32 +49,34 @@ const ProductCard = ({ product }) => {
 
         <div className="card-price-row">
           <span className="card-price">{formatPrice(displayPrice)}</span>
-
           {comparePrice > displayPrice && (
             <span className="card-compare">{formatPrice(comparePrice)}</span>
           )}
         </div>
 
-        {comparePrice > displayPrice && (
+        {comparePrice > displayPrice ? (
           <div className="card-smember">
             Smember giảm đến{" "}
             {formatPrice(Math.round((comparePrice - displayPrice) * 0.01))}
           </div>
+        ) : (
+          <div className="card-installment">Bảo hành 12 tháng chính hãng</div>
         )}
 
         <div className="card-footer">
           <div className="card-rating">
-            <Star size={15} fill="#f59e0b" color="#f59e0b" />
-
-            <span>{rating?.average > 0 ? rating.average : "Chưa có"}</span>
+            <Star size={14} fill="#f59e0b" color="#f59e0b" />
+            <span>{rating?.average > 0 ? rating.average : "5.0"}</span>
           </div>
 
           <button
             className="card-wishlist"
-            onClick={(e) => e.stopPropagation()}
+            onClick={(e) => {
+              e.stopPropagation();
+            }}
           >
-            <Heart size={15} />
-            Yêu thích
+            <Heart size={14} />
+            <span>Yêu thích</span>
           </button>
         </div>
       </div>

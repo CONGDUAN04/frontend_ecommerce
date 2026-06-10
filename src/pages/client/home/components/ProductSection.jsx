@@ -6,19 +6,20 @@ const ProductSection = ({ title, tabs, products, loading }) => {
     <section className="product-section">
       <div className="section-header">
         <h2>{title}</h2>
-
         <button className="view-all-btn">Xem tất cả</button>
       </div>
 
       <div className="tabs">
-        {tabs.map((tab) => (
-          <span key={tab}>{tab}</span>
+        {tabs.map((tab, idx) => (
+          <span key={tab} className={idx === 0 ? "active-tab" : ""}>
+            {tab}
+          </span>
         ))}
       </div>
 
       <div className="product-row">
         {loading
-          ? Array.from({ length: 10 }).map((_, index) => (
+          ? Array.from({ length: 5 }).map((_, index) => (
               <ProductSkeleton key={index} />
             ))
           : products

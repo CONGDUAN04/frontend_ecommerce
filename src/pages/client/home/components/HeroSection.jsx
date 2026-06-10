@@ -26,7 +26,6 @@ const HeroSection = ({ banners, currentBanner, setCurrentBanner }) => {
           <div key={index} className="menu-item">
             <div className="menu-left">
               {item.icon}
-
               <span>{item.name}</span>
             </div>
           </div>
@@ -34,7 +33,7 @@ const HeroSection = ({ banners, currentBanner, setCurrentBanner }) => {
       </div>
 
       <div className="hero-banner">
-        <img src={banners[currentBanner]} alt="banner" />
+        <img src={banners[currentBanner]} alt="banner quảng cáo" />
 
         <button
           className="banner-btn left"
@@ -43,8 +42,9 @@ const HeroSection = ({ banners, currentBanner, setCurrentBanner }) => {
               currentBanner === 0 ? banners.length - 1 : currentBanner - 1,
             )
           }
+          aria-label="Previous banner"
         >
-          <ChevronLeft size={18} />
+          <ChevronLeft size={20} />
         </button>
 
         <button
@@ -54,8 +54,9 @@ const HeroSection = ({ banners, currentBanner, setCurrentBanner }) => {
               currentBanner === banners.length - 1 ? 0 : currentBanner + 1,
             )
           }
+          aria-label="Next banner"
         >
-          <ChevronRight size={18} />
+          <ChevronRight size={20} />
         </button>
       </div>
     </section>

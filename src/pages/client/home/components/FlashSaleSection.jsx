@@ -12,34 +12,23 @@ const FlashSaleSection = ({ products }) => {
     if (!products?.length) return;
 
     const endTime = products[0]?.flashSaleEndTime;
-
     if (!endTime) return;
 
     const target = new Date(endTime).getTime();
 
     const interval = setInterval(() => {
-      const now = Date.now();
-
-      const distance = target - now;
+      const distance = target - Date.now();
 
       if (distance <= 0) {
         clearInterval(interval);
-
-        setTimeLeft({
-          hours: "00",
-          minutes: "00",
-          seconds: "00",
-        });
-
+        setTimeLeft({ hours: "00", minutes: "00", seconds: "00" });
         return;
       }
 
       const hours = Math.floor(
         (distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60),
       );
-
       const minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
-
       const seconds = Math.floor((distance % (1000 * 60)) / 1000);
 
       setTimeLeft({
@@ -55,11 +44,13 @@ const FlashSaleSection = ({ products }) => {
   return (
     <section className="flash-sale">
       <div className="flash-sale-header">
-        <h2>⚡ FLASH SALE</h2>
+        <h2 className="flash-sale-title">⚡ FLASH SALE NỔI BẬT</h2>
 
         <div className="flash-timer">
-          <span>{timeLeft.hours}</span>:<span>{timeLeft.minutes}</span>:
-          <span>{timeLeft.seconds}</span>
+          <span className="timer-label">Kết thúc sau:</span>
+          <span className="timer-box">{timeLeft.hours}</span>:
+          <span className="timer-box">{timeLeft.minutes}</span>:
+          <span className="timer-box">{timeLeft.seconds}</span>
         </div>
       </div>
 

@@ -1,100 +1,73 @@
 .homepage .product-section {
-  margin-top: 28px;
-
-  background: white;
-
-  border-radius: 18px;
-
+  margin-top: 24px;
+  background: var(--bg-white);
+  border-radius: 16px;
   padding: 20px;
-
-  border: 1px solid #ececec;
+  border: 1px solid var(--border-color);
 }
 
 .homepage .section-header {
   display: flex;
   align-items: center;
   justify-content: space-between;
+  margin-bottom: 14px;
+}
 
-  margin-bottom: 16px;
+.homepage .section-header h2 {
+  font-size: 18px;
+  font-weight: 700;
+  color: var(--text-main);
 }
 
 .homepage .view-all-btn {
-  height: 38px;
-
-  padding: 0 16px;
-
-  border: none;
-
-  border-radius: 999px;
-
-  background: #f3f4f6;
-
+  height: 34px;
+  padding: 0 14px;
+  border: 1px solid var(--border-color);
+  border-radius: 20px;
+  background: var(--bg-light);
+  color: var(--text-muted);
+  font-size: 13px;
   font-weight: 600;
-
   cursor: pointer;
-
-  transition: 0.25s;
+  transition: all 0.25s;
 }
 
 .homepage .view-all-btn:hover {
-  background: #d70018;
-  color: white;
+  background: var(--primary-color);
+  color: var(--text-light);
+  border-color: var(--primary-color);
 }
 
+/* Các nhãn chuyển đổi Tab danh mục */
 .homepage .tabs {
   display: flex;
-  gap: 10px;
-
-  margin-bottom: 18px;
-
+  gap: 8px;
+  margin-bottom: 16px;
   overflow-x: auto;
+  padding-bottom: 4px;
+}
+
+.homepage .tabs::-webkit-scrollbar {
+  display: none; /* Ẩn hẳn thanh cuộn xấu xí trên di động */
 }
 
 .homepage .tabs span {
-  background: #f3f4f6;
-
-  padding: 8px 16px;
-
-  border-radius: 999px;
-
+  background: var(--bg-light);
+  color: var(--text-muted);
+  padding: 6px 14px;
+  border-radius: 20px;
   font-size: 13px;
-  font-weight: 600;
-
+  font-weight: 500;
   cursor: pointer;
-
   white-space: nowrap;
-
-  transition: 0.25s;
+  transition: all 0.2s;
+  border: 1px solid transparent;
 }
 
-.homepage .tabs span:hover {
-  background: #d70018;
-  color: white;
-}
-
-.homepage .product-row {
-  display: grid;
-  grid-template-columns: repeat(5, 1fr);
-
-  gap: 16px;
-}
-
-@media (max-width: 1200px) {
-  .homepage .product-row {
-    grid-template-columns: repeat(4, 1fr);
-  }
-}
-
-@media (max-width: 992px) {
-  .homepage .product-row {
-    grid-template-columns: repeat(3, 1fr);
-  }
-}
-
-@media (max-width: 480px) {
-  .homepage .product-row {
-    grid-template-columns: repeat(2, 1fr);
-
-    gap: 10px;
-  }
+.homepage .tabs span:hover, 
+.homepage .tabs span.active-tab {
+  background: var(--primary-light);
+  color: var(--primary-color);
+  border-color: rgba(215, 0, 24, 0.2);
+  font-weight: 600;
 }
