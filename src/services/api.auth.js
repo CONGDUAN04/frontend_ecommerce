@@ -12,7 +12,7 @@ export const logoutAPI = () => axios.post("/api/logout");
 
 export const getAccountAPI = () => {
   const token = localStorage.getItem("access_token");
-  return axios.get("/api/user/me", {
+  return axios.get("/api/users/me", {
     headers: { Authorization: `Bearer ${token}` },
   });
 };

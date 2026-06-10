@@ -5,7 +5,7 @@ import axios from "../axios.customize";
 ───────────────────────────────────────────── */
 
 export const getHomeProductsAPI = async (params = {}) => {
-  return axios.get("/api/client/products", {
+  return axios.get("/api/users/products", {
     params: {
       limit: 100,
       sort: "popular",
@@ -19,7 +19,7 @@ export const getHomeProductsAPI = async (params = {}) => {
 ───────────────────────────────────────────── */
 
 export const getProductsByBrandAPI = async (brandId, limit = 10) => {
-  return axios.get("/api/client/products", {
+  return axios.get("/api/users/products", {
     params: {
       brandId,
       limit,
@@ -32,7 +32,7 @@ export const getProductsByBrandAPI = async (brandId, limit = 10) => {
 ───────────────────────────────────────────── */
 
 export const getProductDetailAPI = async (slug) => {
-  return axios.get(`/api/client/products/${slug}`);
+  return axios.get(`/api/users/products/${slug}`);
 };
 
 /* ─────────────────────────────────────────────
@@ -40,7 +40,7 @@ export const getProductDetailAPI = async (slug) => {
 ───────────────────────────────────────────── */
 
 export const getRelatedProductsAPI = async (slug) => {
-  return axios.get(`/api/client/products/${slug}/related`);
+  return axios.get(`/api/users/products/${slug}/related`);
 };
 
 /* ─────────────────────────────────────────────
@@ -48,7 +48,7 @@ export const getRelatedProductsAPI = async (slug) => {
 ───────────────────────────────────────────── */
 
 export const searchProductsAPI = async (params = {}) => {
-  return axios.get("/api/client/products/search", {
+  return axios.get("/api/users/products/search", {
     params,
   });
 };
@@ -58,7 +58,7 @@ export const searchProductsAPI = async (params = {}) => {
 ───────────────────────────────────────────── */
 
 export const getProductGroupsAPI = async () => {
-  return axios.get("/api/client/products/groups");
+  return axios.get("/api/users/products/groups");
 };
 
 /* ─────────────────────────────────────────────
@@ -66,5 +66,5 @@ export const getProductGroupsAPI = async () => {
 ───────────────────────────────────────────── */
 
 export const getProductGroupDetailAPI = async (slug) => {
-  return axios.get(`/api/client/products/groups/${slug}`);
+  return axios.get(`/api/users/products/groups/${slug}`);
 };

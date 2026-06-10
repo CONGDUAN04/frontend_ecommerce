@@ -1,8 +1,7 @@
-import { Search, ShoppingCart, Menu, LogIn, User } from "lucide-react";
-
+import { Search, ShoppingCart, Menu, LogIn, User, X } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import { Dropdown, Avatar, Badge, Spin } from "antd";
-import { useContext, useState, useCallback, useEffect } from "react";
+import { useContext, useState, useCallback, useEffect, useMemo } from "react";
 
 import { handleApiError, handleApiSuccess } from "../../utils/apiHandler.js";
 import { AuthContext } from "../../contexts/auth.context.jsx";
@@ -13,38 +12,30 @@ import "../../styles/client/layouts/header.css";
 
 const Header = ({ cartCount = 0 }) => {
   const navigate = useNavigate();
-
   const { user, setUser } = useContext(AuthContext);
   const { api } = useContext(NotifyContext);
 
   const [loadingLogout, setLoadingLogout] = useState(false);
   const [scrolled, setScrolled] = useState(false);
+  const [isMobileSearchOpen, setIsMobileSearchOpen] = useState(false);
 
   useEffect(() => {
     const handleScroll = () => {
-      setScrolled(window.scrollY > 10);
+      setScrolled(window.scrollY > 20);
     };
-
     window.addEventListener("scroll", handleScroll);
-
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);
 
   const handleLogout = useCallback(async () => {
     if (loadingLogout) return;
-
     setLoadingLogout(true);
-
     try {
       const res = await logoutAPI();
-
       localStorage.removeItem("access_token");
       localStorage.removeItem("user");
-
       setUser(null);
-
       handleApiSuccess(api, res?.message);
-
       navigate("/");
     } catch (err) {
       handleApiError(api, err);
@@ -53,68 +44,100 @@ const Header = ({ cartCount = 0 }) => {
     }
   }, [api, navigate, setUser, loadingLogout]);
 
-  const userMenu = {
-    items: [
+  const userMenuItems = useMemo(
+    () => [
       {
         key: "profile",
-        label: "Thông tin cá nhân",
+        label: <span className="dropdown-item-custom">Thông tin cá nhân</span>,
       },
-      {
-        type: "divider",
-      },
+      { type: "divider" },
       {
         key: "logout",
         danger: true,
-        label: loadingLogout ? <Spin size="small" /> : "Đăng xuất",
+        label: loadingLogout ? (
+          <Spin size="small" />
+        ) : (
+          <span className="dropdown-item-custom">Đăng xuất</span>
+        ),
       },
     ],
-
-    onClick: ({ key }) => {
-      if (key === "logout") handleLogout();
-
-      if (key === "profile") navigate("/profile");
-    },
-  };
+    [loadingLogout],
+  );
 
   return (
     <header className={`header ${scrolled ? "header-scrolled" : ""}`}>
       <div className="header-container">
-        {/* LEFT */}
         <div className="header-left">
           <div className="logo" onClick={() => navigate("/")}>
-            TechZone
+            Tech<span>Zone</span>
           </div>
-
           <nav className="nav-menu">
-            <span>Danh mục</span>
-            <span>Flash Sale</span>
-            <span>Tin công nghệ</span>
-            <span>Trả góp</span>
+            <span className="nav-item active">Danh mục</span>
+            <span className="nav-item">Flash Sale</span>
+            <span className="nav-item">Tin công nghệ</span>
+            <span className="nav-item">Trả góp</span>
           </nav>
         </div>
 
-        {/* SEARCH */}
-        <div className="search-box">
-          <Search size={18} />
-
-          <input type="text" placeholder="Bạn cần tìm gì hôm nay?" />
+        <div
+          className={`search-box ${isMobileSearchOpen ? "mobile-expanded" : ""}`}
+        >
+          <Search size={18} className="search-icon" />
+          <input type="text" placeholder="Bạn cần tìm gì hôm nay?..." />
+          <button
+            className="close-search-btn"
+            onClick={() => setIsMobileSearchOpen(false)}
+          >
+            <X size={18} />
+          </button>
         </div>
 
-        {/* ACTIONS */}
         <div className="header-actions">
-          {user && (
-            <Badge count={cartCount} size="small">
-              <div className="cart-btn" onClick={() => navigate("/cart")}>
-                <ShoppingCart size={22} />
-              </div>
-            </Badge>
-          )}
+          <button
+            className="action-icon-btn mobile-search-trigger"
+            onClick={() => setIsMobileSearchOpen(true)}
+            aria-label="Tìm kiếm"
+          >
+            <Search size={20} />
+          </button>
 
+          <Badge count={user ? cartCount : 0} size="small" offset={[-2, 4]}>
+            <button
+              className="cart-btn"
+              onClick={() => {
+                if (user) {
+                  navigate("/cart");
+                } else {
+                  api.warning({
+                    message: "Yêu cầu đăng nhập",
+                    description:
+                      "Vui lòng đăng nhập để xem và quản lý giỏ hàng của bạn!",
+                  });
+                  navigate("/login");
+                }
+              }}
+              aria-label="Giỏ hàng"
+            >
+              <ShoppingCart size={20} />
+              <span className="cart-name">Giỏ hàng</span>
+            </button>
+          </Badge>
           {user ? (
-            <Dropdown menu={userMenu} placement="bottomRight">
+            <Dropdown
+              menu={{
+                items: userMenuItems,
+                onClick: ({ key }) => {
+                  if (key === "logout") handleLogout();
+                  if (key === "profile") navigate("/profile");
+                },
+              }}
+              placement="bottomRight"
+              arrow
+            >
               <div className="user-box">
                 <Avatar
-                  size={36}
+                  size={34}
+                  className="user-avatar"
                   src={
                     user?.avatar
                       ? `${import.meta.env.VITE_BACKEND_URL}/images/avatar/${user.avatar}`
@@ -122,20 +145,21 @@ const Header = ({ cartCount = 0 }) => {
                   }
                   icon={<User size={16} />}
                 />
-
-                <span>{user?.fullName || user?.username}</span>
+                <span className="user-name">
+                  {user?.fullName || user?.username}
+                </span>
               </div>
             </Dropdown>
           ) : (
-            <button className="login-btn" onClick={() => navigate("/login")}>
-              <LogIn size={18} />
-              Đăng nhập
-            </button>
+            <div className="user-box" onClick={() => navigate("/login")}>
+              <Avatar
+                size={28}
+                className="user-avatar"
+                icon={<User size={14} />}
+              />
+              <span className="user-name">Đăng nhập</span>
+            </div>
           )}
-
-          <div className="mobile-menu">
-            <Menu size={24} />
-          </div>
         </div>
       </div>
     </header>
