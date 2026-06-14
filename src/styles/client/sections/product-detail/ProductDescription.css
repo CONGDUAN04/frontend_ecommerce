@@ -1,0 +1,19 @@
+.description-equal-block {
+  flex: 1;
+  min-height: 380px;
+}
+
+.product-rich-description {
+  font-size: 14px;
+  color: var(--text-muted);
+  line-height: 1.7;
+  white-space: pre-wrap;
+}
+
+.empty-content-placeholder {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  color: var(--text-slate);
+  line-height: 1.6;
+}

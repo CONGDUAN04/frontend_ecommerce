@@ -6,12 +6,12 @@
 
 .homepage {
   max-width: 1320px;
-  margin: auto;
-  padding: 12px;
+  margin: 0 auto;
+  padding: var(--space-lg);
 }
 
 @media (max-width: 480px) {
   .homepage {
-    padding: 8px;
+    padding: var(--space-sm);
   }
 }

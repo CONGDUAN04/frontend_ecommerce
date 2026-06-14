@@ -1,0 +1,63 @@
+.specs-equal-block {
+  flex: 1;
+  max-height: 440px;
+  display: flex;
+  flex-direction: column;
+}
+
+.specifications-scroll-container {
+  flex: 1;
+  overflow-y: auto;
+  padding-right: 4px;
+}
+
+.specifications-scroll-container::-webkit-scrollbar {
+  width: 5px;
+}
+
+.specifications-scroll-container::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.specifications-scroll-container::-webkit-scrollbar-thumb {
+  background: #cbd5e1;
+  border-radius: 10px;
+}
+
+.specifications-scroll-container::-webkit-scrollbar-thumb:hover {
+  background: #94a3b8;
+}
+
+.specifications-table-box {
+  border-radius: 10px;
+  border: 1px solid var(--border-color);
+  overflow: hidden;
+}
+
+.specification-table-row {
+  display: grid;
+  grid-template-columns: 35% 1fr;
+  padding: 12px 14px;
+  border-bottom: 1px solid var(--border-color);
+  font-size: 13px;
+  align-items: center;
+}
+
+.specification-table-row:last-child {
+  border-bottom: none;
+}
+
+.specification-table-row:nth-child(even) {
+  background-color: var(--bg-light);
+}
+
+.spec-label-cell {
+  font-weight: 600;
+  color: var(--text-slate);
+}
+
+.spec-value-cell {
+  color: var(--text-main);
+  font-weight: 500;
+  padding-left: 8px;
+}

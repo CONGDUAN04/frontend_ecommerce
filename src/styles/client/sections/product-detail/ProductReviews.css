@@ -1,0 +1,75 @@
+.heading-with-badge {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.heading-with-badge .block-main-heading {
+  margin-bottom: 0;
+}
+
+.badge-count-pill {
+  background-color: var(--primary-light);
+  color: var(--primary-color);
+  font-size: 11px;
+  font-weight: 700;
+  padding: 2px 8px;
+  border-radius: 20px;
+}
+
+.customer-reviews-timeline {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.timeline-review-card {
+  padding-bottom: 16px;
+  border-bottom: 1px solid var(--border-color);
+}
+
+.timeline-review-card:last-child {
+  border-bottom: none;
+  padding-bottom: 0;
+}
+
+.reviewer-profile {
+  display: flex;
+  gap: 10px;
+  align-items: center;
+  margin-bottom: 8px;
+}
+
+.avatar-placeholder-box {
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  background-color: var(--bg-light);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 700;
+  font-size: 13px;
+  border: 1px solid var(--border-color);
+}
+
+.reviewer-name {
+  font-size: 13px;
+  font-weight: 700;
+}
+
+.review-stars-row {
+  color: #fbbf24;
+  font-size: 11px;
+}
+
+.empty-stars-grey {
+  color: #d1d5db;
+}
+
+.reviewer-text-content {
+  font-size: 13px;
+  color: var(--text-muted);
+  padding-left: 46px;
+  line-height: 1.5;
+}
