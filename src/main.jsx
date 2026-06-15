@@ -13,7 +13,7 @@ import BrandPage from "./pages/admin/brand/index.jsx";
 import LoginPage from "./pages/auth/login.jsx";
 import RegisterPage from "./pages/auth/register.jsx";
 import HomePageUser from "./pages/client/home/page/HomePageUser.jsx";
-
+import { CartProvider } from "./contexts/cart.context";
 import { AuthWrapper } from "./contexts/auth.context.jsx";
 import NotifyProvider from "./contexts/notify.provider.jsx";
 import LoadingProvider from "./contexts/loading.context.jsx";
@@ -28,6 +28,7 @@ import VariantPage from "./pages/admin/variant/index.jsx";
 import ColorPage from "./pages/admin/color/index.jsx";
 import ProductColorPage from "./pages/admin/productColor/index.jsx";
 import ProductDetailPage from "./pages/client/product-detail/page/ProductDetailPage.jsx";
+import CartPage from "./pages/client/cart/page/CartPage.jsx";
 const router = createBrowserRouter([
   {
     path: "/admin",
@@ -62,6 +63,10 @@ const router = createBrowserRouter([
         path: "/product/:slug",
         element: <ProductDetailPage />,
       },
+      {
+        path: "/cart",
+        element: <CartPage />,
+      },
     ],
   },
 
@@ -92,7 +97,9 @@ ReactDOM.createRoot(document.getElementById("root")).render(
     <NotifyProvider>
       <LoadingProvider>
         <AuthWrapper>
-          <RouterProvider router={router} />
+          <CartProvider>
+            <RouterProvider router={router} />
+          </CartProvider>
         </AuthWrapper>
       </LoadingProvider>
     </NotifyProvider>

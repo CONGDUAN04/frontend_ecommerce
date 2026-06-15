@@ -7,14 +7,14 @@ import { handleApiError, handleApiSuccess } from "../../utils/apiHandler.js";
 import { AuthContext } from "../../contexts/auth.context.jsx";
 import { NotifyContext } from "../../contexts/notify.context.jsx";
 import { logoutAPI } from "../../services/api.auth.js";
-
+import { CartContext } from "../../contexts/cart.context";
 import "../../styles/client/layouts/header.css";
 
-const Header = ({ cartCount = 0 }) => {
+const Header = () => {
   const navigate = useNavigate();
   const { user, setUser } = useContext(AuthContext);
   const { api } = useContext(NotifyContext);
-
+  const { cart } = useContext(CartContext);
   const [loadingLogout, setLoadingLogout] = useState(false);
   const [scrolled, setScrolled] = useState(false);
   const [isMobileSearchOpen, setIsMobileSearchOpen] = useState(false);
@@ -101,7 +101,11 @@ const Header = ({ cartCount = 0 }) => {
             <Search size={20} />
           </button>
 
-          <Badge count={user ? cartCount : 0} size="small" offset={[-2, 4]}>
+          <Badge
+            count={user ? cart.items.length : 0}
+            size="small"
+            offset={[-2, 4]}
+          >
             <button
               className="cart-btn"
               onClick={() => {
