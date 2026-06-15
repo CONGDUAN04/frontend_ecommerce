@@ -1,6 +1,5 @@
 import { Button, Form, Input, Typography, Card } from "antd";
-import { useContext, useState } from "react";
-import { NotifyContext } from "../../contexts/notify.context";
+import { useState } from "react";
 import { resetPasswordAPI } from "../../services/api.auth";
 import { handleApiSuccess, handleApiError } from "../../utils/apiHandler";
 import { useNavigate } from "react-router-dom";
@@ -9,7 +8,6 @@ const { Title, Text } = Typography;
 
 const ResetPassword = () => {
   const [form] = Form.useForm();
-  const { api } = useContext(NotifyContext);
   const navigate = useNavigate();
 
   const [loading, setLoading] = useState(false);
@@ -29,13 +27,13 @@ const ResetPassword = () => {
 
       const res = await resetPasswordAPI(email, values.password);
 
-      handleApiSuccess(api, res?.message);
+      handleApiSuccess(res?.message);
 
       localStorage.removeItem("reset_email");
 
       navigate("/login");
     } catch (err) {
-      handleApiError(api, err, form);
+      handleApiError(err, form);
     } finally {
       setLoading(false);
     }

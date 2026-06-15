@@ -1,8 +1,9 @@
 import { Form, Input, Button, Card, Typography } from "antd";
-import { forgotPasswordAPI } from "../../services/api.auth";
 import { useNavigate } from "react-router-dom";
-import { useContext, useState } from "react";
-import { NotifyContext } from "../../contexts/notify.context";
+import { useState } from "react";
+
+import { forgotPasswordAPI } from "../../services/api.auth";
+
 import { handleApiError, handleApiSuccess } from "../../utils/apiHandler";
 
 const { Title, Text } = Typography;
@@ -10,19 +11,22 @@ const { Title, Text } = Typography;
 const ForgotPasswordPage = () => {
   const [form] = Form.useForm();
   const navigate = useNavigate();
-  const { api } = useContext(NotifyContext);
+
   const [loading, setLoading] = useState(false);
 
   const onFinish = async (values) => {
     try {
       setLoading(true);
+
       const res = await forgotPasswordAPI(values.username);
 
       localStorage.setItem("reset_email", values.username);
-      handleApiSuccess(api, res?.message);
+
+      handleApiSuccess(res?.message);
+
       navigate("/verify-otp");
     } catch (err) {
-      handleApiError(api, err, form);
+      handleApiError(err, form);
     } finally {
       setLoading(false);
     }
@@ -47,9 +51,18 @@ const ForgotPasswordPage = () => {
           boxShadow: "0 10px 40px rgba(0,0,0,0.08)",
           border: "1px solid rgba(0,0,0,0.05)",
         }}
-        styles={{ body: { padding: "40px 32px" } }}
+        styles={{
+          body: {
+            padding: "40px 32px",
+          },
+        }}
       >
-        <div style={{ textAlign: "center", marginBottom: 28 }}>
+        <div
+          style={{
+            textAlign: "center",
+            marginBottom: 28,
+          }}
+        >
           <Title
             level={2}
             style={{
@@ -82,14 +95,26 @@ const ForgotPasswordPage = () => {
             label="Email"
             name="username"
             rules={[
-              { required: true, message: "Vui lòng nhập email" },
-              { type: "email", message: "Email không hợp lệ" },
+              {
+                required: true,
+                message: "Vui lòng nhập email",
+              },
+              {
+                type: "email",
+                message: "Email không hợp lệ",
+              },
             ]}
           >
             <Input size="large" placeholder="Nhập email của bạn" />
           </Form.Item>
 
-          <div style={{ display: "flex", gap: 12, marginTop: 8 }}>
+          <div
+            style={{
+              display: "flex",
+              gap: 12,
+              marginTop: 8,
+            }}
+          >
             <Button
               size="large"
               onClick={() => navigate("/login")}

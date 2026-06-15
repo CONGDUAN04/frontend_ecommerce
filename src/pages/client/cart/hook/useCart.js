@@ -1,5 +1,4 @@
-import { useCallback, useContext, useMemo } from "react";
-import { NotifyContext } from "../../../../contexts/notify.context";
+import { useCallback, useMemo } from "react";
 
 import {
   getCartAPI,
@@ -28,19 +27,17 @@ const useCartCrud = createCrudHook({
 export const useCart = () => {
   const crud = useCartCrud();
 
-  const { api } = useContext(NotifyContext);
-
   const clearCart = useCallback(async () => {
     try {
       const res = await clearCartAPI();
 
-      handleApiSuccess(api, res?.message);
+      handleApiSuccess(res?.message);
 
       return res;
     } catch (err) {
-      handleApiError(api, err);
+      handleApiError(err);
     }
-  }, [api]);
+  }, []);
 
   return useMemo(
     () => ({

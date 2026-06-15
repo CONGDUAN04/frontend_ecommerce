@@ -3,16 +3,17 @@ import { Outlet } from "react-router-dom";
 import Header from "./layouts/admin/Header.jsx";
 import Sidebar from "./layouts/admin/Sidebar.jsx";
 import GlobalSpin from "./components/common/admin/global.spin.jsx";
+import "./styles/admin/admin-layout.css";
 
 export default function AppAdmin() {
   const [sidebarOpen, setSidebarOpen] = useState(true);
+
   return (
     <GlobalSpin>
-      <div className="flex min-h-screen bg-gray-50">
-        {/* Overlay mobile */}
+      <div className="admin-layout">
         {sidebarOpen && (
           <div
-            className="fixed inset-0 bg-black/40 z-40 md:hidden"
+            className="admin-overlay"
             onClick={() => setSidebarOpen(false)}
           />
         )}
@@ -22,9 +23,10 @@ export default function AppAdmin() {
           toggleSidebar={() => setSidebarOpen((v) => !v)}
         />
 
-        <div className="flex-1 flex flex-col min-h-screen min-w-0">
+        <div className="admin-content">
           <Header toggleSidebar={() => setSidebarOpen((v) => !v)} />
-          <main className="flex-1 p-4 md:p-6">
+
+          <main className="admin-main">
             <Outlet />
           </main>
         </div>

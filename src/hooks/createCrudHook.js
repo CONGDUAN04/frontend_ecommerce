@@ -1,20 +1,15 @@
-import { useContext, useCallback, useMemo, useRef } from "react";
-import { NotifyContext } from "../contexts/notify.context";
+import { useCallback, useMemo } from "react";
 import { handleApiSuccess, handleApiError } from "../utils/apiHandler";
 
 export const createCrudHook = ({ name, apis }) => {
   const apisRef = { current: apis };
 
   return () => {
-    const { api } = useContext(NotifyContext);
-    const apiRef = useRef(api);
-    apiRef.current = api;
-
     const getAll = useCallback(async (...params) => {
       try {
         return await apisRef.current.getAll(...params);
       } catch (err) {
-        handleApiError(apiRef.current, err);
+        handleApiError(err);
         throw err;
       }
     }, []);
@@ -23,7 +18,7 @@ export const createCrudHook = ({ name, apis }) => {
       try {
         return await apisRef.current.getById?.(id);
       } catch (err) {
-        handleApiError(apiRef.current, err);
+        handleApiError(err);
         throw err;
       }
     }, []);
@@ -31,39 +26,36 @@ export const createCrudHook = ({ name, apis }) => {
     const create = useCallback(async (data, form) => {
       try {
         const res = await apisRef.current.create(data);
-        handleApiSuccess(
-          apiRef.current,
-          res?.message || `Tạo ${name} thành công`,
-        );
+
+        handleApiSuccess(res?.message || `Tạo ${name} thành công`);
+
         return res;
       } catch (err) {
-        handleApiError(apiRef.current, err, form);
+        handleApiError(err, form);
       }
     }, []);
 
     const update = useCallback(async (id, data, form) => {
       try {
         const res = await apisRef.current.update(id, data);
-        handleApiSuccess(
-          apiRef.current,
-          res?.message || `Cập nhật ${name} thành công`,
-        );
+
+        handleApiSuccess(res?.message || `Cập nhật ${name} thành công`);
+
         return res;
       } catch (err) {
-        handleApiError(apiRef.current, err, form);
+        handleApiError(err, form);
       }
     }, []);
 
     const remove = useCallback(async (id) => {
       try {
         const res = await apisRef.current.delete(id);
-        handleApiSuccess(
-          apiRef.current,
-          res?.message || `Xóa ${name} thành công`,
-        );
+
+        handleApiSuccess(res?.message || `Xóa ${name} thành công`);
+
         return res;
       } catch (err) {
-        handleApiError(apiRef.current, err);
+        handleApiError(err);
       }
     }, []);
 

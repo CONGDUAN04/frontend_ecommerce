@@ -1,8 +1,9 @@
-import { useEffect, useState, useContext } from "react";
+import { useEffect, useState } from "react";
 import { Button, Form, Typography, Input, Row, Col } from "antd";
 import { useNavigate } from "react-router-dom";
+
 import { verifyOtpAPI, resendOtpAPI } from "../../services/api.auth";
-import { NotifyContext } from "../../contexts/notify.context";
+
 import { handleApiError, handleApiSuccess } from "../../utils/apiHandler";
 
 const { Title, Text } = Typography;
@@ -10,7 +11,7 @@ const { Title, Text } = Typography;
 export default function VerifyOtpPage() {
   const [form] = Form.useForm();
   const navigate = useNavigate();
-  const { api } = useContext(NotifyContext);
+
   const [verifyLoading, setVerifyLoading] = useState(false);
   const [resendLoading, setResendLoading] = useState(false);
   const [countdown, setCountdown] = useState(0);
@@ -34,6 +35,7 @@ export default function VerifyOtpPage() {
   const onFinish = async (values) => {
     try {
       setVerifyLoading(true);
+
       const isReset = localStorage.getItem("reset_email");
 
       const res = await verifyOtpAPI({
@@ -42,7 +44,7 @@ export default function VerifyOtpPage() {
         type: isReset ? "RESET_PASSWORD" : "VERIFY_EMAIL",
       });
 
-      handleApiSuccess(api, res?.message);
+      handleApiSuccess(res?.message);
 
       if (isReset) {
         navigate("/reset-password");
@@ -51,7 +53,7 @@ export default function VerifyOtpPage() {
         navigate("/login");
       }
     } catch (err) {
-      handleApiError(api, err, form);
+      handleApiError(err, form);
     } finally {
       setVerifyLoading(false);
     }
@@ -62,6 +64,7 @@ export default function VerifyOtpPage() {
 
     try {
       setResendLoading(true);
+
       const isReset = localStorage.getItem("reset_email");
 
       await resendOtpAPI({
@@ -69,10 +72,11 @@ export default function VerifyOtpPage() {
         type: isReset ? "RESET_PASSWORD" : "VERIFY_EMAIL",
       });
 
-      handleApiSuccess(api, "Đã gửi lại OTP");
+      handleApiSuccess("Đã gửi lại OTP");
+
       setCountdown(30);
     } catch (err) {
-      handleApiError(api, err);
+      handleApiError(err);
     } finally {
       setResendLoading(false);
     }
@@ -80,6 +84,7 @@ export default function VerifyOtpPage() {
 
   const handleGoBack = () => {
     const isReset = localStorage.getItem("reset_email");
+
     if (isReset) {
       localStorage.removeItem("reset_email");
       navigate("/forgot-password");
@@ -145,10 +150,19 @@ export default function VerifyOtpPage() {
           <Form.Item
             name="otp"
             rules={[
-              { required: true, message: "OTP không hợp lệ" },
-              { pattern: /^\d{6}$/, message: "OTP phải là 6 số" },
+              {
+                required: true,
+                message: "OTP không hợp lệ",
+              },
+              {
+                pattern: /^\d{6}$/,
+                message: "OTP phải là 6 số",
+              },
             ]}
-            style={{ marginBottom: 30, textAlign: "center" }}
+            style={{
+              marginBottom: 30,
+              textAlign: "center",
+            }}
           >
             <Input.OTP length={6} size="large" style={{ gap: 12 }} />
           </Form.Item>
@@ -170,6 +184,7 @@ export default function VerifyOtpPage() {
                 ← Quay lại
               </Button>
             </Col>
+
             <Col span={12}>
               <Button
                 block
@@ -177,7 +192,10 @@ export default function VerifyOtpPage() {
                 type="primary"
                 htmlType="submit"
                 loading={verifyLoading}
-                style={{ height: 48, fontWeight: 500 }}
+                style={{
+                  height: 48,
+                  fontWeight: 500,
+                }}
               >
                 Xác nhận
               </Button>

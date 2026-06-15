@@ -5,7 +5,7 @@ import { useContext, useState, useCallback, useEffect, useMemo } from "react";
 
 import { handleApiError, handleApiSuccess } from "../../utils/apiHandler.js";
 import { AuthContext } from "../../contexts/auth.context.jsx";
-import { NotifyContext } from "../../contexts/notify.context.jsx";
+import toast from "react-hot-toast";
 import { logoutAPI } from "../../services/api.auth.js";
 import { CartContext } from "../../contexts/cart.context";
 import "../../styles/client/layouts/header.css";
@@ -13,7 +13,6 @@ import "../../styles/client/layouts/header.css";
 const Header = () => {
   const navigate = useNavigate();
   const { user, setUser } = useContext(AuthContext);
-  const { api } = useContext(NotifyContext);
   const { cart } = useContext(CartContext);
   const [loadingLogout, setLoadingLogout] = useState(false);
   const [scrolled, setScrolled] = useState(false);
@@ -29,20 +28,26 @@ const Header = () => {
 
   const handleLogout = useCallback(async () => {
     if (loadingLogout) return;
+
     setLoadingLogout(true);
+
     try {
       const res = await logoutAPI();
+
       localStorage.removeItem("access_token");
       localStorage.removeItem("user");
+
       setUser(null);
-      handleApiSuccess(api, res?.message);
+
+      handleApiSuccess(res?.message);
+
       navigate("/");
     } catch (err) {
-      handleApiError(api, err);
+      handleApiError(err);
     } finally {
       setLoadingLogout(false);
     }
-  }, [api, navigate, setUser, loadingLogout]);
+  }, [navigate, setUser, loadingLogout]);
 
   const userMenuItems = useMemo(
     () => [
@@ -112,11 +117,7 @@ const Header = () => {
                 if (user) {
                   navigate("/cart");
                 } else {
-                  api.warning({
-                    message: "Yêu cầu đăng nhập",
-                    description:
-                      "Vui lòng đăng nhập để xem và quản lý giỏ hàng của bạn!",
-                  });
+                  toast.warning("Yêu cầu đăng nhập");
                   navigate("/login");
                 }
               }}

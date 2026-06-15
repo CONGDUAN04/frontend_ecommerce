@@ -2,8 +2,8 @@ import * as React from "react";
 import * as ReactDOM from "react-dom/client";
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
 import "antd/dist/reset.css";
-import "../src/index.css";
-
+import "./toast.css";
+import { Toaster } from "react-hot-toast";
 import AppAdmin from "./AppAdmin.jsx";
 import AppClient from "./AppClient.jsx";
 import HomePage from "./pages/admin/dashboard/index.jsx";
@@ -15,7 +15,6 @@ import RegisterPage from "./pages/auth/register.jsx";
 import HomePageUser from "./pages/client/home/page/HomePageUser.jsx";
 import { CartProvider } from "./contexts/cart.context";
 import { AuthWrapper } from "./contexts/auth.context.jsx";
-import NotifyProvider from "./contexts/notify.provider.jsx";
 import LoadingProvider from "./contexts/loading.context.jsx";
 import UserPage from "./pages/admin/user/index.jsx";
 import RolePage from "./pages/admin/role/index.jsx";
@@ -94,14 +93,18 @@ const router = createBrowserRouter([
 
 ReactDOM.createRoot(document.getElementById("root")).render(
   <React.StrictMode>
-    <NotifyProvider>
-      <LoadingProvider>
-        <AuthWrapper>
-          <CartProvider>
-            <RouterProvider router={router} />
-          </CartProvider>
-        </AuthWrapper>
-      </LoadingProvider>
-    </NotifyProvider>
+    <LoadingProvider>
+      <AuthWrapper>
+        <CartProvider>
+          <RouterProvider router={router} />
+          <Toaster
+            position="top-center"
+            toastOptions={{
+              duration: 1500,
+            }}
+          />
+        </CartProvider>
+      </AuthWrapper>
+    </LoadingProvider>
   </React.StrictMode>,
 );

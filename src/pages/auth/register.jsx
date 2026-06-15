@@ -1,35 +1,37 @@
 import { Divider, Button, Form, Input, Row, Col, Typography } from "antd";
 import { CheckCircleOutlined } from "@ant-design/icons";
 import { Link, useNavigate } from "react-router-dom";
+import { useState } from "react";
+
 import { registerUserAPI } from "../../services/api.auth.js";
-import { useContext, useState } from "react";
-import { NotifyContext } from "../../contexts/notify.context.jsx";
 import "../../styles/auth/register.css";
+
 import { handleApiError, handleApiSuccess } from "../../utils/apiHandler.js";
 
 const RegisterPage = () => {
   const [form] = Form.useForm();
   const navigate = useNavigate();
+
   const [loading, setLoading] = useState(false);
-  const { api } = useContext(NotifyContext);
 
   const onFinish = async (values) => {
     if (loading) return;
 
     setLoading(true);
+
     try {
       const res = await registerUserAPI({
         ...values,
         type: "VERIFY_EMAIL",
       });
 
-      handleApiSuccess(api, res?.message);
+      handleApiSuccess(res?.message);
 
       localStorage.setItem("verify_email", values.username);
 
       navigate("/verify-otp");
     } catch (err) {
-      handleApiError(api, err, form);
+      handleApiError(err, form);
     } finally {
       setLoading(false);
     }
@@ -70,6 +72,7 @@ const RegisterPage = () => {
               >
                 <Input size="large" placeholder="example@gmail.com" />
               </Form.Item>
+
               <Typography.Text
                 style={{
                   display: "flex",

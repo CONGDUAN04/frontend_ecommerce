@@ -1,13 +1,14 @@
 import { Outlet } from "react-router-dom";
 import Header from "./layouts/client/Header.jsx";
 import Footer from "./layouts/client/footer.jsx";
+import "./styles/client/layouts/client-layout.css";
 
 const AppClient = () => {
   return (
-    <div className="bg-[#f6f7fb] min-h-screen flex flex-col">
+    <div className="client-layout">
       <Header cartCount={2} />
 
-      <main className="flex-1">
+      <main className="client-main">
         <Outlet />
       </main>
 

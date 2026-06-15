@@ -1,6 +1,4 @@
-import { useContext, useCallback } from "react";
-
-import { NotifyContext } from "../../../../contexts/notify.context";
+import { useCallback } from "react";
 
 import {
   fetchAllVariantsAPI,
@@ -30,22 +28,17 @@ const useVariantCrud = createCrudHook({
 export const useVariant = () => {
   const crud = useVariantCrud();
 
-  const { api } = useContext(NotifyContext);
+  const updateStatus = useCallback(async (id, data) => {
+    try {
+      const res = await updateVariantStatusAPI(id, data);
 
-  const updateStatus = useCallback(
-    async (id, data) => {
-      try {
-        const res = await updateVariantStatusAPI(id, data);
+      handleApiSuccess(res?.message);
 
-        handleApiSuccess(api, res?.message);
-
-        return res;
-      } catch (err) {
-        handleApiError(api, err);
-      }
-    },
-    [api],
-  );
+      return res;
+    } catch (err) {
+      handleApiError(err);
+    }
+  }, []);
 
   return {
     ...crud,

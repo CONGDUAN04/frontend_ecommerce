@@ -1,6 +1,4 @@
-import { useContext, useCallback } from "react";
-
-import { NotifyContext } from "../../../../contexts/notify.context";
+import { useCallback } from "react";
 
 import { handleApiSuccess, handleApiError } from "../../../../utils/apiHandler";
 
@@ -27,25 +25,19 @@ const useUserCrud = createCrudHook({
 export const useUser = () => {
   const crud = useUserCrud();
 
-  const { api } = useContext(NotifyContext);
+  const updateStatus = useCallback(async (id, data) => {
+    try {
+      const res = await updateUserStatusAPI(id, data);
 
-  const updateStatus = useCallback(
-    async (id, data) => {
-      try {
-        const res = await updateUserStatusAPI(id, data);
+      handleApiSuccess(
+        res?.message || "Cập nhật trạng thái người dùng thành công",
+      );
 
-        handleApiSuccess(
-          api,
-          res?.message || "Cập nhật trạng thái người dùng thành công",
-        );
-
-        return res;
-      } catch (err) {
-        handleApiError(api, err);
-      }
-    },
-    [api],
-  );
+      return res;
+    } catch (err) {
+      handleApiError(err);
+    }
+  }, []);
 
   return {
     ...crud,

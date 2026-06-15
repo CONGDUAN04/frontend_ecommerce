@@ -1,10 +1,10 @@
 import { useContext, useState, useMemo, useEffect, useRef } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 import { AuthContext } from "../../contexts/auth.context.jsx";
-import { NotifyContext } from "../../contexts/notify.context.jsx";
 import { logoutAPI } from "../../services/api.auth.js";
 import { handleApiError, handleApiSuccess } from "../../utils/apiHandler.js";
 import "../../styles/admin/header.css";
+
 import {
   Search,
   Bell,
@@ -42,38 +42,50 @@ function useBreadcrumb(path) {
 export default function Header() {
   const location = useLocation();
   const navigate = useNavigate();
+
   const { user, setUser } = useContext(AuthContext);
-  const { api } = useContext(NotifyContext);
 
   const [dropOpen, setDropOpen] = useState(false);
   const [loading, setLoading] = useState(false);
+
   const dropdownRef = useRef(null);
 
   const breadcrumb = useBreadcrumb(location.pathname);
   const current = breadcrumb[breadcrumb.length - 1];
 
   useEffect(() => {
-    function handleClickOutside(event) {
+    const handleClickOutside = (event) => {
       if (dropdownRef.current && !dropdownRef.current.contains(event.target)) {
         setDropOpen(false);
       }
-    }
+    };
+
     document.addEventListener("mousedown", handleClickOutside);
-    return () => document.removeEventListener("mousedown", handleClickOutside);
+
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside);
+    };
   }, []);
 
   const handleLogout = async () => {
     if (loading) return;
+
     setLoading(true);
+
     try {
       await logoutAPI();
+
       localStorage.clear();
+
       setUser(null);
-      handleApiSuccess(api, "Đăng xuất thành công!");
+
+      handleApiSuccess("Đăng xuất thành công!");
+
       setDropOpen(false);
+
       navigate("/");
     } catch (err) {
-      handleApiError(api, err);
+      handleApiError(err);
     } finally {
       setLoading(false);
     }
@@ -89,10 +101,10 @@ export default function Header() {
   return (
     <header className="th-header">
       <div className="th-header__container">
-        {/* LEFT: TIÊU ĐỀ & BREADCRUMB */}
         <div className="th-header__left">
           <div className="th-header__title-area">
             <h1 className="th-header__title">{current}</h1>
+
             <div className="th-header__breadcrumb">
               {breadcrumb.map((item, index) => (
                 <span
@@ -104,6 +116,7 @@ export default function Header() {
                   }`}
                 >
                   {item}
+
                   {index < breadcrumb.length - 1 && (
                     <span className="th-header__breadcrumb-sep">/</span>
                   )}
@@ -113,16 +126,15 @@ export default function Header() {
           </div>
         </div>
 
-        {/* CENTER: THANH TÌM KIẾM */}
         <div className="th-header__search-box">
           <Search size={15} className="th-header__search-icon" />
+
           <input
             className="th-header__search-input"
             placeholder="Tìm kiếm nhanh..."
           />
         </div>
 
-        {/* RIGHT: THÔNG BÁO & USER */}
         <div className="th-header__right">
           <div className="th-header__actions">
             <div className="th-header__action-btn">
@@ -145,6 +157,7 @@ export default function Header() {
           >
             <div className="th-header__avatar">
               {user?.avatar ? <img src={user.avatar} alt="avatar" /> : initials}
+
               <span className="th-header__status-online" />
             </div>
 
@@ -152,6 +165,7 @@ export default function Header() {
               <span className="th-header__name">
                 {user?.fullName || user?.email}
               </span>
+
               <span className="th-header__role">
                 {user?.role?.name || "Administrator"}
               </span>
@@ -159,7 +173,9 @@ export default function Header() {
 
             <ChevronDown
               size={14}
-              className={`th-header__chevron ${dropOpen ? "th-header__chevron--rotated" : ""}`}
+              className={`th-header__chevron ${
+                dropOpen ? "th-header__chevron--rotated" : ""
+              }`}
             />
 
             {dropOpen && (
@@ -174,14 +190,16 @@ export default function Header() {
                   className="th-header__dropdown-item"
                   onClick={() => navigate("/profile")}
                 >
-                  <User size={14} /> <span>Hồ sơ cá nhân</span>
+                  <User size={14} />
+                  <span>Hồ sơ cá nhân</span>
                 </button>
 
                 <button
                   className="th-header__dropdown-item"
                   onClick={() => navigate("/settings")}
                 >
-                  <Settings size={14} /> <span>Cài đặt hệ thống</span>
+                  <Settings size={14} />
+                  <span>Cài đặt hệ thống</span>
                 </button>
 
                 <div className="th-header__dropdown-divider" />
@@ -189,8 +207,10 @@ export default function Header() {
                 <button
                   className="th-header__dropdown-item th-header__dropdown-item--logout"
                   onClick={handleLogout}
+                  disabled={loading}
                 >
-                  <LogOut size={14} /> <span>Đăng xuất</span>
+                  <LogOut size={14} />
+                  <span>{loading ? "Đang đăng xuất..." : "Đăng xuất"}</span>
                 </button>
               </div>
             )}
