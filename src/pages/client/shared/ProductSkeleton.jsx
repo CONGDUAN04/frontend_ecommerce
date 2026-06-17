@@ -1,4 +1,4 @@
-import "../../../styles/client/components/product-card.css";
+import "../../../styles/client/components/ProductCard.css";
 
 const ProductSkeleton = () => {
   return (

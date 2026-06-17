@@ -1,7 +1,7 @@
 @import "../sections/home/hero.css";
-@import "../sections/home/product-section.css";
-@import "../sections/home/flash-sale.css";
-@import "../components/product-card.css";
+@import "../sections/home/Product.css";
+@import "../sections/home/FlashSale.css";
+@import "../components/ProductCard.css";
 @import "../components/skeleton.css";
 
 .homepage {

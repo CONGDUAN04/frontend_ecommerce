@@ -1,7 +1,7 @@
 import { Outlet } from "react-router-dom";
 import Header from "./layouts/client/Header.jsx";
 import Footer from "./layouts/client/footer.jsx";
-import "./styles/client/layouts/client-layout.css";
+import "./styles/client/layouts/Layout.css";
 
 const AppClient = () => {
   return (

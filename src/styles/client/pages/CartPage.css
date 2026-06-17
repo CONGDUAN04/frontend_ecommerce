@@ -1,0 +1,24 @@
+@import "../sections/cart/CartItem.css";
+@import "../sections/cart/CartSummary.css";
+@import "../sections/cart/EmptyCart.css";
+
+.cart-page-wrapper {
+  max-width: 1200px;
+  margin: var(--space-xl) auto;
+  padding: 0 var(--space-lg);
+  min-height: 60vh;
+}
+
+.cart-title {
+  font-size: var(--font-size-2xl);
+  font-weight: 700;
+  color: var(--text-main);
+  margin-bottom: var(--space-xl);
+}
+
+.cart-container {
+  display: grid;
+  grid-template-columns: 1fr 380px;
+  gap: var(--space-2xl);
+  align-items: start;
+}
