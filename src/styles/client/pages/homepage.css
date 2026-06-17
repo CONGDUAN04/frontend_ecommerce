@@ -1,8 +1,8 @@
-@import "../base/variables.css";
-@import "../sections/hero.css";
-@import "../sections/product-section.css";
-@import "../sections/flash-sale.css";
+@import "../sections/home/hero.css";
+@import "../sections/home/product-section.css";
+@import "../sections/home/flash-sale.css";
 @import "../components/product-card.css";
+@import "../components/skeleton.css";
 
 .homepage {
   max-width: 1320px;

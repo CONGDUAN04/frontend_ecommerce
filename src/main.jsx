@@ -3,6 +3,7 @@ import * as ReactDOM from "react-dom/client";
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
 import "antd/dist/reset.css";
 import "./toast.css";
+import "./styles/client/base/global.css";
 import { Toaster } from "react-hot-toast";
 import AppAdmin from "./AppAdmin.jsx";
 import AppClient from "./AppClient.jsx";
