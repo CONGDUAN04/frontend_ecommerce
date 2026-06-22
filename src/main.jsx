@@ -29,6 +29,7 @@ import ColorPage from "./pages/admin/color/index.jsx";
 import ProductColorPage from "./pages/admin/productColor/index.jsx";
 import ProductDetailPage from "./pages/client/product-detail/page/ProductDetailPage.jsx";
 import CartPage from "./pages/client/cart/page/CartPage.jsx";
+import CheckoutPage from "./pages/client/checkout/page/CheckoutPage.jsx";
 const router = createBrowserRouter([
   {
     path: "/admin",
@@ -66,6 +67,10 @@ const router = createBrowserRouter([
       {
         path: "/cart",
         element: <CartPage />,
+      },
+      {
+        path: "/checkout",
+        element: <CheckoutPage />,
       },
     ],
   },

@@ -1,0 +1,14 @@
+.note-textarea {
+  width: 100%;
+  padding: 12px 14px;
+  border: 1px solid #d1d5db;
+  border-radius: 8px;
+  resize: vertical;
+  box-sizing: border-box;
+}
+
+.note-textarea:focus {
+  outline: none;
+  border-color: var(--primary-color, #d70018);
+  box-shadow: 0 0 0 3px rgba(215, 0, 24, 0.08);
+}

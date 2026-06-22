@@ -1,9 +1,18 @@
-import { createContext, useCallback, useState } from "react";
+import {
+  createContext,
+  useCallback,
+  useContext,
+  useEffect,
+  useState,
+} from "react";
 import { getCartAPI } from "../services/client/api.cart";
+import { AuthContext } from "./auth.context";
 
 export const CartContext = createContext();
 
 export const CartProvider = ({ children }) => {
+  const { user } = useContext(AuthContext);
+
   const [cart, setCart] = useState({
     items: [],
     totalItems: 0,
@@ -11,12 +20,28 @@ export const CartProvider = ({ children }) => {
   });
 
   const fetchCart = useCallback(async () => {
-    const res = await getCartAPI();
+    try {
+      const res = await getCartAPI();
 
-    if (res?.data) {
-      setCart(res.data);
+      if (res?.data) {
+        setCart(res.data);
+      }
+    } catch (err) {
+      console.log(err);
     }
   }, []);
+
+  useEffect(() => {
+    if (user) {
+      fetchCart();
+    } else {
+      setCart({
+        items: [],
+        totalItems: 0,
+        subtotal: 0,
+      });
+    }
+  }, [user, fetchCart]);
 
   return (
     <CartContext.Provider

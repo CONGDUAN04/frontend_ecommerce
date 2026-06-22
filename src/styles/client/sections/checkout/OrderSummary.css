@@ -1,0 +1,139 @@
+.checkout-right {
+  position: sticky;
+  top: 24px;
+}
+
+.summary-sticky-card {
+  background: #fff;
+  border: 1px solid #e5e7eb;
+  border-radius: 12px;
+  padding: 24px;
+}
+
+.summary-title {
+  font-size: 18px;
+  font-weight: 600;
+  color: #111827;
+  margin-top: 0;
+  margin-bottom: 20px;
+}
+
+.summary-items-list {
+  max-height: 340px; 
+  overflow-y: auto;
+  padding-right: 4px;
+}
+
+.summary-items-list::-webkit-scrollbar {
+  width: 4px;
+}
+
+.summary-items-list::-webkit-scrollbar-thumb {
+  background: #e5e7eb;
+  border-radius: 4px;
+}
+
+.summary-item {
+  display: flex;
+  align-items: center;
+  gap: 16px; 
+  padding: 16px 0; 
+}
+
+.img-wrapper {
+  position: relative;
+  width: 80px;   
+  height: 80px;  
+  border: 1px solid #e5e7eb;
+  border-radius: 8px;
+  background: #f9fafb;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-shrink: 0; 
+}
+
+.img-wrapper img {
+  width: 85%;
+  height: 85%;
+  object-fit: contain;
+}
+
+.item-detail {
+  flex: 1;
+}
+
+.item-detail h4 {
+  font-size: 16px; 
+  margin: 0 0 6px;
+  line-height: 1.4;
+  color: #111827;
+}
+
+.item-detail p {
+  margin: 0;
+  font-size: 14px; 
+  color: #6b7280;
+}
+
+.item-quantity {
+  margin: 4px 0 0 0;
+  font-size: 14px; 
+  color: #6b7280;
+  font-weight: 500;
+}
+
+.item-price {
+  font-size: 16px; 
+  font-weight: 600;
+  color: #111827;
+}
+
+.summary-divider {
+  border: 0;
+  border-top: 1px solid #e5e7eb;
+  margin: 16px 0;
+}
+
+.summary-calculator {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.calc-row {
+  display: flex;
+  justify-content: space-between;
+  color: #4b5563;
+}
+
+.free-shipping {
+  color: #10b981;
+}
+
+.total {
+  font-size: 16px;
+  font-weight: 600;
+}
+
+.total-price {
+  font-size: 20px;
+  color: var(--primary-color, #d70018);
+}
+
+.checkout-submit-btn {
+  width: 100%;
+  margin-top: 24px;
+  padding: 16px;
+  background: var(--primary-color, #d70018);
+  color: #fff;
+  border: none;
+  border-radius: 10px;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.checkout-submit-btn:disabled {
+  background: #9ca3af;
+  cursor: not-allowed;
+}
