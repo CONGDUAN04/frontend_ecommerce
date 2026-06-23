@@ -35,8 +35,14 @@ export default function CheckoutPage() {
         form,
       );
 
-      if (res?.data) {
-        navigate("/order-success");
+      if (res?.data?.id) {
+        navigate("/order-success", {
+          state: {
+            orderCode: res.data.orderCode,
+            finalPrice: res.data.finalPrice,
+            paymentMethod: res.data.paymentMethod,
+          },
+        });
       }
     } catch (error) {
       console.error(error);
