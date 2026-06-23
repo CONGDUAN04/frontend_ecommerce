@@ -1,9 +1,9 @@
-import { useState } from "react";
+import { useState, useContext, useMemo } from "react";
 import { ShoppingCart, Heart } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import { useCart } from "../../cart/hook/useCart";
-import { useContext } from "react";
 import { CartContext } from "../../../../contexts/cart.context";
+
 export default function ProductActions({
   selectedVariant,
   isWishlist,
@@ -15,16 +15,23 @@ export default function ProductActions({
   const { fetchCart } = useContext(CartContext);
   const [loading, setLoading] = useState(false);
 
+  // 🚨 CHECK HẾT HÀNG
+  const isOutOfStock = useMemo(() => {
+    return !selectedVariant || selectedVariant.quantity <= 0;
+  }, [selectedVariant]);
+
   // Thêm vào giỏ hàng
   const handleAddToCart = async () => {
-    if (!selectedVariant || loading) return;
+    if (isOutOfStock || loading) return;
 
     try {
       setLoading(true);
+
       await addToCart({
         variantId: selectedVariant.id,
         quantity: 1,
       });
+
       await fetchCart();
     } finally {
       setLoading(false);
@@ -33,7 +40,7 @@ export default function ProductActions({
 
   // Mua ngay
   const handleBuyNow = async () => {
-    if (!selectedVariant || loading) return;
+    if (isOutOfStock || loading) return;
 
     try {
       setLoading(true);
@@ -42,6 +49,7 @@ export default function ProductActions({
         variantId: selectedVariant.id,
         quantity: 1,
       });
+
       await fetchCart();
       navigate("/cart");
     } finally {
@@ -51,31 +59,48 @@ export default function ProductActions({
 
   return (
     <div className="action-buttons-cluster">
-      {/* Mua ngay */}
+      {/* MUA NGAY */}
       <button
         type="button"
         className="cta-action-btn cta-primary-buy"
-        disabled={!selectedVariant || loading}
+        disabled={isOutOfStock || loading}
         onClick={handleBuyNow}
       >
-        <strong>{loading ? "ĐANG XỬ LÝ..." : "MUA NGAY CHÍNH HÃNG"}</strong>
+        <strong>
+          {loading
+            ? "ĐANG XỬ LÝ..."
+            : isOutOfStock
+              ? "HẾT HÀNG"
+              : "MUA NGAY CHÍNH HÃNG"}
+        </strong>
 
-        <span>Giao tận nhà siêu tốc hoặc nhận tại shop</span>
+        <span>
+          {isOutOfStock
+            ? "Sản phẩm hiện đã hết hàng"
+            : "Giao tận nhà siêu tốc hoặc nhận tại shop"}
+        </span>
       </button>
 
-      {/* Thêm vào giỏ + Wishlist */}
+      {/* THÊM VÀO GIỎ */}
       <div className="cta-sub-group">
         <button
           type="button"
           className="cta-action-btn cta-secondary-cart"
-          disabled={!selectedVariant || loading}
+          disabled={isOutOfStock || loading}
           onClick={handleAddToCart}
         >
           <ShoppingCart size={18} />
 
-          <span>{loading ? "Đang thêm..." : "Thêm vào giỏ hàng"}</span>
+          <span>
+            {loading
+              ? "Đang thêm..."
+              : isOutOfStock
+                ? "Hết hàng"
+                : "Thêm vào giỏ hàng"}
+          </span>
         </button>
 
+        {/* WISHLIST */}
         <button
           type="button"
           className={`wishlist-toggle-btn ${isWishlist ? "active" : ""}`}
@@ -88,7 +113,7 @@ export default function ProductActions({
         </button>
       </div>
 
-      {/* Khuyến mãi */}
+      {/* PROMO */}
       <div className="product-promotions-box">
         <div className="product-promotions-title">
           🎁 KHUYẾN MÃI CÒN HIỆU LỰC
@@ -96,10 +121,8 @@ export default function ProductActions({
 
         <ul className="product-promotions-list">
           <li>Tặng gói bảo hành VIP Kim Cương trị giá 1.200.000đ.</li>
-
-          <li>Giảm thêm 500.000đ khi tham gia Thu cũ đổi mới lên đời.</li>
-
-          <li>Tặng voucher giảm 10% khi mua kèm phụ kiện bao da, ốp lưng.</li>
+          <li>Giảm thêm 500.000đ khi tham gia Thu cũ đổi mới.</li>
+          <li>Tặng voucher 10% khi mua kèm phụ kiện.</li>
         </ul>
       </div>
     </div>

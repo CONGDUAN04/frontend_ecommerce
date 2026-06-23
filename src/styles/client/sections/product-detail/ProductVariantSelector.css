@@ -61,3 +61,14 @@
   background-color: var(--primary-light);
   box-shadow: 0 0 0 1px var(--primary-color);
 }
+.out-of-stock {
+  opacity: 0.4;
+  cursor: not-allowed;
+  position: relative;
+}
+
+.sold-out-text {
+  font-size: 11px;
+  color: red;
+  margin-left: 6px;
+}
