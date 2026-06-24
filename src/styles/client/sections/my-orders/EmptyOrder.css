@@ -1,0 +1,41 @@
+.empty-order {
+  background-color: var(--bg-white);
+  border-radius: var(--radius-lg);
+  padding: var(--space-2xl) var(--space-xl);
+  text-align: center;
+  box-shadow: var(--shadow-sm);
+  border: 1px solid var(--border-light);
+  margin-top: var(--space-xl);
+  font-family: var(--font-family-base);
+}
+
+/* Biểu tượng hộp hàng trống bằng CSS giả */
+.empty-order::before {
+  content: "📦";
+  font-size: 48px;
+  display: block;
+  margin-bottom: var(--space-md);
+  opacity: 0.7;
+}
+
+.empty-order h3 {
+  font-size: var(--font-size-md);
+  color: var(--text-muted);
+  margin-bottom: var(--space-xl);
+  font-weight: 500;
+}
+
+/* Custom Ant Design Button cho riêng component này */
+.empty-order .ant-btn {
+  height: 42px;
+  padding: 0 var(--space-2xl);
+  font-weight: 600;
+  border-radius: var(--radius-md);
+  background-color: var(--primary-color) !important;
+  border-color: var(--primary-color) !important;
+}
+
+.empty-order .ant-btn:hover {
+  background-color: var(--primary-hover) !important;
+  border-color: var(--primary-hover) !important;
+}

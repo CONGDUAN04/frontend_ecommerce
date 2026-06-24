@@ -1,0 +1,50 @@
+@import "../sections/my-orders/EmptyOrder.css";
+@import "../sections/my-orders/OrderCard.css";
+.my-orders-page {
+  font-family: var(--font-family-base);
+  max-width: 800px;
+  margin: var(--space-2xl) auto;
+  padding: 0 var(--space-lg);
+}
+
+.page-title {
+  font-size: var(--font-size-2xl);
+  font-weight: 700;
+  color: var(--text-main);
+  margin-bottom: var(--space-xl);
+  position: relative;
+  padding-bottom: var(--space-xs);
+}
+
+/* Thanh gạch chân trang trí tiêu đề */
+.page-title::after {
+  content: "";
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 50px;
+  height: 4px;
+  background-color: var(--primary-color);
+  border-radius: var(--radius-sm);
+}
+
+/* Loading state */
+.my-orders-loading {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 300px;
+}
+
+/* Khung bọc danh sách các thẻ đơn hàng */
+.orders-list {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-lg);
+}
+
+@media (max-width: 576px) {
+  .my-orders-page {
+    margin: var(--space-lg) auto;
+  }
+}

@@ -55,6 +55,10 @@ const Header = () => {
         key: "profile",
         label: <span className="dropdown-item-custom">Thông tin cá nhân</span>,
       },
+      {
+        key: "orders",
+        label: <span className="dropdown-item-custom">Lịch sử đơn hàng</span>,
+      },
       { type: "divider" },
       {
         key: "logout",
@@ -132,8 +136,17 @@ const Header = () => {
               menu={{
                 items: userMenuItems,
                 onClick: ({ key }) => {
-                  if (key === "logout") handleLogout();
-                  if (key === "profile") navigate("/profile");
+                  if (key === "logout") {
+                    handleLogout();
+                  }
+
+                  if (key === "profile") {
+                    navigate("/profile");
+                  }
+
+                  if (key === "orders") {
+                    navigate("/my-orders");
+                  }
                 },
               }}
               placement="bottomRight"

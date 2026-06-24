@@ -1,0 +1,21 @@
+.order-card-footer {
+  display: flex;
+  justify-content: flex-end;
+  gap: var(--space-md);
+}
+
+.order-card-footer .ant-btn {
+  height: 40px;
+  padding: 0 24px;
+  border-radius: var(--radius-sm);
+}
+
+@media (max-width: 576px) {
+  .order-card-footer {
+    flex-direction: column-reverse;
+    gap: var(--space-sm);
+  }
+  .order-card-footer .ant-btn {
+    width: 100%;
+  }
+}

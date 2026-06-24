@@ -31,6 +31,7 @@ import ProductDetailPage from "./pages/client/product-detail/page/ProductDetailP
 import CartPage from "./pages/client/cart/page/CartPage.jsx";
 import CheckoutPage from "./pages/client/checkout/page/CheckoutPage.jsx";
 import OrderSuccessPage from "./pages/client/order-success/page/OrderSuccessPage.jsx";
+import MyOrdersPage from "./pages/client/my-orders/page/MyOrdersPage.jsx";
 const router = createBrowserRouter([
   {
     path: "/admin",
@@ -76,6 +77,10 @@ const router = createBrowserRouter([
       {
         path: "/order-success",
         element: <OrderSuccessPage />,
+      },
+      {
+        path: "/my-orders",
+        element: <MyOrdersPage />,
       },
     ],
   },

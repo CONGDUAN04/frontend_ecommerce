@@ -1,0 +1,19 @@
+.payment-status-dot {
+  font-weight: 600;
+  color: var(--text-main);
+  font-size: var(--font-size-sm); 
+  display: flex;
+  align-items: center;
+  gap: 8px; 
+  line-height: 1.5;
+}
+
+.payment-status-dot::before {
+  content: "";
+  display: inline-block;
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background-color: var(--dot-color);
+  flex-shrink: 0;
+}
