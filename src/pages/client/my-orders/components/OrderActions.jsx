@@ -1,15 +1,35 @@
 import { Button } from "antd";
 
-export default function OrderActions({ order, onCancel, onView }) {
+export default function OrderActions({ order, onCancel, onView, onReorder }) {
+  const isCancelable =
+    order.status === "PENDING" || order.status === "CONFIRMED";
+
+  const isCancelled = order.status === "CANCELLED";
+
   return (
     <div className="order-card-footer">
-      {(order.status === "PENDING" || order.status === "CONFIRMED") && (
-        <Button danger onClick={() => onCancel(order.id)}>
+      {isCancelable && (
+        <Button
+          danger
+          type="primary"
+          className="order-action-btn"
+          onClick={() => onCancel(order.id)}
+        >
           Hủy đơn
         </Button>
       )}
 
-      <Button type="primary" onClick={onView}>
+      {isCancelled && (
+        <Button
+          type="primary"
+          className="order-action-btn"
+          onClick={() => onReorder(order.id)}
+        >
+          Mua lại
+        </Button>
+      )}
+
+      <Button type="default" className="order-action-btn" onClick={onView}>
         Xem chi tiết
       </Button>
     </div>

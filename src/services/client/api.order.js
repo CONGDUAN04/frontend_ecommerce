@@ -18,6 +18,12 @@ export const getOrderDetailAPI = (id) => {
   return axios.get(`/api/users/orders/${id}`);
 };
 
-export const cancelOrderAPI = (id) => {
-  return axios.patch(`/api/users/orders/${id}/cancel`);
+export const cancelOrderAPI = (id, cancelReason) => {
+  return axios.patch(`/api/users/orders/${id}/cancel`, {
+    cancelReason,
+  });
+};
+
+export const reorderOrderAPI = (id) => {
+  return axios.post(`/api/users/orders/${id}/reorder`);
 };

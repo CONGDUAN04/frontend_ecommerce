@@ -1,0 +1,34 @@
+.order-info-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 20px;
+}
+.order-info-grid > div {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+.order-info-grid span {
+  color: var(--text-slate, #8c8c8c);
+  font-size: 13px;
+  font-weight: 500;
+}
+.order-info-grid strong {
+  color: var(--text-main, #1f1f1f);
+  font-size: 14px;
+  font-weight: 600;
+}
+.order-status-tag {
+  width: fit-content;
+  border-radius: 6px;
+  padding: 4px 12px;
+  font-size: 11px;
+  font-weight: 700;
+  margin: 0 !important;
+  border: none;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}

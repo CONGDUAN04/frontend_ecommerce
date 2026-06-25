@@ -111,7 +111,7 @@ const Header = () => {
           </button>
 
           <Badge
-            count={user ? cart.items.length : 0}
+            count={user ? cart?.totalItems || 0 : 0}
             size="small"
             offset={[-2, 4]}
           >

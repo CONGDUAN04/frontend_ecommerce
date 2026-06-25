@@ -1,0 +1,17 @@
+.shipping-info {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+.shipping-info p {
+  margin: 0;
+  font-size: 14px;
+  color: #434343;
+  line-height: 1.5;
+}
+.shipping-info strong {
+  display: inline-block;
+  min-width: 110px;
+  color: var(--text-slate, #8c8c8c);
+  font-weight: 500;
+}

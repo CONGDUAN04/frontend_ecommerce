@@ -1,0 +1,29 @@
+.summary-row {
+  display: flex;
+  justify-content: space-between;
+  padding: 8px 0;
+  font-size: 14px;
+  color: #434343;
+}
+.summary-row span:first-child {
+  color: #8c8c8c;
+}
+.total-row {
+  margin-top: 12px;
+  padding-top: 12px;
+  border-top: 1px dashed #e8e8e8;
+  font-weight: 700;
+  font-size: 18px;
+  color: var(--primary-color, #ff4d4f);
+}
+.integrated-action-zone {
+  padding: 0 24px 24px 24px;
+  background: #ffffff;
+}
+.btn-cancel-sidebar-submit {
+  border-radius: 8px !important;
+  font-weight: 600;
+  height: 44px !important;
+  font-size: 14px;
+  transition: all 0.2s ease;
+}

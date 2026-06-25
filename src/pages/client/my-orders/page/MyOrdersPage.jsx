@@ -1,11 +1,14 @@
-import { useEffect, useState } from "react";
-import { Spin, Pagination } from "antd";
+import { useEffect, useState, useContext } from "react";
+import { Spin, Pagination, message, Form } from "antd";
 
-import { useOrder } from "../hook/useOrder";
+import { useMyOrder } from "../hook/useMyOrder";
 import { usePagination } from "../../../../hooks/usePagination";
 
 import OrderCard from "../components/OrderCard";
 import EmptyOrder from "../components/EmptyOrder";
+import CancelOrderModal from "../components/CancelOrderModal";
+
+import { CartContext } from "../../../../contexts/cart.context";
 
 import "../../../../styles/client/pages/MyOrdersPage.css";
 
@@ -15,8 +18,16 @@ export default function MyOrdersPage() {
   const [loading, setLoading] = useState(false);
 
   const { current, pageSize, updatePagination } = usePagination();
-  const { getOrders, cancelOrder } = useOrder();
+  const { getOrders, cancelOrder, reorderOrder } = useMyOrder();
+  const { fetchCart } = useContext(CartContext);
 
+  const [form] = Form.useForm();
+
+  const [cancelModalOpen, setCancelModalOpen] = useState(false);
+  const [selectedOrderId, setSelectedOrderId] = useState(null);
+  const [cancelLoading, setCancelLoading] = useState(false);
+
+  // ===== LOAD ORDERS =====
   const loadOrders = async () => {
     try {
       setLoading(true);
@@ -25,8 +36,10 @@ export default function MyOrdersPage() {
 
       if (res?.data) {
         setOrders(res.data);
-        setTotal(res.meta.total);
+        setTotal(res.meta?.total || 0);
       }
+    } catch {
+      message.error("Không thể tải đơn hàng");
     } finally {
       setLoading(false);
     }
@@ -34,9 +47,66 @@ export default function MyOrdersPage() {
 
   useEffect(() => {
     if (!current || !pageSize) return;
-
     loadOrders();
   }, [current, pageSize]);
+
+  // ===== OPEN CANCEL =====
+  const handleOpenCancelModal = (id) => {
+    setSelectedOrderId(id);
+    form.resetFields();
+    setCancelModalOpen(true);
+  };
+
+  // ===== CONFIRM CANCEL =====
+  const handleConfirmCancel = async () => {
+    try {
+      setCancelLoading(true);
+
+      const values = await form.validateFields();
+
+      const finalReason =
+        values.cancelReason === "Khác"
+          ? values.customReason
+          : values.cancelReason;
+
+      await cancelOrder(selectedOrderId, finalReason);
+
+      message.success("Hủy đơn hàng thành công");
+
+      setCancelModalOpen(false);
+      await loadOrders();
+    } catch (err) {
+      if (err?.error?.errors) {
+        const fields = err.error.errors.map((e) => ({
+          name: e.field,
+          errors: [e.message],
+        }));
+
+        form.setFields(fields);
+      } else {
+        message.error("Không thể hủy đơn hàng");
+      }
+    } finally {
+      setCancelLoading(false);
+    }
+  };
+
+  // ===== REORDER =====
+  const handleReorder = async (orderId) => {
+    try {
+      setLoading(true);
+
+      await reorderOrder(orderId);
+
+      await fetchCart();
+
+      message.success("Đã thêm lại sản phẩm vào giỏ hàng");
+    } catch {
+      message.error("Không thể mua lại");
+    } finally {
+      setLoading(false);
+    }
+  };
 
   if (loading) {
     return (
@@ -60,27 +130,32 @@ export default function MyOrdersPage() {
                 <OrderCard
                   key={order.id}
                   order={order}
-                  onCancel={async (id) => {
-                    await cancelOrder(id);
-                    await loadOrders();
-                  }}
+                  onCancel={handleOpenCancelModal}
+                  onReorder={handleReorder}
                 />
               ))}
             </div>
 
-            <div className="pagination-wrapper">
-              <Pagination
-                current={current}
-                pageSize={pageSize}
-                total={total}
-                showSizeChanger
-                showTotal={(total) => `Tổng ${total} đơn hàng`}
-                onChange={updatePagination}
-              />
-            </div>
+            <Pagination
+              current={current}
+              pageSize={pageSize}
+              total={total}
+              showSizeChanger
+              showTotal={(t) => `Tổng ${t} đơn hàng`}
+              onChange={updatePagination}
+            />
           </>
         )}
       </Spin>
+
+      {/* MODAL */}
+      <CancelOrderModal
+        open={cancelModalOpen}
+        form={form}
+        loading={cancelLoading}
+        onCancel={() => setCancelModalOpen(false)}
+        onConfirm={handleConfirmCancel}
+      />
     </div>
   );
 }

@@ -7,7 +7,7 @@ import OrderActions from "./OrderActions";
 
 import "../../../../styles/client/sections/my-orders/OrderCard.css";
 
-export default function OrderCard({ order, onCancel }) {
+export default function OrderCard({ order, onCancel, onReorder }) {
   const navigate = useNavigate();
 
   const firstItem = order.orderItems?.[0];
@@ -30,7 +30,12 @@ export default function OrderCard({ order, onCancel }) {
 
       <OrderSummary order={order} />
 
-      <OrderActions order={order} onCancel={onCancel} onView={goDetail} />
+      <OrderActions
+        order={order}
+        onCancel={onCancel}
+        onView={goDetail}
+        onReorder={onReorder}
+      />
     </div>
   );
 }
