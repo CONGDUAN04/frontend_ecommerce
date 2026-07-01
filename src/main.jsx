@@ -33,6 +33,7 @@ import CheckoutPage from "./pages/client/checkout/page/CheckoutPage.jsx";
 import OrderSuccessPage from "./pages/client/order-success/page/OrderSuccessPage.jsx";
 import MyOrdersPage from "./pages/client/my-orders/page/MyOrdersPage.jsx";
 import OrderDetailPage from "./pages/client/order-detail/page/OrderDetailPage.jsx";
+import OrderPage from "./pages/admin/order/index.jsx";
 const router = createBrowserRouter([
   {
     path: "/admin",
@@ -52,6 +53,8 @@ const router = createBrowserRouter([
       { path: "variants", element: <VariantPage /> },
       { path: "colors", element: <ColorPage /> },
       { path: "product-colors", element: <ProductColorPage /> },
+      { path: "product-colors", element: <ProductColorPage /> },
+      { path: "orders", element: <OrderPage /> },
     ],
   },
   {

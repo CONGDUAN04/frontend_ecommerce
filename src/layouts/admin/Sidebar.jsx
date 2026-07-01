@@ -13,6 +13,7 @@ import {
   ShieldCheck,
   Layers,
   Palette,
+  ShoppingCart,
 } from "lucide-react";
 import { Link, useLocation } from "react-router-dom";
 import { AuthContext } from "../../contexts/auth.context.jsx";
@@ -20,19 +21,60 @@ import "../../styles/admin/sidebar.css";
 
 const getActiveMenuFromPath = (path) => {
   const routeMap = {
-    "/admin/product-groups": { menu: "product-groups", subMenu: null },
-    "/admin/products": { menu: "product-groups", subMenu: "products" },
-    "/admin/variants": { menu: "product-groups", subMenu: "variants" },
+    "/admin/product-groups": {
+      menu: "product-groups",
+      subMenu: null,
+    },
+
+    "/admin/products": {
+      menu: "product-groups",
+      subMenu: "products",
+    },
+
+    "/admin/variants": {
+      menu: "product-groups",
+      subMenu: "variants",
+    },
+
     "/admin/product-colors": {
       menu: "product-groups",
       subMenu: "product-colors",
     },
-    "/admin/colors": { menu: "product-groups", subMenu: "colors" },
-    "/admin/categories": { menu: "categories", subMenu: null },
-    "/admin/brands": { menu: "brands", subMenu: null },
-    "/admin/users": { menu: "users", subMenu: null },
-    "/admin/roles": { menu: "roles", subMenu: null },
-    "/admin/targets": { menu: "targets", subMenu: null },
+
+    "/admin/colors": {
+      menu: "product-groups",
+      subMenu: "colors",
+    },
+
+    "/admin/categories": {
+      menu: "categories",
+      subMenu: null,
+    },
+
+    "/admin/brands": {
+      menu: "brands",
+      subMenu: null,
+    },
+
+    "/admin/orders": {
+      menu: "orders",
+      subMenu: null,
+    },
+
+    "/admin/users": {
+      menu: "users",
+      subMenu: null,
+    },
+
+    "/admin/roles": {
+      menu: "roles",
+      subMenu: null,
+    },
+
+    "/admin/targets": {
+      menu: "targets",
+      subMenu: null,
+    },
   };
 
   const matched = routeMap[path] ||
@@ -105,6 +147,12 @@ export default function Sidebar({ isOpen, toggleSidebar }) {
         label: "Thương hiệu",
         icon: BadgeCheck,
         path: "/admin/brands",
+      },
+      {
+        id: "orders",
+        label: "Đơn hàng",
+        icon: ShoppingCart,
+        path: "/admin/orders",
       },
       {
         id: "roles",

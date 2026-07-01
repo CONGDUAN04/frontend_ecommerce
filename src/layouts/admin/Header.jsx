@@ -17,18 +17,23 @@ import {
 
 const ROUTE_BREADCRUMB = {
   "/admin": ["Dashboard"],
+
   "/admin/product-groups": ["Nhóm sản phẩm"],
   "/admin/products": ["Nhóm sản phẩm", "Sản phẩm"],
   "/admin/colors": ["Nhóm sản phẩm", "Màu sắc"],
   "/admin/product-colors": ["Nhóm sản phẩm", "Màu theo sản phẩm"],
   "/admin/variants": ["Nhóm sản phẩm", "Biến thể"],
+
   "/admin/categories": ["Danh mục"],
   "/admin/brands": ["Thương hiệu"],
+
+  "/admin/orders": ["Quản lý đơn hàng"],
+
   "/admin/users": ["Người dùng"],
   "/admin/roles": ["Vai trò"],
+
   "/admin/settings": ["Cài đặt"],
 };
-
 function useBreadcrumb(path) {
   return useMemo(() => {
     const match = Object.keys(ROUTE_BREADCRUMB)
