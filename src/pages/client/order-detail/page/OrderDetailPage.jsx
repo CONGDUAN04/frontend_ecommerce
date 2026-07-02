@@ -11,6 +11,7 @@ import OrderInfo from "../components/OrderInfo";
 import ShippingInfo from "../components/ShippingInfo";
 import OrderItems from "../components/OrderItems";
 import OrderSummary from "../components/OrderSummary";
+import OrderTimeline from "../../../../components/common/order/OrderTimeline";
 
 import "../../../../styles/client/pages/OrderDetailPage.css";
 
@@ -88,26 +89,28 @@ export default function OrderDetailPage() {
   return (
     <div className="order-detail-page">
       <div className="order-detail-header">
-        <h1 className="page-title">Chi tiết đơn hàng #{order.orderCode}</h1>
+        <h1 className="page-title">Chi tiết đơn hàng - {order.orderCode}</h1>
       </div>
 
-      {/* Thông tin chung của đơn hàng */}
+      <div className="order-timeline-wrapper" style={{ marginBottom: 5 }}>
+        <OrderTimeline order={order} />
+      </div>
+
       <OrderInfo order={order} />
 
-      {/* Layout 2 cột cân bằng khoảng cách giữa danh sách hàng và sidebar thanh toán */}
-      <Row gutter={[24, 24]} className="order-detail-layout-grid">
-        {/* Cột trái: Sản phẩm */}
+      <Row
+        gutter={[24, 24]}
+        className="order-detail-layout-grid"
+        style={{ marginTop: 5 }}
+      >
         <Col xs={24} xl={16} className="layout-col-main">
           <OrderItems items={order.orderItems} />
         </Col>
 
-        {/* Cột phải: Nhận nhận hàng + Tổng tiền tích hợp nút Hủy */}
         <Col xs={24} xl={8} className="layout-col-sidebar">
           <div className="sidebar-sticky-box">
-            {/* Thông tin nhận hàng */}
             <ShippingInfo order={order} />
 
-            {/* Khối hóa đơn tích hợp nút hủy */}
             <div className="checkout-summary-integration">
               <OrderSummary order={order} />
 
