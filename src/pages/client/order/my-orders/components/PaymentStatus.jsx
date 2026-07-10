@@ -1,7 +1,7 @@
 import {
   paymentStatusMap,
   getPaymentStatusColor,
-} from "../../../../constants/order";
+} from "../../../../../constants/order";
 
 export default function PaymentStatus({ status }) {
   return (

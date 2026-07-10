@@ -1,20 +1,19 @@
 import { useState, useContext } from "react";
 import { useNavigate } from "react-router-dom";
 import { Form } from "antd";
-import { CartContext } from "../../../../contexts/cart.context";
-import { useCheckout } from "../hook/useCheckout";
-
+import { CartContext } from "../../../../../contexts/cart.context";
 import ShippingInfo from "../components/ShippingInfo";
 import PaymentMethod from "../components/PaymentMethod";
 import OrderNote from "../components/OrderNote";
 import OrderSummary from "../components/OrderSummary";
 
-import "../../../../styles/client/pages/CheckoutPage.css";
+import "../../../../../styles/client/pages/CheckoutPage.css";
+import { useOrder } from "../../hooks/useOrder";
 
 export default function CheckoutPage() {
   const navigate = useNavigate();
   const { cart } = useContext(CartContext);
-  const { createOrder } = useCheckout();
+  const { createOrder } = useOrder();
 
   const [form] = Form.useForm();
   const [loading, setLoading] = useState(false);

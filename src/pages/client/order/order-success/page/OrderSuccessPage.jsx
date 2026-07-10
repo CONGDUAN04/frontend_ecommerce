@@ -2,7 +2,7 @@ import { useLocation } from "react-router-dom";
 import SuccessCard from "../components/SuccessCard";
 import ActionButtons from "../components/ActionButtons";
 
-import "../../../../styles/client/pages/OrderSuccessPage.css";
+import "../../../../../styles/client/pages/OrderSuccessPage.css";
 
 export default function OrderSuccessPage() {
   const location = useLocation();

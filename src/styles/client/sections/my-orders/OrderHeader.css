@@ -45,3 +45,13 @@
     gap: var(--space-sm);
   }
 }
+.order-card-header .ant-tag {
+  font-size: var(--font-size-sm) !important;   
+  padding: 4px 12px !important;               
+  font-weight: 600 !important;                  
+  line-height: 1.2 !important;
+  border-radius: var(--radius-sm) !important;   
+  display: inline-flex !important;
+  align-items: center;
+  justify-content: center;
+}

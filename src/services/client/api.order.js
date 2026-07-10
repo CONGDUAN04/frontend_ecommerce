@@ -27,3 +27,11 @@ export const cancelOrderAPI = (id, cancelReason) => {
 export const reorderOrderAPI = (id) => {
   return axios.post(`/api/users/orders/${id}/reorder`);
 };
+
+export const returnOrderAPI = (id, data) => {
+  return axios.post(`/api/users/orders/${id}/return`, data);
+};
+
+export const getReturnRequestAPI = (id) => {
+  return axios.get(`/api/users/orders/${id}/return`);
+};

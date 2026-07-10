@@ -5,7 +5,7 @@ import OrderItemPreview from "./OrderItemPreview";
 import OrderSummary from "./OrderSummary";
 import OrderActions from "./OrderActions";
 
-import "../../../../styles/client/sections/my-orders/OrderCard.css";
+import "../../../../../styles/client/sections/my-orders/OrderCard.css";
 
 export default function OrderCard({ order, onCancel, onReorder }) {
   const navigate = useNavigate();

@@ -29,10 +29,10 @@ import ColorPage from "./pages/admin/color/index.jsx";
 import ProductColorPage from "./pages/admin/productColor/index.jsx";
 import ProductDetailPage from "./pages/client/product-detail/page/ProductDetailPage.jsx";
 import CartPage from "./pages/client/cart/page/CartPage.jsx";
-import CheckoutPage from "./pages/client/checkout/page/CheckoutPage.jsx";
-import OrderSuccessPage from "./pages/client/order-success/page/OrderSuccessPage.jsx";
-import MyOrdersPage from "./pages/client/my-orders/page/MyOrdersPage.jsx";
-import OrderDetailPage from "./pages/client/order-detail/page/OrderDetailPage.jsx";
+import CheckoutPage from "./pages/client/order/checkout/page/CheckoutPage.jsx";
+import OrderSuccessPage from "./pages/client/order/order-success/page/OrderSuccessPage.jsx";
+import MyOrdersPage from "./pages/client/order/my-orders/page/MyOrdersPage.jsx";
+import OrderDetailPage from "./pages/client/order/order-detail/page/OrderDetailPage.jsx";
 import OrderPage from "./pages/admin/order/index.jsx";
 const router = createBrowserRouter([
   {

@@ -20,15 +20,16 @@
 }
 .order-status-tag {
   width: fit-content;
-  border-radius: 6px;
-  padding: 4px 12px;
-  font-size: 11px;
-  font-weight: 700;
+  border-radius: var(--radius-sm);
+  padding: 6px 14px;            
+  font-size: 13px;               
+  font-weight: 600;                
+  text-transform: none;         
+  letter-spacing: normal;         
   margin: 0 !important;
   border: none;
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  text-transform: uppercase;
-  letter-spacing: 0.5px;
+  line-height: 1.4;
 }

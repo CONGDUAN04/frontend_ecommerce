@@ -1,4 +1,7 @@
-import { paymentIconMap, paymentMethodMap } from "../../../../constants/order";
+import {
+  paymentIconMap,
+  paymentMethodMap,
+} from "../../../../../constants/order";
 
 export default function PaymentMethod({ paymentMethod }) {
   return (

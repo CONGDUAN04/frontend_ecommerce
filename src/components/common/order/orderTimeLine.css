@@ -1,0 +1,132 @@
+.order-timeline {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  overflow-x: auto;
+}
+
+.timeline-item {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  position: relative;
+}
+
+.timeline-line {
+  position: absolute;
+  top: 17px;
+  left: calc(50% + 22px);
+  right: calc(-50% + 22px);
+  height: 2px;
+  background: var(--border-color);
+  z-index: 1;
+}
+
+.timeline-content {
+  display: flex;
+  flex-direction: column;
+}
+
+.timeline-extra.danger {
+  color: var(--color-danger);
+}
+
+/* =========================
+   USER
+========================= */
+
+.order-timeline.user {
+  gap: 24px;
+}
+
+.order-timeline.user .timeline-item {
+  min-width: 160px;
+}
+
+.order-timeline.user .timeline-icon {
+  width: 42px;
+  height: 42px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 18px;
+  margin-bottom: 10px;
+  position: relative;
+  z-index: 2;
+}
+
+.order-timeline.user .timeline-content {
+  gap: 2px;
+}
+
+.order-timeline.user .timeline-title {
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--text-main);
+  line-height: 22px;
+}
+
+.order-timeline.user .timeline-time {
+  font-size: 13px;
+  color: var(--text-muted);
+  line-height: 18px;
+}
+
+.order-timeline.user .timeline-extra {
+  margin-top: 2px;
+  font-size: 13px;
+  color: var(--text-muted);
+  line-height: 18px;
+}
+
+/* =========================
+   ADMIN
+========================= */
+
+.order-timeline.admin {
+  gap: 16px;
+}
+
+.order-timeline.admin .timeline-item {
+  min-width: 120px;
+}
+
+.order-timeline.admin .timeline-icon {
+  width: 34px;
+  height: 34px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 16px;
+  margin-bottom: 8px;
+  position: relative;
+  z-index: 2;
+}
+
+.order-timeline.admin .timeline-content {
+  gap: 2px;
+}
+
+.order-timeline.admin .timeline-title {
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--text-main);
+  line-height: 16px;
+}
+
+.order-timeline.admin .timeline-time {
+  font-size: 11px;
+  color: var(--text-muted);
+  line-height: 14px;
+}
+
+.order-timeline.admin .timeline-extra {
+  margin-top: 2px;
+  font-size: 11px;
+  color: var(--text-muted);
+  line-height: 14px;
+}

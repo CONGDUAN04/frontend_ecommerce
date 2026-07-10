@@ -301,13 +301,16 @@ export default function OrderDetail({ dataDetail, openDetail, setOpenDetail }) {
               </Card>
 
               <Card
-                title="Lịch sử đơn hàng"
+                title="Theo dõi đơn hàng"
                 size="small"
                 style={{ borderRadius: "var(--radius-md, 10px)" }}
               >
-                <OrderTimeline order={dataDetail} />
+                <OrderTimeline
+                  order={dataDetail}
+                  withCard={false}
+                  variant="admin"
+                />
               </Card>
-
               <Card
                 title="Thông tin người nhận"
                 size="small"

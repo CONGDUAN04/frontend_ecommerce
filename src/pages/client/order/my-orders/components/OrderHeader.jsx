@@ -1,6 +1,6 @@
 import { Calendar } from "lucide-react";
 import { Tag } from "antd";
-import { statusMap, getStatusColor } from "../../../../constants/order";
+import { statusMap, getStatusColor } from "../../../../../constants/order";
 
 export default function OrderHeader({ orderCode, createdAt, status }) {
   return (
@@ -11,7 +11,7 @@ export default function OrderHeader({ orderCode, createdAt, status }) {
         </h3>
 
         <p className="order-date">
-          <Calendar size={14} style={{ marginRight: 6 }} /> {/* Icon Lucide */}
+          <Calendar size={14} style={{ marginRight: 6 }} />
           <span>Ngày đặt: </span>
           <span className="order-date-value">
             {new Date(createdAt).toLocaleString("vi-VN")}

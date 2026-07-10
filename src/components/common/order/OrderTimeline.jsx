@@ -3,12 +3,17 @@ import {
   ClockCircleOutlined,
   CloseCircleOutlined,
 } from "@ant-design/icons";
-import { Typography } from "antd";
+import { Card, Typography } from "antd";
 import { formatDateTime } from "../../../utils/formatDate";
+import "./orderTimeLine.css";
 
 const { Text } = Typography;
 
-export default function OrderTimeline({ order }) {
+export default function OrderTimeline({
+  order,
+  withCard = true,
+  variant = "user",
+}) {
   const items = [
     {
       show: true,
@@ -55,103 +60,30 @@ export default function OrderTimeline({ order }) {
     },
   ].filter((item) => item.show);
 
-  return (
-    <div
-      style={{
-        fontFamily: "var(--font-family-base)",
-        background: "var(--bg-white)",
-        border: "1px solid var(--border-color)",
-        borderRadius: "var(--radius-md)",
-        padding: "20px 16px",
-        display: "flex",
-        justifyContent: "space-between",
-        alignItems: "flex-start",
-        position: "relative",
-        overflowX: "auto",
-        gap: "16px",
-      }}
-    >
+  const timeline = (
+    <div className={`order-timeline ${variant}`}>
       {items.map((item, index) => (
-        <div
-          key={index}
-          style={{
-            display: "flex",
-            flexDirection: "column",
-            alignItems: "center",
-            textAlign: "center",
-            flex: 1,
-            minWidth: "120px",
-            position: "relative",
-          }}
-        >
-          {/* Đường line nối giữa các node (ẩn ở item cuối cùng) */}
-          {index !== items.length - 1 && (
-            <div
-              style={{
-                position: "absolute",
-                top: "17px",
-                left: "calc(50% + 22px)",
-                right: "calc(-50% + 22px)",
-                height: "2px",
-                background: "var(--border-color)",
-                zIndex: 1,
-              }}
-            />
-          )}
+        <div className="timeline-item" key={index}>
+          {index !== items.length - 1 && <div className="timeline-line" />}
 
-          {/* Vòng tròn Icon */}
           <div
+            className="timeline-icon"
             style={{
-              width: 34,
-              height: 34,
-              borderRadius: "var(--radius-round)",
               background: item.bg,
-              display: "flex",
-              alignItems: "center",
-              justifyContent: "center",
               color: item.color,
-              fontSize: "var(--font-size-md)",
-              position: "relative",
-              zIndex: 2,
-              marginBottom: "8px",
             }}
           >
             {item.icon}
           </div>
 
-          {/* Khối thông tin text bên dưới icon */}
-          <div style={{ display: "flex", flexDirection: "column", gap: "2px" }}>
-            <Text
-              style={{
-                fontSize: "var(--font-size-xs)",
-                fontWeight: 600,
-                color: "var(--text-main)",
-                lineHeight: "16px",
-              }}
-            >
-              {item.title}
-            </Text>
+          <div className="timeline-content">
+            <Text className="timeline-title">{item.title}</Text>
 
-            <Text
-              style={{
-                fontSize: "11px",
-                color: "var(--text-muted)",
-                lineHeight: "14px",
-              }}
-            >
-              {formatDateTime(item.time)}
-            </Text>
+            <Text className="timeline-time">{formatDateTime(item.time)}</Text>
 
             {item.extra && (
               <Text
-                style={{
-                  fontSize: "11px",
-                  color: item.isCancel
-                    ? "var(--color-danger)"
-                    : "var(--text-muted)",
-                  marginTop: "2px",
-                  lineHeight: "14px",
-                }}
+                className={`timeline-extra ${item.isCancel ? "danger" : ""}`}
               >
                 {item.isCancel ? `Lý do: ${item.extra}` : item.extra}
               </Text>
@@ -160,5 +92,13 @@ export default function OrderTimeline({ order }) {
         </div>
       ))}
     </div>
+  );
+
+  if (!withCard) return timeline;
+
+  return (
+    <Card title="Theo dõi đơn hàng" className="detail-card">
+      {timeline}
+    </Card>
   );
 }
