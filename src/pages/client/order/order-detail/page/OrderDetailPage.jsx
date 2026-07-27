@@ -8,6 +8,7 @@ import ShippingInfo from "../components/ShippingInfo";
 import OrderItems from "../components/OrderItems";
 import OrderSummary from "../components/OrderSummary";
 import OrderTimeline from "../../../../../components/common/order/OrderTimeline";
+import ReturnTimeline from "../../../../../components/common/order/ReturnTimeline";
 import OrderDetailActions from "../components/OrderDetailActions";
 import ReturnRequestModal from "../components/ReturnRequestModal";
 import { CartContext } from "../../../../../contexts/cart.context";
@@ -111,7 +112,7 @@ export default function OrderDetailPage() {
       setReturnLoading(false);
     }
   };
-
+  console.log(order?.returnRequest);
   if (loading) {
     return (
       <div className="order-detail-loading">
@@ -131,7 +132,11 @@ export default function OrderDetailPage() {
       <div className="order-timeline-wrapper" style={{ marginBottom: 5 }}>
         <OrderTimeline order={order} />
       </div>
-
+      {order.returnRequest && (
+        <div style={{ marginTop: 20 }}>
+          <ReturnTimeline returnRequest={order.returnRequest} />
+        </div>
+      )}
       <OrderInfo order={order} />
 
       <Row

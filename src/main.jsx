@@ -3,7 +3,7 @@ import * as ReactDOM from "react-dom/client";
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
 import "antd/dist/reset.css";
 import "./toast.css";
-import "./styles/client/base/global.css";
+import "./styles/base/global.css";
 import { Toaster } from "react-hot-toast";
 import AppAdmin from "./AppAdmin.jsx";
 import AppClient from "./AppClient.jsx";
@@ -34,6 +34,7 @@ import OrderSuccessPage from "./pages/client/order/order-success/page/OrderSucce
 import MyOrdersPage from "./pages/client/order/my-orders/page/MyOrdersPage.jsx";
 import OrderDetailPage from "./pages/client/order/order-detail/page/OrderDetailPage.jsx";
 import OrderPage from "./pages/admin/order/index.jsx";
+import ReturnPage from "./pages/admin/return/page/index.jsx";
 const router = createBrowserRouter([
   {
     path: "/admin",
@@ -55,6 +56,7 @@ const router = createBrowserRouter([
       { path: "product-colors", element: <ProductColorPage /> },
       { path: "product-colors", element: <ProductColorPage /> },
       { path: "orders", element: <OrderPage /> },
+      { path: "returns", element: <ReturnPage /> },
     ],
   },
   {

@@ -2,6 +2,8 @@ import {
   CheckCircleOutlined,
   ClockCircleOutlined,
   CloseCircleOutlined,
+  DollarCircleOutlined,
+  RollbackOutlined,
 } from "@ant-design/icons";
 import { Card, Typography } from "antd";
 import { formatDateTime } from "../../../utils/formatDate";
@@ -9,61 +11,76 @@ import "./orderTimeLine.css";
 
 const { Text } = Typography;
 
-export default function OrderTimeline({
-  order,
+export default function ReturnTimeline({
+  returnRequest,
   withCard = true,
   variant = "user",
 }) {
+  if (!returnRequest) return null;
+
   const items = [
     {
-      show: true,
-      title: "Đặt hàng thành công",
-      time: order.createdAt,
-      icon: <CheckCircleOutlined />,
-      bg: "#eaf3ff",
-      color: "var(--blue-color)",
-    },
-    {
-      show: order.confirmedAt,
-      title: "Đã xác nhận",
-      time: order.confirmedAt,
-      icon: <CheckCircleOutlined />,
-      bg: "#eaf8ef",
-      color: "var(--color-success)",
-    },
-    {
-      show: order.shippedAt,
-      title: "Đang giao hàng",
-      time: order.shippedAt,
-      icon: <ClockCircleOutlined />,
+      show: returnRequest.createdAt,
+      title: "Đã gửi yêu cầu trả hàng",
+      time: returnRequest.createdAt,
+      icon: <RollbackOutlined />,
       bg: "#fff7e6",
-      color: "var(--color-warning)",
-      extra: order.trackingCode
-        ? `Mã vận đơn: ${order.trackingCode}`
+      color: "#fa8c16",
+    },
+
+    {
+      show: returnRequest.approvedAt,
+      title: "Yêu cầu được chấp nhận",
+      time: returnRequest.approvedAt,
+      icon: <CheckCircleOutlined />,
+      bg: "#f6ffed",
+      color: "#52c41a",
+    },
+
+    {
+      show: returnRequest.receivedAt,
+      title: "Shop đã nhận hàng",
+      time: returnRequest.receivedAt,
+      icon: <CheckCircleOutlined />,
+      bg: "#e6f4ff",
+      color: "#1677ff",
+    },
+
+    {
+      show: returnRequest.inspectingAt,
+      title: "Đang kiểm tra sản phẩm",
+      time: returnRequest.inspectingAt,
+      icon: <ClockCircleOutlined />,
+      bg: "#fffbe6",
+      color: "#faad14",
+    },
+
+    {
+      show: returnRequest.refundedAt,
+      title: "Đã hoàn tiền",
+      time: returnRequest.refundedAt,
+      icon: <DollarCircleOutlined />,
+      bg: "#f6ffed",
+      color: "#52c41a",
+      extra: returnRequest.refundAmount
+        ? `Hoàn ${Number(returnRequest.refundAmount).toLocaleString("vi-VN")}đ`
         : undefined,
     },
+
     {
-      show: order.completedAt,
-      title: "Đã giao thành công",
-      time: order.completedAt,
-      icon: <CheckCircleOutlined />,
-      bg: "#eaf8ef",
-      color: "var(--color-success)",
-    },
-    {
-      show: order.cancelledAt,
-      title: "Đơn hàng đã hủy",
-      time: order.cancelledAt,
+      show: returnRequest.rejectedAt,
+      title: "Yêu cầu bị từ chối",
+      time: returnRequest.rejectedAt,
       icon: <CloseCircleOutlined />,
       bg: "#fff1f0",
-      color: "var(--color-danger)",
-      extra: order.cancelReason,
+      color: "#ff4d4f",
+      extra: returnRequest.adminNote,
       isDanger: true,
     },
   ].filter((item) => item.show);
 
   const timeline = (
-    <div className={`order-timeline ${variant}`}>
+    <div className={`return-timeline ${variant}`}>
       {items.map((item, index) => (
         <div className="timeline-item" key={index}>
           {index !== items.length - 1 && <div className="timeline-line" />}
@@ -87,7 +104,7 @@ export default function OrderTimeline({
               <Text
                 className={`timeline-extra ${item.isDanger ? "danger" : ""}`}
               >
-                {item.isDanger ? `Lý do: ${item.extra}` : item.extra}
+                {item.extra}
               </Text>
             )}
           </div>
@@ -99,7 +116,7 @@ export default function OrderTimeline({
   if (!withCard) return timeline;
 
   return (
-    <Card title="Theo dõi đơn hàng" className="detail-card">
+    <Card title="Theo dõi trả hàng" className="detail-card">
       {timeline}
     </Card>
   );

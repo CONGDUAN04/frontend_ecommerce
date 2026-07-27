@@ -148,7 +148,7 @@ export default function OrderTable({
       width: 150,
       align: "center",
       render: (value) => (
-        <Text strong style={{ color: "#389e0d" }}>
+        <Text style={{ fontWeight: 500, color: "var(--text-main)" }}>
           {Number(value).toLocaleString("vi-VN")}đ
         </Text>
       ),
@@ -233,7 +233,7 @@ export default function OrderTable({
 
     {
       title: "Thao tác",
-      width: 150,
+      width: 170,
       align: "center",
       fixed: "right",
       render: (_, record) => {
@@ -241,44 +241,62 @@ export default function OrderTable({
           {
             key: "detail",
             icon: <EyeOutlined style={{ color: "#1677ff" }} />,
-            label: "Xem chi tiết",
+            label: (
+              <span style={{ color: "#1677ff", fontWeight: 600 }}>
+                Xem chi tiết
+              </span>
+            ),
             onClick: () => handleViewDetail(record.id),
           },
         ];
 
         if (record.status === "PENDING") {
-          items.push({
-            key: "confirm",
-            icon: <CheckCircleOutlined style={{ color: "#52c41a" }} />,
-            label: <span style={{ color: "#52c41a" }}>Xác nhận đơn</span>,
-            onClick: () => handleConfirm(record.id),
-          });
-
-          items.push({
-            key: "cancel",
-            icon: <CloseCircleOutlined style={{ color: "#ff4d4f" }} />,
-            label: <span style={{ color: "#ff4d4f" }}>Hủy đơn</span>,
-            onClick: () => handleOpenCancel(record.id),
-          });
+          items.push(
+            {
+              key: "confirm",
+              icon: <CheckCircleOutlined style={{ color: "#52c41a" }} />,
+              label: (
+                <span style={{ color: "#52c41a", fontWeight: 600 }}>
+                  Xác nhận đơn
+                </span>
+              ),
+              onClick: () => handleConfirm(record.id),
+            },
+            {
+              key: "cancel",
+              icon: <CloseCircleOutlined style={{ color: "#ff4d4f" }} />,
+              label: (
+                <span style={{ color: "#ff4d4f", fontWeight: 600 }}>
+                  Hủy đơn
+                </span>
+              ),
+              onClick: () => handleOpenCancel(record.id),
+            },
+          );
         }
 
         if (record.status === "CONFIRMED") {
           items.push({
             key: "ship",
             icon: <CarOutlined style={{ color: "#fa8c16" }} />,
-            label: "Giao hàng",
-            onClick: () => {
-              console.log("SHIP CLICK");
-              handleOpenShip(record.id);
-            },
+            label: (
+              <span style={{ color: "#fa8c16", fontWeight: 600 }}>
+                Giao hàng
+              </span>
+            ),
+            onClick: () => handleOpenShip(record.id),
           });
         }
 
         if (record.status === "SHIPPING") {
           items.push({
             key: "complete",
-            icon: <CheckOutlined style={{ color: "#52c41a" }} />,
-            label: "Hoàn thành",
+            icon: <CheckOutlined style={{ color: "#13c2c2" }} />,
+            label: (
+              <span style={{ color: "#13c2c2", fontWeight: 600 }}>
+                Hoàn thành
+              </span>
+            ),
             onClick: () => handleOpenComplete(record.id),
           });
         }
@@ -295,10 +313,11 @@ export default function OrderTable({
               icon={<DownOutlined style={{ fontSize: 10 }} />}
               iconPosition="end"
               style={{
-                borderRadius: 6,
-                background: "#fafafa",
+                borderRadius: 8,
+                background: "#fff",
                 border: "1px solid #d9d9d9",
-                fontWeight: 500,
+                fontWeight: 600,
+                minWidth: 110,
               }}
             >
               Thao tác

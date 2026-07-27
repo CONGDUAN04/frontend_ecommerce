@@ -16,11 +16,10 @@ import {
   statusMap,
   paymentStatusMap,
   paymentMethodMap,
-  getStatusColor,
-  getPaymentStatusColor,
 } from "../../../../constants/order.js";
+import { returnStatusMap, returnReasonMap } from "../../../../constants/return";
 import OrderTimeline from "../../../../components/common/order/OrderTimeline";
-
+import ReturnTimeline from "../../../../components/common/order/ReturnTimeline";
 const { Text } = Typography;
 
 export default function OrderDetail({ dataDetail, openDetail, setOpenDetail }) {
@@ -162,7 +161,7 @@ export default function OrderDetail({ dataDetail, openDetail, setOpenDetail }) {
                         <Text
                           strong
                           style={{
-                            color: "var(--primary-color, #d70018)",
+                            color: "var(--primary-color)",
                             fontSize: "18px",
                           }}
                         >
@@ -187,26 +186,15 @@ export default function OrderDetail({ dataDetail, openDetail, setOpenDetail }) {
                     <Descriptions.Item
                       label={<Text type="secondary">Trạng thái xử lý</Text>}
                     >
-                      <Tag
-                        color={
-                          dataDetail.returnRequest.isApproved === null
-                            ? "orange"
-                            : dataDetail.returnRequest.isApproved
-                              ? "green"
-                              : "red"
-                        }
-                      >
-                        {dataDetail.returnRequest.isApproved === null
-                          ? "Chờ xử lý"
-                          : dataDetail.returnRequest.isApproved
-                            ? "Đã duyệt"
-                            : "Từ chối"}
-                      </Tag>
+                      <Text strong>
+                        {returnStatusMap[dataDetail.returnRequest.status] ||
+                          "-"}
+                      </Text>
                     </Descriptions.Item>
                     <Descriptions.Item
                       label={<Text type="secondary">Số tiền hoàn</Text>}
                     >
-                      <Text strong type="warning">
+                      <Text strong>
                         {dataDetail.returnRequest.refundAmount
                           ? `${Number(dataDetail.returnRequest.refundAmount).toLocaleString("vi-VN")}đ`
                           : "-"}
@@ -228,7 +216,10 @@ export default function OrderDetail({ dataDetail, openDetail, setOpenDetail }) {
                       label={<Text type="secondary">Lý do hoàn trả</Text>}
                       span={2}
                     >
-                      {dataDetail.returnRequest.reason}
+                      <Text>
+                        {returnReasonMap[dataDetail.returnRequest.reason] ||
+                          "-"}
+                      </Text>
                     </Descriptions.Item>
                     <Descriptions.Item
                       label={<Text type="secondary">Ghi chú khách</Text>}
@@ -263,38 +254,28 @@ export default function OrderDetail({ dataDetail, openDetail, setOpenDetail }) {
                       {dataDetail.orderCode}
                     </Text>
                   </Descriptions.Item>
-                  <Descriptions.Item
-                    label={<Text type="secondary">Trạng thái</Text>}
-                  >
-                    <Tag
-                      color={getStatusColor(dataDetail.status)}
-                      style={{ margin: 0 }}
-                    >
-                      {statusMap[dataDetail.status]}
-                    </Tag>
+                  <Descriptions.Item label="Trạng thái đơn">
+                    <Text strong>{statusMap[dataDetail.status]}</Text>
                   </Descriptions.Item>
-                  <Descriptions.Item
-                    label={<Text type="secondary">Thanh toán</Text>}
-                  >
-                    <Tag
-                      color={getPaymentStatusColor(dataDetail.paymentStatus)}
-                      style={{ margin: 0 }}
-                    >
+                  <Descriptions.Item label="Thanh toán">
+                    <Text strong>
                       {paymentStatusMap[dataDetail.paymentStatus]}
-                    </Tag>
+                    </Text>
                   </Descriptions.Item>
-                  <Descriptions.Item
-                    label={<Text type="secondary">Phương thức</Text>}
-                  >
-                    {paymentMethodMap[dataDetail.paymentMethod]}
+                  <Descriptions.Item label="Phương thức">
+                    <Text strong>
+                      {paymentMethodMap[dataDetail.paymentMethod]}
+                    </Text>
                   </Descriptions.Item>
                   <Descriptions.Item
                     label={<Text type="secondary">Mã vận đơn</Text>}
                   >
                     {dataDetail.trackingCode ? (
-                      <Text copyable>{dataDetail.trackingCode}</Text>
+                      <Text strong copyable>
+                        {dataDetail.trackingCode}
+                      </Text>
                     ) : (
-                      "-"
+                      <Text type="secondary">-</Text>
                     )}
                   </Descriptions.Item>
                 </Descriptions>
@@ -305,11 +286,14 @@ export default function OrderDetail({ dataDetail, openDetail, setOpenDetail }) {
                 size="small"
                 style={{ borderRadius: "var(--radius-md, 10px)" }}
               >
-                <OrderTimeline
-                  order={dataDetail}
-                  withCard={false}
-                  variant="admin"
-                />
+                <OrderTimeline order={dataDetail} variant="admin" />
+
+                {dataDetail.returnRequest && (
+                  <ReturnTimeline
+                    returnRequest={dataDetail.returnRequest}
+                    variant="admin"
+                  />
+                )}
               </Card>
               <Card
                 title="Thông tin người nhận"

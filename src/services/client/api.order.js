@@ -32,6 +32,3 @@ export const returnOrderAPI = (id, data) => {
   return axios.post(`/api/users/orders/${id}/return`, data);
 };
 
-export const getReturnRequestAPI = (id) => {
-  return axios.get(`/api/users/orders/${id}/return`);
-};

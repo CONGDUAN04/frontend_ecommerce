@@ -36,6 +36,15 @@ export default function OrderActions({
     });
   }
 
+  if (order.returnRequest) {
+    actions.push({
+      key: "detail",
+      label: "Theo dõi trả hàng",
+      variant: "warning",
+      onClick: () => onView(order.id),
+    });
+  }
+
   actions.push({
     key: "detail",
     label: "Xem chi tiết",

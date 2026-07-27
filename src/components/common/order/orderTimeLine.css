@@ -1,4 +1,9 @@
-.order-timeline {
+/* ===========================
+   COMMON
+=========================== */
+
+.order-timeline,
+.return-timeline {
   display: flex;
   justify-content: space-between;
   align-items: flex-start;
@@ -24,6 +29,15 @@
   z-index: 1;
 }
 
+.timeline-icon {
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+  z-index: 2;
+}
+
 .timeline-content {
   display: flex;
   flex-direction: column;
@@ -33,100 +47,97 @@
   color: var(--color-danger);
 }
 
-/* =========================
+/* ===========================
    USER
-========================= */
+=========================== */
 
-.order-timeline.user {
+.order-timeline.user,
+.return-timeline.user {
   gap: 24px;
 }
 
-.order-timeline.user .timeline-item {
+.order-timeline.user .timeline-item,
+.return-timeline.user .timeline-item {
   min-width: 160px;
 }
 
-.order-timeline.user .timeline-icon {
+.order-timeline.user .timeline-icon,
+.return-timeline.user .timeline-icon {
   width: 42px;
   height: 42px;
-  border-radius: 50%;
-  display: flex;
-  align-items: center;
-  justify-content: center;
   font-size: 18px;
   margin-bottom: 10px;
-  position: relative;
-  z-index: 2;
 }
 
-.order-timeline.user .timeline-content {
+.order-timeline.user .timeline-content,
+.return-timeline.user .timeline-content {
   gap: 2px;
 }
 
-.order-timeline.user .timeline-title {
+.order-timeline.user .timeline-title,
+.return-timeline.user .timeline-title {
   font-size: 14px;
   font-weight: 600;
   color: var(--text-main);
   line-height: 22px;
 }
 
-.order-timeline.user .timeline-time {
+.order-timeline.user .timeline-time,
+.return-timeline.user .timeline-time {
   font-size: 13px;
   color: var(--text-muted);
-  line-height: 18px;
 }
 
-.order-timeline.user .timeline-extra {
+.order-timeline.user .timeline-extra,
+.return-timeline.user .timeline-extra {
   margin-top: 2px;
   font-size: 13px;
   color: var(--text-muted);
-  line-height: 18px;
 }
 
-/* =========================
+/* ===========================
    ADMIN
-========================= */
+=========================== */
 
-.order-timeline.admin {
+.order-timeline.admin,
+.return-timeline.admin {
   gap: 16px;
 }
 
-.order-timeline.admin .timeline-item {
+.order-timeline.admin .timeline-item,
+.return-timeline.admin .timeline-item {
   min-width: 120px;
 }
 
-.order-timeline.admin .timeline-icon {
+.order-timeline.admin .timeline-icon,
+.return-timeline.admin .timeline-icon {
   width: 34px;
   height: 34px;
-  border-radius: 50%;
-  display: flex;
-  align-items: center;
-  justify-content: center;
   font-size: 16px;
   margin-bottom: 8px;
-  position: relative;
-  z-index: 2;
 }
 
-.order-timeline.admin .timeline-content {
+.order-timeline.admin .timeline-content,
+.return-timeline.admin .timeline-content {
   gap: 2px;
 }
 
-.order-timeline.admin .timeline-title {
+.order-timeline.admin .timeline-title,
+.return-timeline.admin .timeline-title {
   font-size: 13px;
   font-weight: 600;
   color: var(--text-main);
-  line-height: 16px;
 }
 
-.order-timeline.admin .timeline-time {
+.order-timeline.admin .timeline-time,
+.return-timeline.admin .timeline-time {
   font-size: 11px;
   color: var(--text-muted);
-  line-height: 14px;
 }
 
-.order-timeline.admin .timeline-extra {
+.order-timeline.admin .timeline-extra,
+.return-timeline.admin .timeline-extra {
   margin-top: 2px;
   font-size: 11px;
   color: var(--text-muted);
-  line-height: 14px;
 }

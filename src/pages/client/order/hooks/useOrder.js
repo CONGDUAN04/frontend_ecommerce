@@ -8,7 +8,6 @@ import {
   cancelOrderAPI,
   reorderOrderAPI,
   returnOrderAPI,
-  getReturnRequestAPI,
 } from "../../../../services/client/api.order";
 
 const useOrderCrud = createCrudHook({
@@ -35,10 +34,6 @@ export const useOrder = () => {
     return returnOrderAPI(id, data);
   }, []);
 
-  const getReturnRequest = useCallback((id) => {
-    return getReturnRequestAPI(id);
-  }, []);
-
   return useMemo(
     () => ({
       // CRUD
@@ -50,8 +45,7 @@ export const useOrder = () => {
       cancelOrder,
       reorderOrder,
       returnOrder,
-      getReturnRequest,
     }),
-    [crud, cancelOrder, reorderOrder, returnOrder, getReturnRequest],
+    [crud, cancelOrder, reorderOrder, returnOrder],
   );
 };

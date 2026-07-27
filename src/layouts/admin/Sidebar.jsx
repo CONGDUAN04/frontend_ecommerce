@@ -14,6 +14,8 @@ import {
   Layers,
   Palette,
   ShoppingCart,
+  RotateCcw,
+  RefreshCcw,
 } from "lucide-react";
 import { Link, useLocation } from "react-router-dom";
 import { AuthContext } from "../../contexts/auth.context.jsx";
@@ -58,7 +60,17 @@ const getActiveMenuFromPath = (path) => {
 
     "/admin/orders": {
       menu: "orders",
-      subMenu: null,
+      subMenu: "order-list",
+    },
+
+    "/admin/returns": {
+      menu: "orders",
+      subMenu: "returns",
+    },
+
+    "/admin/exchanges": {
+      menu: "orders",
+      subMenu: "exchange",
     },
 
     "/admin/users": {
@@ -150,9 +162,29 @@ export default function Sidebar({ isOpen, toggleSidebar }) {
       },
       {
         id: "orders",
-        label: "Đơn hàng",
+        label: "Quản lý đơn hàng",
         icon: ShoppingCart,
         path: "/admin/orders",
+        subMenu: [
+          {
+            id: "order-list",
+            label: "Đơn hàng",
+            path: "/admin/orders",
+            icon: ShoppingCart,
+          },
+          {
+            id: "returns",
+            label: "Hoàn trả",
+            path: "/admin/returns",
+            icon: RotateCcw,
+          },
+          {
+            id: "exchange",
+            label: "Đổi hàng",
+            path: "/admin/exchanges",
+            icon: RefreshCcw,
+          },
+        ],
       },
       {
         id: "roles",

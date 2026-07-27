@@ -27,7 +27,11 @@ const ROUTE_BREADCRUMB = {
   "/admin/categories": ["Danh mục"],
   "/admin/brands": ["Thương hiệu"],
 
-  "/admin/orders": ["Quản lý đơn hàng"],
+  "/admin/orders": ["Quản lý đơn hàng", "Đơn hàng"],
+
+  "/admin/returns": ["Quản lý đơn hàng", "Hoàn trả"],
+
+  "/admin/exchanges": ["Quản lý đơn hàng", "Đổi hàng"],
 
   "/admin/users": ["Người dùng"],
   "/admin/roles": ["Vai trò"],
